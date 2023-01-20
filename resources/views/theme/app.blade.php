@@ -4,14 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Mazer Admin Dashboard</title>
+    <title>{{$title}}</title>
+
+
+
 
     <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/main/app.css">
     <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/main/app-dark.css">
     <link rel="shortcut icon" href="{{ asset('theme') }}/assets/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('theme') }}/assets/images/logo/favicon.png" type="image/png">
 
-    <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/shared/iconly.css">
+    <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/pages/fontawesome.css">
+    <link rel="stylesheet"
+        href="{{ asset('theme') }}/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/pages/datatables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('theme') }}/assets/extensions/choices.js/public/assets/styles/choices.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('theme') }}/assets/extensions/toastify-js/src/toastify.css">
+
+
+
+    <style>
+        .select2 {
+            width: 100% !important;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            height: 35px;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+        }
+
+        .form-control:read-only {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+    </style>
     @yield('styles')
 </head>
 
@@ -19,14 +55,80 @@
     <div id="app">
         @include('theme.navbar')
         @yield('content')
-        
+
     </div>
     <script src="{{ asset('theme') }}/assets/js/bootstrap.js"></script>
     <script src="{{ asset('theme') }}/assets/js/app.js"></script>
 
-    <!-- Need: Apexcharts -->
-    <script src="{{ asset('theme') }}/assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="{{ asset('theme') }}/assets/js/pages/dashboard.js"></script>
+    <script src="{{ asset('theme') }}/assets/extensions/jquery/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <script src="{{ asset('theme') }}/assets/js/pages/datatables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+    <script src="{{ asset('theme') }}/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+    <script src="{{ asset('theme') }}/assets/js/pages/form-element-select.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    {{-- <script src="{{ asset('theme') }}/assets/js/select2.min.js"></script> --}}
+    <script src="{{ asset('theme') }}/assets/extensions/toastify-js/src/toastify.js"></script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            
+            $('.select2').select2({
+                dropdownParent: $('#tambah')
+                });
+
+                $('#tb_bkin').DataTable({
+                "paging": false,
+                "pageLength": 100,
+                "scrollY": "100%",
+                "lengthChange": false,
+                // "ordering": false,
+                "info": false,
+                "stateSave": true,
+                "autoWidth": true,
+                // "order": [ 5, 'DESC' ],
+                "searching": true,
+            });
+            
+        });
+    </script>
+    @if (session()->has('sukses'))
+    <script>
+        $(document).ready(function() {
+            Toastify({
+                text: "{{ session()->get('sukses') }}",
+                duration: 3000,
+                style: {
+                    background: "#EAF7EE",
+                    color: "#7F8B8B"
+                },
+                close:true,
+                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+            }).showToast();
+            });
+    </script>
+    @endif
+    @if (session()->has('error'))
+    <script>
+        $(document).ready(function() {
+            Toastify({
+                text: "{{ session()->get('error') }}",
+                duration: 3000,
+                style: {
+                    background: "#FCEDE9",
+                    color: "#7F8B8B"
+                },
+                close:true,
+                avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+            }).showToast();
+            });
+    </script>
+    @endif
     @yield('scripts')
 </body>
 
