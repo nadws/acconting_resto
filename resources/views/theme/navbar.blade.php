@@ -58,6 +58,9 @@
                         <li class="submenu-item">
                             <a href="{{route('jurnal_pengeluaran')}}">Jurnal Pengeluaran</a>
                         </li>
+                        <li class="submenu-item">
+                            <a href="{{route('buku_besar')}}">Buku Besar</a>
+                        </li>
 
                     </ul>
                 </li>

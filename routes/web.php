@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Buku_besar;
 use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
 use App\Http\Controllers\Jurnal_pengeluaran;
@@ -16,18 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/dashboard', function () {
-    $data = [
-        'title' => 'Dashboard'
-    ];
-    return view('dashboard.dashboard', $data);
-})->middleware(['auth'])->name('dashboard');
 
-Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
+
+
+Route::get('/', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
 Route::get('/data_pemasukan', [Jurnal_pemasukan::class, 'data_pemasukan'])->name('data_pemasukan');
 
 
@@ -50,6 +44,9 @@ Route::get('/get_history_bahan', [Gudang::class, 'get_history_bahan'])->name('ge
 Route::post('/save_opname', [Gudang::class, 'save_opname'])->name('save_opname');
 Route::post('/save_bahan', [Gudang::class, 'save_bahan'])->name('save_bahan');
 Route::post('/save_merk_bahan', [Gudang::class, 'save_merk_bahan'])->name('save_merk_bahan');
+
+Route::get('/buku_besar', [Buku_besar::class, 'index'])->name('buku_besar');
+
 
 
 require __DIR__ . '/auth.php';
