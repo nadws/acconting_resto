@@ -23,7 +23,7 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item  ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
@@ -60,6 +60,18 @@
                         </li>
                         <li class="submenu-item">
                             <a href="{{route('buku_besar')}}">Buku Besar</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-caret-down-square-fill"></i>
+                        <span>More</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="{{route('user')}}">User</a>
                         </li>
 
                     </ul>

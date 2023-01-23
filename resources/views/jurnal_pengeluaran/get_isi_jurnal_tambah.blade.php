@@ -2,7 +2,7 @@
     <div class="col-md-2">
         <div class="form-group">
             <label for="list_kategori">List Bahan = Resep</label>
-            <select name="id_list_bahan[]" detail="{{$count}}" id="id_list_bahan1"
+            <select name="id_list_bahan[]" detail="{{$count}}" id="id_list_bahan{{$count}}"
                 class="id_list_bahan form-control select satuan input_detail input_stok listBahan listBahan{{$count}}"
                 required>
                 <option value="">-Pilih data--</option>

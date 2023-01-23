@@ -62,8 +62,11 @@
                                     <td>{{number_format($j->debit,0)}}</td>
                                     <td>{{number_format($j->kredit,0)}}</td>
                                     <td style="white-space: nowrap">
-                                        <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                        <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#edit"
+                                            no_nota="{{$j->no_nota}}" class="btn btn-sm btn-warning edit"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a href="{{route('hapus_stok_daging',['no_nota' => $j->no_nota])}}"
+                                            class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
 
@@ -181,6 +184,40 @@
 
                             </div>
                         </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Save</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form action="{{ route('edit_stok_daging')}}" method="post">
+        @csrf
+        <div id="edit" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg-max2" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel33">
+                            Tambah {{$title}}
+                        </h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="Edit_jurnal"></div>
 
 
                     </div>
@@ -525,6 +562,19 @@
 
                 var debit = $('.total').val(total_all);
 
+            });
+            $(document).on('click', '.edit', function() {
+                var no_nota = $(this).attr('no_nota');
+                $.ajax({
+                    url: "{{ route('edit_jurnal') }}?no_nota=" + no_nota,
+                    type: "Get",
+                    success: function(data) {
+                        $('#Edit_jurnal').html(data);
+                        $(".select").select2({
+                            dropdownParent: $('#edit .modal-content')
+                        });
+                    }
+                });
             });
     });
 </script>
