@@ -23,7 +23,7 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item  ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
@@ -66,11 +66,16 @@
                 </li>
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
+<<<<<<< HEAD
                         <i class="bi bi-menu-button-wide"></i>
+=======
+                        <i class="bi bi-caret-down-square-fill"></i>
+>>>>>>> 56d987ebb0850cbbd0cc1ba451cec38c06ecb027
                         <span>More</span>
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
+<<<<<<< HEAD
                             <a href="{{route('akun')}}">Post Akun</a>
                         </li>
                         {{-- <li class="submenu-item">
@@ -79,6 +84,10 @@
                         <li class="submenu-item">
                             <a href="{{route('buku_besar')}}">Buku Besar</a>
                         </li> --}}
+=======
+                            <a href="{{route('user')}}">User</a>
+                        </li>
+>>>>>>> 56d987ebb0850cbbd0cc1ba451cec38c06ecb027
 
                     </ul>
                 </li>

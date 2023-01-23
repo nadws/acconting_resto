@@ -176,4 +176,38 @@ class Gudang extends Controller
         }
         return redirect()->route("gudang")->with('sukses', 'Data berhasil di input');
     }
+
+    public function export_opname(Request $r)
+    {
+        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.n,f.tgl
+        FROM tb_list_bahan as a
+        LEFT join (
+            SELECT b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
+            FROM stok_ts as b 
+            group by b.id_bahan
+        ) as b on b.id_bahan = a.id_list_bahan
+        
+        left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
+        left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
+        left join tb_satuan as e on e.id = a.id_satuan
+        LEFT join (
+            SELECT max(b.tgl) as tgl, b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
+            FROM stok_ts as b 
+            where b.opname ='Y'
+            group by b.id_bahan
+        ) as f on f.id_bahan = a.id_list_bahan
+        where a.id_lokasi = '1' and a.monitoring ='Y'
+        order by a.id_list_bahan DESC
+        ");
+        $data = [
+            'title' => 'Opname Bahan',
+            'gudang' => $gudang,
+            'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
+            'satuan' => DB::table('tb_satuan')->get(),
+            'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
+
+        ];
+        return view('gudang.export_opname', $data);
+    }
 }

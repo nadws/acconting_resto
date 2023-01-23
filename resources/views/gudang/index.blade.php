@@ -44,6 +44,8 @@ background-position: 0;
                         <button type="submit" class="btn icon icon-left btn-primary "
                             style="float: right; margin-left: 2px"><i class="far fa-save"></i>
                             Opname</button>
+                        <a href="{{route('export_opname')}}" class="btn icon icon-left btn-primary"
+                            style="float: right;margin-left: 2px"><i class="bi bi-file-earmark-excel"></i> Export</a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
                             class="btn icon icon-left btn-primary" style="float: right"><i
                                 class="bi bi-plus-circle"></i> Tambah</a>

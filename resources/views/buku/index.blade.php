@@ -51,7 +51,9 @@
                                 <tr>
                                     <td>{{$no+1}}</td>
                                     <td>{{$j->no_akun}}</td>
-                                    <td><a href="">{{$j->nm_akun}}</a></td>
+                                    <td><a
+                                            href="{{route('detail_buku',['id_akun' => $j->id_akun,'tgl1' => $tgl1,'tgl2'=> $tgl2])}}">{{$j->nm_akun}}</a>
+                                    </td>
                                     <td>{{number_format($j->debit,0)}}</td>
                                     <td>{{number_format($j->kredit,0)}}</td>
                                     <td>{{number_format($j->debit-$j->kredit,0)}}</td>
