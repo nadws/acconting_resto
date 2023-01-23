@@ -64,6 +64,24 @@
 
                     </ul>
                 </li>
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-menu-button-wide"></i>
+                        <span>More</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="{{route('akun')}}">Post Akun</a>
+                        </li>
+                        {{-- <li class="submenu-item">
+                            <a href="{{route('jurnal_pengeluaran')}}">Jurnal Pengeluaran</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{route('buku_besar')}}">Buku Besar</a>
+                        </li> --}}
+
+                    </ul>
+                </li>
 
 
 
