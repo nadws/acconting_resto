@@ -84,7 +84,7 @@ background-position: 0;
                                     <td>{{ $no++ }}</td>
                                     <td>{{$j->nm_merk}}</td>
                                     <td>{{$j->nm_bahan}}</td>
-                                    <td>{{$j->n}}</td>
+                                    <td>{{$j->nm_satuan}}</td>
                                     <td>{{$j->nm_kategori}}</td>
                                     <td>{{$j->admin}}</td>
                                     <td align="center">

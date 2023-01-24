@@ -22,7 +22,7 @@
                     <td>{{$a->tarif * 100 }}%</td>
                     <td>{{$a->barang_kelompok}}</td>
                     <td style="white-space: nowrap">
-                        <a href="" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></a>
+                        <a href="#" class="btn btn-primary btn-sm btnEditKelompok" id_kelompok="{{$a->id_kelompok}}" id_akun="{{$a->id_akun}}"><i class="fas fa-pen"></i></a>
                         <a href="#" class="btn btn-danger btn-sm delete_kelompok_baru" id_kelompok="{{$a->id_kelompok}}"
                             id_akun_kelompok="{{$a->id_akun}}"><i class="fas fa-trash-alt"></i></a>
                     </td>

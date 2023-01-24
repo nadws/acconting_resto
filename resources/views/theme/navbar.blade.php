@@ -21,7 +21,6 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
-
                 <li class="sidebar-item  ">
                     <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
@@ -61,7 +60,6 @@
                         <li class="submenu-item">
                             <a href="{{route('buku_besar')}}">Buku Besar</a>
                         </li>
-
                     </ul>
                 </li>
                 <li class="sidebar-item has-sub">
@@ -76,10 +74,8 @@
                         <li class="submenu-item ">
                             <a href="{{route('user')}}">User</a>
                         </li>
-
                     </ul>
                 </li>
-
             </ul>
         </div>
     </div>

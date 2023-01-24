@@ -9,21 +9,6 @@ use App\Http\Controllers\Jurnal_pengeluaran;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
-
-
 Route::get('/', [Dashboard::class, 'index'])->name('dashboard');
 
 Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
@@ -74,6 +59,9 @@ Route::get('/delete_kelompok_baru', [AkunController::class, 'delete_kelompok_bar
 Route::get('/post_center_akun', [AkunController::class, 'post_center_akun'])->name('post_center_akun');
 Route::get('/tambah_post', [AkunController::class, 'tambah_post'])->name('tambah_post');
 Route::get('/delete_post', [AkunController::class, 'delete_post'])->name('delete_post');
+Route::get('/loadEditkelompok', [AkunController::class, 'loadEditkelompok'])->name('loadEditkelompok');
+Route::get('/edit_kelompok_baru', [AkunController::class, 'edit_kelompok_baru'])->name('edit_kelompok_baru');
+Route::get('/loadEditAkun', [AkunController::class, 'loadEditAkun'])->name('loadEditAkun');
 
 
 require __DIR__ . '/auth.php';

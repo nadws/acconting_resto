@@ -142,7 +142,7 @@ background-position: 0;
                                     <label for="list_kategori">Satuan</label>
                                     <select name="id_satuan" id="" class="select2">
                                         @foreach ($satuan as $s)
-                                        <option value="{{$s->id}}">{{$s->n}}</option>
+                                        <option value="{{$s->id_satuan}}">{{$s->nm_satuan}}</option>
                                         @endforeach
                                     </select>
                                 </div>

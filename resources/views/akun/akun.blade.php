@@ -3,7 +3,7 @@
 <style>
     .form-switch2 .form-check-input2 {
         background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-background-position: 0;
+        background-position: 0;
         border-radius: 2em;
         margin-left: -2.5em;
         transition: background-position .15s ease-in-out;
@@ -71,22 +71,20 @@ background-position: 0;
                                         <a id_akun="{{$d->id_akun}}" data-toggle="tooltip"
                                             data-placement="top" title="Post Center" type="button" class="post_center btn btn-sm btn-primary"><i class="bi bi-stack"></i> </a>
                                         <a href="#" data-toggle="tooltip"
-                                        data-placement="top" title="Edit" class="btn btn-sm btn-primary"><i class="bi bi-pen"></i> </a>
+                                        data-placement="top" title="Edit" class="btn btn-sm btn-primary btnEditAkun" id_akun="{{ $d->id_akun }}"><i class="bi bi-pen"></i> </a>
                                         <a data-toggle="tooltip"
                                         data-placement="top" title="Delete" href="{{ route('del_akun', $d->id_akun) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
-
-
                 </div>
             </div>
         </section>
     </div>
 </div>
+
 <form action="" method="post">
     <div class="modal fade" id="post_center" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -113,6 +111,28 @@ background-position: 0;
     </div>
 </form>
 
+<form id="saveEditAkun">
+    <div class="modal fade" id="editAkun" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-costume">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Akun</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="loadEditAkun"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save/Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <form id="tambah_post">
     <div class="modal fade" id="tbh_post" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -129,6 +149,7 @@ background-position: 0;
                     <div class="row">
                         <input type="text" class="form-control nm_post" name="nm_post">
                         <input type="hidden" class="form-control " id="id_akun" name="nm_post">
+                        <input type="hidden" class="form-control " id="edit_id_post" name="edit_id_post">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -139,7 +160,7 @@ background-position: 0;
     </div>
 </form>
 
-<div class="modal fade show_kelompok" id="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade show_kelompok" onchange="" id="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-costume">
@@ -210,6 +231,29 @@ background-position: 0;
                     <div id="tbh_kelompok_edit">
 
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="save_kelompok_edit">
+    <div class="modal fade" id="edit_k_aktiva" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg-max" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header bg-costume">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Kelompok Akun</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_kelompok" id="id_kelompok">
+                    <div id="loadEditKelompok"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -484,6 +528,7 @@ background-position: 0;
                 avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
             }).showToast();
         }
+
         function load_post(id_akun) {
             $.ajax({
                     url: "{{route('post_center_akun')}}",
@@ -497,7 +542,33 @@ background-position: 0;
                             "lengthChange": false,
                             "autoWidth": false,
                             "stateSave": true,
-                        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                        })
+                    }
+                });
+        }
+
+        function load_kelompok(id_akun) {
+            $.ajax({
+                    url: "{{route('kelompok_akun')}}",
+                    method: "GET",
+                    data: {
+                        id_akun: id_akun,
+                    },
+                    success: function(data) {
+                        $('#kelompok_akun').html(data);
+                    }
+                });
+        }
+
+        function load_edit_akun(id_akun) {
+            $.ajax({
+                    url: "{{route('loadEditAkun')}}",
+                    method: "GET",
+                    data: {
+                        id_akun: id_akun,
+                    },
+                    success: function(data) {
+                        $('#loadEditAkun').html(data);
                     }
                 });
         }
@@ -514,6 +585,12 @@ background-position: 0;
                 }
             });
         }
+
+        $(document).on('click', '.btnEditAkun', function(){
+            var id_akun = $(this).attr('id_akun')
+            $("#editAkun").modal('show')
+            load_edit_akun(id_akun)
+        })
 
         $(document).on('change', '#pilihKategori', function(){
             var id_pilih = $(this).val()
@@ -614,9 +691,7 @@ background-position: 0;
 
         $(document).on('click', '.edit_kelompok', function(){
             var id_akun = $(this).attr("id_akun");
-            var url = "{{route('kelompok_akun')}}?id_akun=" + id_akun;
-            
-            $('#kelompok_akun').load(url);
+            load_kelompok(id_akun)
             $(".show_kelompok").modal('show')
         })
 
@@ -673,6 +748,7 @@ background-position: 0;
                 });
 
         });
+
         $(document).on('click', '.delete_kelompok_baru', function() {
             if(confirm('Yakin dihapus ?')) {
                 var id_kelompok = $(this).attr("id_kelompok");
@@ -697,28 +773,30 @@ background-position: 0;
 
         $(document).on('click', '.tbh_post', function() {
             var id_akun = $(this).attr("id_akun");
-            // alert(id_akun);
+            $(".nm_post").val('');
+            $("#edit_id_post").val('');
             $("#id_akun").val(id_akun);
             $("#tbh_post").modal('show')
         });
 
-        $(document).on('submit', '#tambah_post', function(event) {
-            event.preventDefault();
-
+        $(document).on('submit', '#tambah_post', function(e) {
+            e.preventDefault()
             var nm_post = $(".nm_post").val();
             var id_akun = $("#id_akun").val();
+            var id_post = $("#edit_id_post").val();
+
             $.ajax({
                 type: "GET",
                 url: "{{ route('tambah_post') }}",
                 data: {
                     nm_post: nm_post,
-                    id_akun: id_akun
+                    id_akun: id_akun,
+                    id_post:id_post
                 },
                 success: function(response) {
                     toast('Berhasil tambah post center')
-                    var id_akun = $("#id_akun").val();
-                 
-                    $('#tbh_post').hide();
+
+                    $('#tbh_post').modal('hide');
                     load_post(id_akun)
                 }
             });
@@ -739,14 +817,58 @@ background-position: 0;
                     success: function(response) {
                         toast('Berhasil hapus post center')
                         load_post(id_akun2)
-    
-                        
                     }
                 });
             }
 
         });
+
+        $(document).on('click', '.btn_edit_post', function(){
+            var nm_post = $(this).attr('nm_post')
+            var id_post = $(this).attr('id_post')
+            var id_akun = $(this).attr('id_akun')
+
+            $(".nm_post").val(nm_post);
+            $("#edit_id_post").val(id_post);
+            $("#id_akun").val(id_akun);
+            $("#tbh_post").modal('show')
+        })
         
+        $(document).on('click', '.btnEditKelompok', function(){
+            var id_kelompok = $(this).attr('id_kelompok')
+            var id_akun = $(this).attr('id_akun')
+
+            $('#edit_k_aktiva').modal('show')
+            $("#id_kelompok").val(id_kelompok)
+            $.ajax({
+                type: "GET",
+                url: "{{route('loadEditkelompok')}}?id_kelompok="+id_kelompok,
+                success: function (r) {
+                    $("#loadEditKelompok").html(r)
+                    $('.select2').select2({
+                        dropdownParent: $('#edit_k_aktiva .modal-content')
+                    });
+                }
+            });
+        })
+
+        $(document).on('submit', '#save_kelompok_edit', function(event) {
+                event.preventDefault();
+               
+                var pesanan_new = $("#save_kelompok_edit").serialize()
+                var id_akun = $("#editIdAkun").val()
+                $.ajax({
+                    url: "{{ route('edit_kelompok_baru') }}?" + pesanan_new,
+                    method: 'GET',
+                    success: function(data) {
+                        toast('Berhasil tambah kelompok')
+                        load_kelompok(id_akun)
+                        $('#edit_k_aktiva').modal('hide');
+                    }
+                });
+
+        });
+
     });
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()

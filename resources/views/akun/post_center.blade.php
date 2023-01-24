@@ -9,8 +9,8 @@
                 <tr>
                     <th>No</th>
                     <th>Post Center</th>
-                    <th>NPWP</th>
-                    <th>No Telpon</th>
+                    {{-- <th>NPWP</th>
+                    <th>No Telpon</th> --}}
                     <th>
                         <center>
                             Aksi
@@ -23,21 +23,21 @@
                 foreach ($post_center as $p) : ?>
                 <tr>
                     <td>
-                        <?= $i++ ?>
+                        {{ $i++ }}
                     </td>
                     <td>
-                        <?= $p->nm_post ?>
+                        {{ $p->nm_post }}
                     </td>
-                    <td>
+                    {{-- <td>
                         <?= $p->npwp ?>
                     </td>
                     <td>
                         <?= $p->no_telepon ?>
-                    </td>
+                    </td> --}}
                     <td>
                         <center>
-                            <a href="" data-toggle="modal" data-target="#edit" id_post="<?= $p->id_post ?>"
-                                class="btn btn-sm btn-primary btn_edit"><i class="fas fa-edit"></i></a>
+                            <a href="#" id_akun="{{$id_akun}}" nm_post="{{ $p->nm_post }}" id_post="<?= $p->id_post ?>"
+                                class="btn btn-sm btn-primary btn_edit_post"><i class="fas fa-edit"></i></a>
                             <a href="#" id_post="<?= $p->id_post ?>" id_akun2='<?= $id_akun ?>'
                                 class="btn btn-sm btn-danger delete_post"><i class="fas fa-trash-alt"></i></a>
                         </center>

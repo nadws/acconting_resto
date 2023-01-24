@@ -10,7 +10,7 @@ class Gudang extends Controller
     public function index(Request $r)
     {
 
-        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.n,f.tgl
+        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
             SELECT b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
@@ -20,7 +20,7 @@ class Gudang extends Controller
         
         left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
         left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
-        left join tb_satuan as e on e.id = a.id_satuan
+        left join tb_satuan as e on e.id_satuan = a.id_satuan
         LEFT join (
             SELECT max(b.tgl) as tgl, b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
             FROM stok_ts as b 
@@ -44,7 +44,7 @@ class Gudang extends Controller
     public function produk(Request $r)
     {
 
-        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.n,f.tgl
+        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
             SELECT b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
@@ -54,7 +54,7 @@ class Gudang extends Controller
         
         left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
         left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
-        left join tb_satuan as e on e.id = a.id_satuan
+        left join tb_satuan as e on e.id_satuan = a.id_satuan
         LEFT join (
             SELECT max(b.tgl) as tgl, b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
             FROM stok_ts as b 
@@ -151,7 +151,7 @@ class Gudang extends Controller
             'title' => 'Merk Bahan',
             'merkBahan' => DB::table('tb_merk_bahan as a')
                 ->join('tb_list_bahan as b', 'a.id_list_bahan', 'b.id_list_bahan')
-                ->join('tb_satuan as d', 'b.id_satuan', 'd.id')
+                ->join('tb_satuan as d', 'b.id_satuan', 'd.id_satuan')
                 ->join('tb_kategori_makanan as c', 'b.id_kategori_makanan', 'c.id_kategori_makanan')
                 ->where('a.id_lokasi', '1')
                 ->orderBy('a.id_merk_bahan', 'DESC')
@@ -179,7 +179,7 @@ class Gudang extends Controller
 
     public function export_opname(Request $r)
     {
-        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.n,f.tgl
+        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
             SELECT b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
@@ -189,7 +189,7 @@ class Gudang extends Controller
         
         left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
         left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
-        left join tb_satuan as e on e.id = a.id_satuan
+        left join tb_satuan as e on e.id_satuan = a.id_satuan
         LEFT join (
             SELECT max(b.tgl) as tgl, b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit
             FROM stok_ts as b 

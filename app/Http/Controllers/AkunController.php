@@ -195,12 +195,47 @@ class AkunController extends Controller
             'nm_post' => $request->nm_post,
             'id_akun' => $request->id_akun,
         ];
-        DB::table('tb_post_center')->insert($data);
+        if(empty($request->id_post)) {
+            DB::table('tb_post_center')->insert($data);
+        } else {
+            DB::table('tb_post_center')->where('id_post', $request->id_post)->update($data);
+        }
     }
 
     public function delete_post(Request $r)
     {
         DB::table('tb_post_center')->where('id_post', $r->id_post)->delete();
         
+    }
+
+    public function loadEditkelompok(Request $r)
+    {
+        $data = [
+            'aktiva' => DB::table('tb_kelompok_aktiva')->where('id_kelompok', $r->id_kelompok)->first(),
+            'id_kelompok' => $r->id_kelompok
+        ];
+        return view('akun.editKelompokBaru', $data);
+    }
+
+    public function edit_kelompok_baru(Request $r)
+    {
+            $t_tarif =  $r->tarif / 100;
+            $data = [
+                'nm_kelompok' => $r->nm_kelompok,
+                'umur' => $r->umur,
+                'satuan' => $r->satuan_aktiva,
+                'tarif' => $t_tarif,
+                'barang_kelompok' => $r->barang,
+            ];
+            DB::table('tb_kelompok_aktiva')->where('id_kelompok', $r->id_kelompok)->update($data);
+    }
+
+    public function loadEditAkun(Request $r)
+    {
+        $data = [
+            'akun' => DB::table('tb_akun_fix')->where('id_akun', $r->id_akun)->first(),
+            'id_akun' => $r->id_akun
+        ];
+        return view('akun.load_edit_akun', $data);
     }
 }
