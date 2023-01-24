@@ -34,13 +34,16 @@
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
-                            <a href="{{route('produk')}}">Bahan</a>
+                            <a href="{{route('produk',1)}}">Bahan & Barang</a>
                         </li>
                         <li class="submenu-item ">
                             <a href="{{route('gudang')}}">Opname Bahan</a>
                         </li>
                         <li class="submenu-item ">
                             <a href="{{route('merk_bahan')}}">Merk Bahan</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="{{route('kategoriMakanan',1)}}">Kategori Makanan</a>
                         </li>
                     </ul>
                 </li>

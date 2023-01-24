@@ -9,7 +9,8 @@ class Gudang extends Controller
 {
     public function index(Request $r)
     {
-
+        $id_kategori = $r->id_kategori ?? '';
+        $isi = !empty($id_kategori) ? "AND a.id_kategori_makanan = $id_kategori" : '';
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
@@ -27,12 +28,13 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '1' and a.monitoring ='Y'
+        where a.id_lokasi = '1' and a.monitoring ='Y' $isi
         order by a.id_list_bahan DESC
         ");
         $data = [
             'title' => 'Opname Bahan',
             'gudang' => $gudang,
+            'id_kategori' => $id_kategori,
             'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
@@ -41,7 +43,8 @@ class Gudang extends Controller
         ];
         return view('gudang.index', $data);
     }
-    public function produk(Request $r)
+
+    public function produk($id)
     {
 
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
@@ -61,23 +64,48 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '1'
+        where a.id_lokasi = '1' AND a.jenis = '$id'
         order by a.id_list_bahan DESC
         ");
         $data = [
-            'title' => 'Bahan',
+            'title' => 'Bahan & Barang',
             'gudang' => $gudang,
+            'id_jenis' => $id,
             'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
+            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', '1'],['jenis', $id]])->get()
 
         ];
         return view('gudang.produk', $data);
     }
 
+    public function loadEditBahan(Request $r)
+    {
+        $data = [
+            'id_list_bahan' => $r->idListBahan, 
+            'detail' => DB::table('tb_list_bahan')->where('id_list_bahan', $r->idListBahan)->first(),
+            'satuan' => DB::table('tb_satuan')->get(),
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
+        ];  
+        return view('gudang.load_edit_bahan', $data);
+    }
+
+    public function edit_bahan(Request $r)
+    {
+        $data = [
+            'nm_bahan' => $r->nm_bahan,
+            'id_satuan' => $r->id_satuan,
+            'id_kategori_makanan' => $r->id_kategori_makanan,
+            'monitoring' => empty($r->monitoring) ? 'T' : $r->monitoring,
+        ];
+        DB::table('tb_list_bahan')->where('id_list_bahan', $r->id_list_bahan)->update($data);
+        return redirect()->route("produk", $r->id_jenis)->with('sukses', 'Data berhasil di edit');
+    }
+
     public function save_opname(Request $r)
     {
+   
         $id_list_bahan = $r->id_list_bahan;
         $stok_ak = $r->stok_ak;
         $stok_po = $r->stok_po;
@@ -113,7 +141,7 @@ class Gudang extends Controller
                 DB::table('stok_ts')->insert($data);
             }
         }
-        return redirect()->route("gudang")->with('sukses', 'Data berhasil di input');
+        return redirect()->route("gudang", ['id_kategori' => $r->id_kategori ?? 1])->with('sukses', 'Data berhasil di input');
     }
 
     public function save_bahan(Request $r)
@@ -125,10 +153,17 @@ class Gudang extends Controller
             'monitoring' => empty($r->monitoring) ? 'T' : $r->monitoring,
             'id_lokasi' => '1',
             'admin' => 'aldi',
-            'tgl' => date('Y-m-d')
+            'jenis' => $r->id_jenis,
+            'tgl' => date('Y-m-d'),
         ];
         DB::table('tb_list_bahan')->insert($data);
-        return redirect()->route("gudang")->with('sukses', 'Data berhasil di input');
+        return redirect()->route("produk", $r->id_jenis)->with('sukses', 'Data berhasil di input');
+    }
+
+    public function hapusBahan($id, $id_jenis)
+    {
+        DB::table('tb_list_bahan')->where('id_list_bahan', $id)->delete();
+        return redirect()->route('produk', $id_jenis)->with('sukses', 'Berhasil hapus data');
     }
 
     public function get_history_bahan(Request $r)
@@ -161,6 +196,7 @@ class Gudang extends Controller
         ];
         return view('gudang.bahan', $data);
     }
+
     public function save_merk_bahan(Request $r)
     {
         $nm_bahan = $r->nm_bahan;
@@ -209,5 +245,40 @@ class Gudang extends Controller
 
         ];
         return view('gudang.export_opname', $data);
+    }
+
+    public function kategoriMakanan($id)
+    {
+        $data = [
+            'title' => 'Kategori Makanan',
+            'id_jenis' => $id,
+            'kat' => DB::table('tb_kategori_makanan')->where([['id_lokasi', 1],['jenis', $id]])->get(),
+        ];
+        return view('gudang.kategori_makanan', $data);
+    }
+
+    public function save_kategori_makanan(Request $r)
+    {
+        DB::table('tb_kategori_makanan')->insert([
+            'nm_kategori' => $r->nm_kategori,
+            'id_lokasi' => 1,
+            'jenis' => $r->id_jenis,
+        ]);
+        return redirect()->route('kategoriMakanan', $r->id_jenis)->with('sukses', 'Berhasil tambah kategori makanan');
+    }
+    
+    public function hapus_kategori_makanan($id,$id_jenis)
+    {
+        DB::table('tb_kategori_makanan')->where('id_kategori_makanan', $id)->delete();
+        return redirect()->route('kategoriMakanan', $id_jenis)->with('sukses', 'Berhasil hapus kategori makanan');
+    }
+
+    public function edit_kategori_makanan(Request $r)
+    {
+        DB::table('tb_kategori_makanan')->where('id_kategori_makanan', $r->id_kategori_makanan)->update([
+            'nm_kategori' => $r->nm_kategori,
+            'id_lokasi' => 1
+        ]);
+        return redirect()->route('kategoriMakanan', $r->id_jenis)->with('sukses', 'Berhasil edit kategori makanan');
     }
 }
