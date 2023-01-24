@@ -61,14 +61,7 @@
                 name="ttl_rp[]" total_rp='{{$count}}' required>
         </div>
     </div>
-    <div class="col-md-1">
-        <div class="form-group">
-            <label for="list_kategori">Qty Resep</label>
-            <input type="text" readonly class="form-control input_detail input_stok qtyResep qtyResep{{$count}}"
-                id="qtyResep1" qty=1 name="qtyResep[]" required>
-        </div>
-    </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <div class="form-group">
             <label for="list_kategori">Total Rp</label>
             <input readonly type="text" class="form-control input_detail input_stok t_rp t_rp{{$count}}" name="t_rp[]"

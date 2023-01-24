@@ -325,6 +325,7 @@
                     },
                     type: "GET",
                     success: function(data) {
+                        
                         if (data == 'biaya-daging') {
                             $("#form-jurnal").attr("action",
                                 "{{ route('save_stok_daging') }}");
@@ -452,8 +453,9 @@
             var count = 1;
             $(document).on('click', '.tbh-stok', function() {
                 count = count + 1;
+                var id_akun = $(this).attr('id_akun');
                 $.ajax({
-                    url: "{{ route('tambah_jurnal_daging') }}?count=" + count,
+                    url: "{{ route('tambah_jurnal_daging') }}?count=" + count + "&id_debit=" + id_akun,
                     type: "Get",
                     success: function(data) {
                         $('#tambah_input_jurnal').append(data);
@@ -700,6 +702,28 @@
             var debit = $('.total').val(debit);
         
         });
+        
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        var count = 1;
+            $(document).on('click', '.tbh-stok-barang', function() {
+                count = count + 1;
+                var id_akun = $(this).attr('id_akun');
+                $.ajax({
+                    url: "{{ route('tambah_jurnal_barang') }}?count=" + count + "&id_debit=" + id_akun,
+                    type: "Get",
+                    success: function(data) {
+                        $('#tambah_input_jurnal-barang').append(data);
+                        $(".select").select2({
+                            dropdownParent: $('#tambah .modal-content')
+                        });
+                    }
+                });
+            });
+            
         
     });
 </script>

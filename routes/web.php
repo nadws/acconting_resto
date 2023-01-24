@@ -34,6 +34,7 @@ Route::get('/tambah_jurnal_biaya', [Jurnal_pengeluaran::class, 'tambah_jurnal_bi
 Route::get('/get_save_jurnal', [Jurnal_pengeluaran::class, 'get_save_jurnal'])->name('get_save_jurnal');
 Route::post('/save_jurnal_biaya', [Jurnal_pengeluaran::class, 'save_jurnal_biaya'])->name('save_jurnal_biaya');
 Route::post('/save_jurnal_aktiva', [Jurnal_pengeluaran::class, 'save_jurnal_aktiva'])->name('save_jurnal_aktiva');
+Route::get('/tambah_jurnal_barang', [Jurnal_pengeluaran::class, 'tambah_jurnal_barang'])->name('tambah_jurnal_barang');
 
 
 
@@ -68,6 +69,7 @@ Route::get('/delete_post', [AkunController::class, 'delete_post'])->name('delete
 Route::get('/loadEditkelompok', [AkunController::class, 'loadEditkelompok'])->name('loadEditkelompok');
 Route::get('/edit_kelompok_baru', [AkunController::class, 'edit_kelompok_baru'])->name('edit_kelompok_baru');
 Route::get('/loadEditAkun', [AkunController::class, 'loadEditAkun'])->name('loadEditAkun');
+Route::get('/get_kategori_kelompok', [AkunController::class, 'get_kategori_kelompok'])->name('get_kategori_kelompok');
 
 
 require __DIR__ . '/auth.php';

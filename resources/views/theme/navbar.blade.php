@@ -47,7 +47,7 @@
 
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="fas fa-calculator"></i>
                         <span>Accounting</span>
                     </a>
                     <ul class="submenu ">

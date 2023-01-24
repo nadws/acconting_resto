@@ -66,7 +66,7 @@
 <div class="row">
     <div class="col-md-2">
         <div class="form-group">
-            <label for="list_kategori">List Bahan = Resep</label>
+            <label for="list_kategori">Barang</label>
             <select name="id_list_bahan[]" detail="1" id="id_list_bahan1"
                 class="id_list_bahan form-control select satuan input_detail input_stok listBahan listBahan1" required>
                 <option value="">-Pilih data--</option>
@@ -125,14 +125,7 @@
                 name="ttl_rp[]" total_rp='1' required>
         </div>
     </div>
-    <div class="col-md-1">
-        <div class="form-group">
-            <label for="list_kategori">Qty Resep</label>
-            <input type="text" readonly class="form-control input_detail input_stok qtyResep qtyResep1" id="qtyResep1"
-                qty=1 name="qtyResep[]" required>
-        </div>
-    </div>
-    <div class="col-md-1">
+    <div class="col-md-2">
         <div class="form-group">
             <label for="list_kategori">Total Rp</label>
             <input readonly type="text" class="form-control input_detail input_stok t_rp t_rp1" name="t_rp[]" t_rp="1"
@@ -148,12 +141,12 @@
 </div>
 
 
-<div id="tambah_input_jurnal">
+<div id="tambah_input_jurnal-barang">
 
 </div>
 <div align="right" class="mt-2 col-lg-12">
-    <button type="button" class="btn btn-block btn-lg  tbh-stok" id_akun="{{$id_akun
-    }}" style="background-color: #F4F7F9; color: #8FA8BD"><i class="fas fa-plus"></i> Tambah Baris Baru</button>
+    <button type="button" class="btn btn-block btn-lg  tbh-stok-barang" id_akun="{{$id_akun}}"
+        style="background-color: #F4F7F9; color: #8FA8BD"><i class="fas fa-plus"></i> Tambah Baris Baru</button>
 </div>
 <div class="col-lg-12">
     <hr>

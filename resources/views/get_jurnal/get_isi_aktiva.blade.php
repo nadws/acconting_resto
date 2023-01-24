@@ -61,8 +61,8 @@
         </div>
     </div>
 
-    <div class="col-12">
-        <table class="table table-bordered">
+    <div class="col-11">
+        <table class="table table-bordered" style="text-align: center">
             <thead>
                 <tr>
                     <th></th>

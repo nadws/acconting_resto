@@ -3,7 +3,7 @@
 <style>
     .form-switch2 .form-check-input2 {
         background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-        background-position: 0;
+background-position: 0;
         border-radius: 2em;
         margin-left: -2.5em;
         transition: background-position .15s ease-in-out;
@@ -163,7 +163,8 @@
     </div>
 </form>
 
-<div class="modal fade show_kelompok" onchange="" id="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade show_kelompok" onchange="" id="" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-costume">
@@ -344,6 +345,7 @@
                                     <option value="1">Umum</option>
                                     <option value="2">Aktiva</option>
                                     <option value="3">ATK</option>
+                                    <option value="5">Peralatan</option>
                                     <option value="4">Stok Ts</option>
                                 </select>
                             </div>
@@ -387,6 +389,16 @@
                                 </a>
 
                             </div>
+                            <div class="form-group keterangan5 listKategori">
+                                <label for="list_kategori"><u>Asset Stok Peralatan</u></label>
+                                <p>Asset Peralatan memuat data asset yang memiliki produk dan akan di opname setiap
+                                    bulannya</p>
+                                <p>Contoh Jurnal Penyesuaian:</p>
+                                <a href="#" data-target="#view_image_atk" data-toggle="modal">
+                                    <img src="{{asset('img/atk.png')}}" alt="" width="80%">
+                                </a>
+
+                            </div>
                         </div>
                         <div class="col-lg-4 keterangan mb-2 listKategori">
                             <label for="">Satuan</label>
@@ -396,6 +408,22 @@
                                 <?php foreach ($satuan as $p) : ?>
                                 <option value="{{ $p->id_satuan }}">{{ $p->nm_satuan }}</option>
                                 <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 keterangan4 mb-2 listKategori">
+                            <label for="">Jenis</label>
+                            <select name="jenis"
+                                class="form-control jenis select2 satuan input_detail kategori_makanan   input_biaya"
+                                required>
+                                <option value="">-Pilih Jenis-</option>
+                                <option value="1">Bahan</option>
+                                <option value="2">Barang</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 keterangan4 mb-2 listKategori">
+                            <label for="">Kategori Kelompok</label>
+                            <select name="id_kategori_makanan" id="kategori"
+                                class="form-control select2 satuan input_detail kategori_makanan  input_biaya" required>
                             </select>
                         </div>
                         <div class="col-lg-12 keterangan2 listKategori">
@@ -513,9 +541,11 @@
             $('.keterangan2').hide();
             $('.keterangan3').hide();
             $('.keterangan4').hide();
+            $('.keterangan5').hide();
             $('.input_akun2').attr('disabled', 'true');
             $('.kelompok').attr('disabled', 'true');
             $('.satuan_umum').attr('disabled', 'true');
+            $('.kategori_makanan').attr('disabled', 'true');
             $('#id_kas').attr('disabled', 'true');
         }
 
@@ -643,10 +673,10 @@
 
         $(document).on('change', '.kat_akun', function(){
             var id_kat = $(this).val();
-            alert(id_kat);
             if (id_kat == '1') {
                 $('.keterangan').show();
                 $('.satuan_umum').removeAttr('disabled', 'true');
+                
             } else {
                 $('.keterangan').hide();
             }
@@ -663,8 +693,14 @@
             }
             if (id_kat == '4') {
                 $('.keterangan4').show();
+                $('.kategori_makanan').removeAttr('disabled', 'true');
             } else {
                 $('.keterangan4').hide();
+            }
+            if (id_kat == '5') {
+                $('.keterangan5').show();
+            } else {
+                $('.keterangan5').hide();
             }
         })
 
@@ -870,6 +906,17 @@
                         $('#edit_k_aktiva').modal('hide');
                     }
                 });
+
+        });
+        $(document).on('change', '.jenis', function(event) {
+            var jenis = $(this).val();
+            $.ajax({
+                    url: "{{ route('get_kategori_kelompok') }}?jenis=" + jenis,
+                    method: 'GET',
+                    success: function(data) {
+                      $('#kategori').html(data);
+                }
+            });
 
         });
 

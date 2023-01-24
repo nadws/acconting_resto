@@ -16,7 +16,8 @@ class AkunController extends Controller
             'akun' => Akun::with('kategoriAkun')->get(),
             'no_akun' => 1,
             'kategori' => KategoriAkun::all(),
-            'satuan' => DB::table('tb_satuan')->get()
+            'satuan' => DB::table('tb_satuan')->get(),
+            'kategori_makan' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
         ];
         return view('akun.akun', $data);
     }
@@ -29,7 +30,10 @@ class AkunController extends Controller
             'nm_akun' => $r->nm_akun,
             'id_kategori' => $r->id_kategori,
             'id_penyesuaian' => !empty($r->id_penyesuaian) ? $r->id_penyesuaian : 0,
-            'id_satuan' => empty($r->id_satuan) ? '0' : $r->id_satuan
+            'id_satuan' => empty($r->id_satuan) ? '0' : $r->id_satuan,
+            'id_kategori_makanan' => empty($r->id_kategori_makanan) ? '0' : $r->id_kategori_makanan,
+            'jenis_gudang' => empty($r->jenis) ? '0' : $r->jenis,
+
         ];
         $akun = Akun::create($data);
 
@@ -195,7 +199,7 @@ class AkunController extends Controller
             'nm_post' => $request->nm_post,
             'id_akun' => $request->id_akun,
         ];
-        if(empty($request->id_post)) {
+        if (empty($request->id_post)) {
             DB::table('tb_post_center')->insert($data);
         } else {
             DB::table('tb_post_center')->where('id_post', $request->id_post)->update($data);
@@ -218,15 +222,15 @@ class AkunController extends Controller
 
     public function edit_kelompok_baru(Request $r)
     {
-            $t_tarif =  $r->tarif / 100;
-            $data = [
-                'nm_kelompok' => $r->nm_kelompok,
-                'umur' => $r->umur,
-                'satuan' => $r->satuan_aktiva,
-                'tarif' => $t_tarif,
-                'barang_kelompok' => $r->barang,
-            ];
-            DB::table('tb_kelompok_aktiva')->where('id_kelompok', $r->id_kelompok)->update($data);
+        $t_tarif =  $r->tarif / 100;
+        $data = [
+            'nm_kelompok' => $r->nm_kelompok,
+            'umur' => $r->umur,
+            'satuan' => $r->satuan_aktiva,
+            'tarif' => $t_tarif,
+            'barang_kelompok' => $r->barang,
+        ];
+        DB::table('tb_kelompok_aktiva')->where('id_kelompok', $r->id_kelompok)->update($data);
     }
 
     public function loadEditAkun(Request $r)
@@ -236,5 +240,16 @@ class AkunController extends Controller
             'id_akun' => $r->id_akun
         ];
         return view('akun.load_edit_akun', $data);
+    }
+
+    public function get_kategori_kelompok(Request $r)
+    {
+        $jenis = $r->jenis;
+        $get_jenis = DB::table('tb_kategori_makanan')->where(['jenis' => $jenis, 'id_lokasi' => '1'])->get();
+
+        echo "<option value=''>--Pilih Kategori--</option>";
+        foreach ($get_jenis as $g) {
+            echo "<option value='$g->id_kategori_makanan'>$g->nm_kategori</option>";
+        }
     }
 }

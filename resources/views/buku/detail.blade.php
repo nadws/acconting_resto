@@ -39,24 +39,22 @@
                                 <tr>
                                     <th>No</th>
                                     <th>No Akun</th>
+                                    <th>Keterangan</th>
                                     <th>Debit </th>
                                     <th>Kredit</th>
                                     <th>Saldo</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @foreach ($buku as $no => $j)
-
                                 <tr>
                                     <td>{{$no+1}}</td>
                                     <td>{{$j->no_akun}}</td>
+                                    <td>{{$j->ket}}</td>
                                     <td>{{number_format($j->debit,0)}}</td>
                                     <td>{{number_format($j->kredit,0)}}</td>
                                     <td>{{number_format($j->debit-$j->kredit,0)}}</td>
                                 </tr>
-
                                 @endforeach
 
                             </tbody>

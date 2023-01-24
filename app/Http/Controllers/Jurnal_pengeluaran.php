@@ -19,7 +19,7 @@ class Jurnal_pengeluaran extends Controller
 
         $j_pengeluaran = DB::select("SELECT a.*, b.no_akun, b.nm_akun
         FROM tb_jurnal as a
-        left join tb_akun as b on b.id_akun = a.id_akun
+        left join tb_akun_fix as b on b.id_akun = a.id_akun
         where a.tgl BETWEEN '$tgl1' and '$tgl2' and a.id_buku = '3'
         order by a.id_jurnal DESC
         ");
@@ -38,18 +38,22 @@ class Jurnal_pengeluaran extends Controller
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
-            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', 1 == 1 ? 1 : 2]])->get(),
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
             'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
-            'kelompok' => DB::table('tb_kelompok_aktiva')->get()
+            'kelompok' => DB::table('tb_kelompok_aktiva')->orderBy('id_kelompok', 'ASC')->get()
         ];
         if ($akun->id_kategori == '1') {
             if ($akun->id_penyesuaian == '4') {
-                return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+                if ($akun->jenis_gudang == '1') {
+                    return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+                } else {
+                    return view('jurnal_pengeluaran.get_isi_jurnal2', $data);
+                }
+            } elseif ($akun->id_penyesuaian == '2') {
+                return view('get_jurnal.get_isi_aktiva', $data);
             } else {
                 # code...
             }
-        } elseif ($id == '143') {
-            return view('get_jurnal.get_isi_aktiva', $data);
         } else {
             if ($akun->id_kategori == '5') {
                 return view('jurnal_pengeluaran.get_jurnal_biaya', $data);
@@ -87,17 +91,32 @@ class Jurnal_pengeluaran extends Controller
     public function tambah_jurnal_daging(Request $r)
     {
         $id = $r->id_debit;
-        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
 
 
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
-            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', 1 == 1 ? 1 : 2]])->get(),
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
             'count' => $r->count,
         ];
 
         return view('jurnal_pengeluaran.get_isi_jurnal_tambah', $data);
+    }
+    public function tambah_jurnal_barang(Request $r)
+    {
+        $id = $r->id_debit;
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
+
+
+        $data = [
+            'satuan' => DB::table('tb_satuan')->get(),
+            'id_akun' => $id,
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
+            'count' => $r->count,
+        ];
+
+        return view('jurnal_pengeluaran.get_isi_jurnal_tambah2', $data);
     }
 
     public function save_stok_daging(Request $r)
@@ -133,7 +152,7 @@ class Jurnal_pengeluaran extends Controller
         $data = [
             'tgl' => $tgl,
             'id_akun' => $metode,
-            'ket' => 'testing',
+            'ket' => $keterangan,
             'no_nota' => 'TKM' . $no_urutan,
             'kredit' => $r->total,
             'id_buku' => '3',
@@ -168,7 +187,7 @@ class Jurnal_pengeluaran extends Controller
             $data = [
                 'id_bahan' => $id_list_bahan[$x],
                 'id_satuan' => $id_satuan[$x],
-                'debit' => $qtyResep[$x],
+                'debit' => empty($qtyResep[$x]) ? $qty[$x] : $qtyResep[$x],
                 'tgl' => $tgl,
                 'no_nota' => 'TKM' . $no_urutan,
                 'kredit' => '0',
@@ -201,7 +220,7 @@ class Jurnal_pengeluaran extends Controller
     public function get_biaya_lain(Request $r)
     {
         $data = [
-            'akun' => DB::table('tb_akun')->where(['id_kategori' => '5', 'id_lokasi' => '1'])->get()
+            'akun' => DB::table('tb_akun_fix')->where(['id_kategori' => '5', 'id_lokasi' => '1'])->get()
         ];
 
         return view('jurnal_pengeluaran.get_biaya_lain', $data);
@@ -210,7 +229,7 @@ class Jurnal_pengeluaran extends Controller
     public function tambah_jurnal_lain(Request $r)
     {
         $data = [
-            'akun' => DB::table('tb_akun')->where(['id_kategori' => '5', 'id_lokasi' => '1'])->get(),
+            'akun' => DB::table('tb_akun_fix')->where(['id_kategori' => '5', 'id_lokasi' => '1'])->get(),
             'count' => $r->count,
         ];
 
@@ -370,29 +389,41 @@ class Jurnal_pengeluaran extends Controller
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
-            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', 1 == 1 ? 1 : 2]])->get(),
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
             'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
             'count' => $r->count
         ];
         return view('jurnal_pengeluaran.tbhget_biaya_biaya', $data);
     }
+    public function tambah_jurnal_biaya2(Request $r)
+    {
+        $id = $r->id_akun;
+        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+        $data = [
+            'satuan' => DB::table('tb_satuan')->get(),
+            'id_akun' => $id,
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
+            'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
+            'count' => $r->count
+        ];
+        return view('jurnal_pengeluaran.tbhget_biaya_biaya2', $data);
+    }
 
     public function get_save_jurnal(Request $r)
     {
         $id = $r->id_debit;
-        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
 
-
-        if ($id == '228') {
-            echo "biaya-daging";
-        } elseif ($id == '143') {
-            echo "biaya-aktiva";
-        } else {
-            if ($akun->id_kategori == '5') {
-                echo "biaya";
+        if ($akun->id_kategori == '1') {
+            if ($akun->id_penyesuaian == '4') {
+                echo "biaya-daging";
+            } elseif ($akun->id_penyesuaian == '2') {
+                echo "biaya-aktiva";
             } else {
                 # code...
             }
+        } else {
+            echo "biaya";
         }
     }
 
