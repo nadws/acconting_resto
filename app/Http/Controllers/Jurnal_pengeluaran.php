@@ -26,7 +26,7 @@ class Jurnal_pengeluaran extends Controller
         $data = [
             'title' => 'Jurnal Pengeluaran',
             'jurnal' => $j_pengeluaran,
-            'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get()
+            'akun' => DB::table('tb_akun_fix')->where('id_lokasi', '1')->get()
         ];
         return view('jurnal_pengeluaran.index', $data);
     }
@@ -34,20 +34,28 @@ class Jurnal_pengeluaran extends Controller
     public function get_isi_jurnal(Request $r)
     {
         $id = $r->id_debit;
-        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
-
-
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
             'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', 1 == 1 ? 1 : 2]])->get(),
-
-
+            'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
+            'kelompok' => DB::table('tb_kelompok_aktiva')->get()
         ];
-
-        if ($id == '228') {
-            return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+        if ($akun->id_kategori == '1') {
+            if ($akun->id_penyesuaian == '4') {
+                return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+            } else {
+                # code...
+            }
+        } elseif ($id == '143') {
+            return view('get_jurnal.get_isi_aktiva', $data);
         } else {
+            if ($akun->id_kategori == '5') {
+                return view('jurnal_pengeluaran.get_jurnal_biaya', $data);
+            } else {
+                # code...
+            }
         }
     }
 
@@ -56,12 +64,12 @@ class Jurnal_pengeluaran extends Controller
         $id_list = $r->id_list_bahan;
 
         $list =  DB::table('tb_list_bahan')->where('id_list_bahan', $id_list)->first();
-        $d = DB::table('tb_satuan')->where('id', $list->id_satuan)->first();
+        $d = DB::table('tb_satuan')->where('id_satuan', $list->id_satuan)->first();
 
 
         $output = [
-            'id_satuan' => $d->id,
-            'satuan' => $d->n
+            'id_satuan' => $d->id_satuan,
+            'satuan' => $d->nm_satuan
         ];
 
         echo json_encode($output);
@@ -114,7 +122,7 @@ class Jurnal_pengeluaran extends Controller
         $debit_lain = $r->debit_lain;
 
 
-        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a ");
+        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
 
         if (empty($urutan->urutan)) {
             $no_urutan = '1001';
@@ -126,10 +134,10 @@ class Jurnal_pengeluaran extends Controller
             'tgl' => $tgl,
             'id_akun' => $metode,
             'ket' => 'testing',
-            'no_nota' => 'TSP' . $no_urutan,
+            'no_nota' => 'TKM' . $no_urutan,
             'kredit' => $r->total,
             'id_buku' => '3',
-            'kd_gabungan' => 'TSP' . $no_urutan,
+            'kd_gabungan' => 'TKM' . $no_urutan,
             'id_lokasi' => '1',
             'urutan' => $no_urutan,
         ];
@@ -143,11 +151,11 @@ class Jurnal_pengeluaran extends Controller
                 'id_akun' => $id_akun,
                 'ket' => $keterangan,
                 'ket2' => $bahan->nm_bahan,
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'debit' => $total,
                 'qty' => $qty[$x],
                 'id_buku' => '3',
-                'kd_gabungan' => 'TSP' . $no_urutan,
+                'kd_gabungan' => 'TKM' . $no_urutan,
                 'id_lokasi' => '1',
                 'urutan' => $no_urutan,
                 'no_urutan' => $no_id
@@ -162,7 +170,7 @@ class Jurnal_pengeluaran extends Controller
                 'id_satuan' => $id_satuan[$x],
                 'debit' => $qtyResep[$x],
                 'tgl' => $tgl,
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'kredit' => '0',
                 'id_jurnal' => $max_id->id_jurnal,
                 'id_merk_bahan' => $id_merk_bahan[$x],
@@ -177,10 +185,10 @@ class Jurnal_pengeluaran extends Controller
                 'tgl' => $tgl,
                 'id_akun' => $id_akun_lain[$x],
                 'ket' => "Biaya lain-lain",
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'debit' => $debit_lain[$x],
                 'id_buku' => '3',
-                'kd_gabungan' => 'TSP' . $no_urutan,
+                'kd_gabungan' => 'TKM' . $no_urutan,
                 'id_lokasi' => '1',
                 'urutan' => $no_urutan,
             ];
@@ -271,7 +279,7 @@ class Jurnal_pengeluaran extends Controller
         DB::table('stok_ts')->where('no_nota', $no_nota)->delete();
 
 
-        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a ");
+        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
 
         if (empty($urutan->urutan)) {
             $no_urutan = '1001';
@@ -283,10 +291,10 @@ class Jurnal_pengeluaran extends Controller
             'tgl' => $tgl,
             'id_akun' => $metode,
             'ket' => 'testing',
-            'no_nota' => 'TSP' . $no_urutan,
+            'no_nota' => 'TKM' . $no_urutan,
             'kredit' => $r->total,
             'id_buku' => '3',
-            'kd_gabungan' => 'TSP' . $no_urutan,
+            'kd_gabungan' => 'TKM' . $no_urutan,
             'id_lokasi' => '1',
             'urutan' => $no_urutan,
         ];
@@ -300,11 +308,11 @@ class Jurnal_pengeluaran extends Controller
                 'id_akun' => $id_akun,
                 'ket' => $keterangan,
                 'ket2' => $bahan->nm_bahan,
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'debit' => $total,
                 'qty' => $qty[$x],
                 'id_buku' => '3',
-                'kd_gabungan' => 'TSP' . $no_urutan,
+                'kd_gabungan' => 'TKM' . $no_urutan,
                 'id_lokasi' => '1',
                 'urutan' => $no_urutan,
                 'no_urutan' => $no_id
@@ -319,7 +327,7 @@ class Jurnal_pengeluaran extends Controller
                 'id_satuan' => $id_satuan[$x],
                 'debit' => $qtyResep[$x],
                 'tgl' => $tgl,
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'kredit' => '0',
                 'id_jurnal' => $max_id->id_jurnal,
                 'id_merk_bahan' => $id_merk_bahan[$x],
@@ -334,10 +342,10 @@ class Jurnal_pengeluaran extends Controller
                 'tgl' => $tgl,
                 'id_akun' => $id_akun_lain[$x],
                 'ket' => "Biaya lain-lain",
-                'no_nota' => 'TSP' . $no_urutan,
+                'no_nota' => 'TKM' . $no_urutan,
                 'debit' => $debit_lain[$x],
                 'id_buku' => '3',
-                'kd_gabungan' => 'TSP' . $no_urutan,
+                'kd_gabungan' => 'TKM' . $no_urutan,
                 'id_lokasi' => '1',
                 'urutan' => $no_urutan,
             ];
@@ -353,5 +361,148 @@ class Jurnal_pengeluaran extends Controller
         DB::table('tb_jurnal')->where('no_nota', $nota)->delete();
         DB::table('stok_ts')->where('no_nota', $nota)->delete();
         return redirect()->route("jurnal_pengeluaran")->with('sukses', 'Data berhasil di hapus');
+    }
+
+    public function tambah_jurnal_biaya(Request $r)
+    {
+        $id = $r->id_akun;
+        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+        $data = [
+            'satuan' => DB::table('tb_satuan')->get(),
+            'id_akun' => $id,
+            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', 1 == 1 ? 1 : 2]])->get(),
+            'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
+            'count' => $r->count
+        ];
+        return view('jurnal_pengeluaran.tbhget_biaya_biaya', $data);
+    }
+
+    public function get_save_jurnal(Request $r)
+    {
+        $id = $r->id_debit;
+        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+
+
+        if ($id == '228') {
+            echo "biaya-daging";
+        } elseif ($id == '143') {
+            echo "biaya-aktiva";
+        } else {
+            if ($akun->id_kategori == '5') {
+                echo "biaya";
+            } else {
+                # code...
+            }
+        }
+    }
+
+    public function save_jurnal_biaya(Request $r)
+    {
+        $tgl = $r->tgl;
+        $metode = $r->metode;
+        $no_id = $r->no_id;
+        $tujuan = $r->tujuan;
+        $keterangan = $r->keterangan;
+        $id_post_center = $r->id_post_center;
+        $id_satuanBeli = $r->id_satuanBeli;
+        $qty = $r->qty;
+        $rupiah = $r->rupiah;
+        $id_akun = $r->id_akun;
+
+        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+
+        if (empty($urutan->urutan)) {
+            $no_urutan = '1001';
+        } else {
+            $no_urutan = $urutan->urutan + 1;
+        }
+
+        $data = [
+            'tgl' => $tgl,
+            'id_akun' => $metode,
+            'ket' => 'testing',
+            'no_nota' => 'TKM' . $no_urutan,
+            'kredit' => $r->total,
+            'id_buku' => '3',
+            'kd_gabungan' => 'TKM' . $no_urutan,
+            'id_lokasi' => '1',
+            'urutan' => $no_urutan,
+        ];
+        DB::table('tb_jurnal')->insert($data);
+
+        for ($x = 0; $x < count($no_id); $x++) {
+            $data = [
+                'no_urutan' => $no_id[$x],
+                'id_akun' => $id_akun,
+                'tgl' => $tgl,
+                'id_lokasi' => '1',
+                'no_nota' => 'TKM' . $no_urutan,
+                'urutan' => $no_urutan,
+                'id_buku' => '3',
+                'ket' => $tujuan[$x],
+                'ket2' => $keterangan[$x],
+                'id_post_center' => $id_post_center[$x],
+                'id_satuan' => $id_satuanBeli[$x],
+                'qty' => $qty[$x],
+                'debit' => $rupiah[$x],
+            ];
+            DB::table('tb_jurnal')->insert($data);
+        }
+        $tgl1 = date('Y-m-01', strtotime($r->tgl));
+        return redirect()->route("jurnal_pengeluaran", ['tgl1' => $tgl1, 'tgl2' => $r->tgl])->with('sukses', 'Data berhasil di input');
+    }
+    public function save_jurnal_aktiva(Request $r)
+    {
+        $tgl = $r->tgl;
+        $metode = $r->metode;
+        $no_id = $r->no_id;
+        $tujuan = $r->tujuan;
+        $keterangan = $r->keterangan;
+        $id_post_center = $r->id_post_center;
+        $id_satuanBeli = $r->id_satuanBeli;
+        $qty = $r->qty;
+        $rupiah = $r->rupiah;
+        $id_akun = $r->id_akun;
+
+        $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+
+        if (empty($urutan->urutan)) {
+            $no_urutan = '1001';
+        } else {
+            $no_urutan = $urutan->urutan + 1;
+        }
+
+        $data = [
+            'tgl' => $tgl,
+            'id_akun' => $metode,
+            'ket' => 'testing',
+            'no_nota' => 'TKM' . $no_urutan,
+            'kredit' => $r->total,
+            'id_buku' => '3',
+            'kd_gabungan' => 'TKM' . $no_urutan,
+            'id_lokasi' => '1',
+            'urutan' => $no_urutan,
+        ];
+        DB::table('tb_jurnal')->insert($data);
+
+        for ($x = 0; $x < count($no_id); $x++) {
+            $data = [
+                'no_urutan' => $no_id[$x],
+                'id_akun' => $id_akun,
+                'tgl' => $tgl,
+                'id_lokasi' => '1',
+                'no_nota' => 'TKM' . $no_urutan,
+                'urutan' => $no_urutan,
+                'id_buku' => '3',
+                'ket' => $keterangan[$x],
+                'id_post_center' => $id_post_center[$x],
+                'id_satuan' => $id_satuanBeli[$x],
+                'qty' => $qty[$x],
+                'debit' => $rupiah[$x],
+            ];
+            DB::table('tb_jurnal')->insert($data);
+        }
+        $tgl1 = date('Y-m-01', strtotime($r->tgl));
+        return redirect()->route("jurnal_pengeluaran", ['tgl1' => $tgl1, 'tgl2' => $r->tgl])->with('sukses', 'Data berhasil di input');
     }
 }

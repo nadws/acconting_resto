@@ -30,6 +30,12 @@ Route::post('/edit_stok_daging', [Jurnal_pengeluaran::class, 'edit_stok_daging']
 Route::get('/hapus_stok_daging', [Jurnal_pengeluaran::class, 'hapus_stok_daging'])->name('hapus_stok_daging');
 
 
+Route::get('/tambah_jurnal_biaya', [Jurnal_pengeluaran::class, 'tambah_jurnal_biaya'])->name('tambah_jurnal_biaya');
+Route::get('/get_save_jurnal', [Jurnal_pengeluaran::class, 'get_save_jurnal'])->name('get_save_jurnal');
+Route::post('/save_jurnal_biaya', [Jurnal_pengeluaran::class, 'save_jurnal_biaya'])->name('save_jurnal_biaya');
+Route::post('/save_jurnal_aktiva', [Jurnal_pengeluaran::class, 'save_jurnal_aktiva'])->name('save_jurnal_aktiva');
+
+
 
 Route::get('/gudang', [Gudang::class, 'index'])->name('gudang');
 Route::get('/export_opname', [Gudang::class, 'export_opname'])->name('export_opname');

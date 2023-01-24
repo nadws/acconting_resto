@@ -57,25 +57,28 @@
                         </thead>
                         <tbody>
                             @foreach ($akun as $no => $d)
-                                <tr>
-                                    <td>{{ $no+1 }}</td>
-                                    <td>{{ $d->no_akun }}</td>
-                                    <td>{{ $d->kd_akun }}</td>
-                                    <td>{{ $d->nm_akun }}</td>
-                                    <td>{{ $d->kategoriAkun->nm_kategori }}</td>
-                                    <td align="right">
-                                        @if ($d->id_penyesuaian == 2)
-                                            <button type="button" data-toggle="tooltip"
-                                            data-placement="top" title="Kelompok" class="btn btn-sm btn-primary edit_kelompok" id_akun="{{$d->id_akun}}"><i class="bi bi-diagram-3-fill"></i> </button>
-                                        @endif
-                                        <a id_akun="{{$d->id_akun}}" data-toggle="tooltip"
-                                            data-placement="top" title="Post Center" type="button" class="post_center btn btn-sm btn-primary"><i class="bi bi-stack"></i> </a>
-                                        <a href="#" data-toggle="tooltip"
-                                        data-placement="top" title="Edit" class="btn btn-sm btn-primary btnEditAkun" id_akun="{{ $d->id_akun }}"><i class="bi bi-pen"></i> </a>
-                                        <a data-toggle="tooltip"
-                                        data-placement="top" title="Delete" href="{{ route('del_akun', $d->id_akun) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> </a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{ $no+1 }}</td>
+                                <td>{{ $d->no_akun }}</td>
+                                <td>{{ $d->kd_akun }}</td>
+                                <td>{{ $d->nm_akun }}</td>
+                                <td>{{ $d->kategoriAkun->nm_kategori }}</td>
+                                <td align="right">
+                                    @if ($d->id_penyesuaian == 2)
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Kelompok"
+                                        class="btn btn-sm btn-primary edit_kelompok" id_akun="{{$d->id_akun}}"><i
+                                            class="bi bi-diagram-3-fill"></i> </button>
+                                    @endif
+                                    <a id_akun="{{$d->id_akun}}" data-toggle="tooltip" data-placement="top"
+                                        title="Post Center" type="button" class="post_center btn btn-sm btn-primary"><i
+                                            class="bi bi-stack"></i> </a>
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Edit"
+                                        class="btn btn-sm btn-primary"><i class="bi bi-pen"></i> </a>
+                                    <a data-toggle="tooltip" data-placement="top" title="Delete"
+                                        href="{{ route('del_akun', $d->id_akun) }}" class="btn btn-sm btn-danger"><i
+                                            class="bi bi-trash"></i> </a>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -284,7 +287,7 @@
                                 <select name="id_kategori" id="pilihKategori" class="select2 form-control">
                                     <option value="">- Kategori Akun -</option>
                                     @foreach ($kategori as $d)
-                                        <option value="{{ $d->id_kategori }}">{{ $d->nm_kategori }}</option>
+                                    <option value="{{ $d->id_kategori }}">{{ $d->nm_kategori }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -292,10 +295,10 @@
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="list_kategori">No Akun</label>
-                                <input type="text" id="noAkun" readonly  name="no_akun" class="form-control">
+                                <input type="text" id="noAkun" readonly name="no_akun" class="form-control">
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-2">
                             <div class="form-group">
                                 <label for="list_kategori">Kode Akun</label>
@@ -308,13 +311,13 @@
                                 <input type="text" name="nm_akun" class="form-control">
                             </div>
                         </div>
-                        
+
                         <div class="col-lg-3 cashFlow">
                             <div class="form-group">
                                 <label for="switchBiaya">Biaya Di Sesuaikan</label> <br>
                                 <div class="form-check form-switch form-switch2">
-                                    <input class="form-check-input form-check-input2 " name="biayaDisesuaikan" value="off"
-                                    type="checkbox" id="switchBiaya" />
+                                    <input class="form-check-input form-check-input2 " name="biayaDisesuaikan"
+                                        value="off" type="checkbox" id="switchBiaya" />
                                     <input type="hidden" name="id_biaya" id="id_biaya" value="0">
                                 </div>
                             </div>
@@ -325,7 +328,7 @@
                                 <div class="form-check form-switch form-switch2">
                                     <input class="form-check-input form-check-input2 " name="bukuKas" value="off"
                                         type="checkbox" id="switchBukuKas" />
-                                        <input type="hidden" name="id_kas" id="id_kas" value="0">
+                                    <input type="hidden" name="id_kas" id="id_kas" value="0">
                                 </div>
                             </div>
                         </div>
@@ -478,7 +481,7 @@
                                     readonly>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -495,7 +498,7 @@
             </div>
         </div>
     </div>
-</form> 
+</form>
 @endsection
 
 @section('scripts')
@@ -640,6 +643,7 @@
 
         $(document).on('change', '.kat_akun', function(){
             var id_kat = $(this).val();
+            alert(id_kat);
             if (id_kat == '1') {
                 $('.keterangan').show();
                 $('.satuan_umum').removeAttr('disabled', 'true');
