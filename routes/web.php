@@ -39,12 +39,19 @@ Route::post('/save_jurnal_aktiva', [Jurnal_pengeluaran::class, 'save_jurnal_akti
 
 Route::get('/gudang', [Gudang::class, 'index'])->name('gudang');
 Route::get('/export_opname', [Gudang::class, 'export_opname'])->name('export_opname');
-Route::get('/produk', [Gudang::class, 'produk'])->name('produk');
+Route::get('/produk/{id}', [Gudang::class, 'produk'])->name('produk');
 Route::get('/merk_bahan', [Gudang::class, 'merk_bahan'])->name('merk_bahan');
+Route::get('/hapusBahan/{id}/{id_jenis}', [Gudang::class, 'hapusBahan'])->name('hapusBahan');
 Route::get('/get_history_bahan', [Gudang::class, 'get_history_bahan'])->name('get_history_bahan');
 Route::post('/save_opname', [Gudang::class, 'save_opname'])->name('save_opname');
 Route::post('/save_bahan', [Gudang::class, 'save_bahan'])->name('save_bahan');
 Route::post('/save_merk_bahan', [Gudang::class, 'save_merk_bahan'])->name('save_merk_bahan');
+Route::post('/edit_bahan', [Gudang::class, 'edit_bahan'])->name('edit_bahan');
+Route::get('/loadEditBahan', [Gudang::class, 'loadEditBahan'])->name('loadEditBahan');
+Route::get('/kategoriMakanan/{id}', [Gudang::class, 'kategoriMakanan'])->name('kategoriMakanan');
+Route::post('/save_kategori_makanan', [Gudang::class, 'save_kategori_makanan'])->name('save_kategori_makanan');
+Route::post('/edit_kategori_makanan', [Gudang::class, 'edit_kategori_makanan'])->name('edit_kategori_makanan');
+Route::get('/hapus_kategori_makanan/{id}/{id_jenis}', [Gudang::class, 'hapus_kategori_makanan'])->name('hapus_kategori_makanan');
 
 Route::get('/buku_besar', [Buku_besar::class, 'index'])->name('buku_besar');
 Route::get('/detail_buku', [Buku_besar::class, 'detail_buku'])->name('detail_buku');

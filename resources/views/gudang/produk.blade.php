@@ -41,7 +41,16 @@ background-position: 0;
                 @csrf
                 <div class="card">
                     <div class="card-header">
-
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link {{Request::is('produk/1') ? 'active' : ''}}"
+                                    aria-current="page" href="{{ route('produk', 1) }}">Bahan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{Request::is('produk/2') ? 'active' : ''}}"
+                                    aria-current="page" href="{{ route('produk', 2) }}">Barang</a>
+                            </li>
+                        </ul>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
                             class="btn icon icon-left btn-primary" style="float: right"><i
                                 class="bi bi-plus-circle"></i> Tambah</a>
@@ -92,11 +101,15 @@ background-position: 0;
 
                                     <td align="center">{{ $tKerja == '0' ? ' - ' : $tKerja->d }} </td>
                                     <td style="white-space: nowrap">
-                                        <a href="" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                        <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="#" class="btn btn-sm btn-warning editBahan" idListBahan="{{$j->id_list_bahan}}"><i class="fas fa-pen"></i></a>
+                                        @php
+                                            $adaStok = DB::table('stok_ts')->where('id_bahan', $j->id_list_bahan)->first();
+                                        @endphp
+                                        @if (empty($adaStok))
+                                            <a href="{{ route('hapusBahan',[$j->id_list_bahan, $id_jenis]) }}" onclick="return confirm('Yakin ingin dihapus ?')" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                        @endif
                                     </td>
                                 </tr>
-
                                 @endforeach
 
                             </tbody>
@@ -133,6 +146,7 @@ background-position: 0;
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
+                                    <input type="hidden" name="id_jenis" value="{{ $id_jenis }}">
                                     <label for="list_kategori">Nama Bahan</label>
                                     <input type="text" name="nm_bahan" class="form-control">
                                 </div>
@@ -184,6 +198,39 @@ background-position: 0;
         </div>
     </form>
 
+    <form action="{{route('edit_bahan')}}" method="post">
+        @csrf
+        <div class="modal fade text-left" id="editBahan">
+            <div class="modal-dialog  modal-lg-max2" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel33">
+                            Edit {{$title}}
+                        </h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id_jenis" value="{{ $id_jenis }}">
+                        <div id="loadEditBahan"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Save</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
     <footer>
         <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
@@ -198,8 +245,24 @@ background-position: 0;
 @endsection
 
 @section('scripts')
-
-
-
-
+<script>
+    $(document).ready(function () {
+        
+        $(document).on('click', '.editBahan', function(){
+            var idListBahan = $(this).attr('idListBahan')
+            $('#editBahan').modal('show')
+            $.ajax({
+                type: "GET",
+                url: "{{route('loadEditBahan')}}?idListBahan="+idListBahan,
+                success: function (r) {
+                    $("#loadEditBahan").html(r)
+                    $('.select').select2({
+                        dropdownParent: $('#editBahan .modal-content')
+                    });
+                    
+                }
+            });
+        })
+    });
+</script>
 @endsection
