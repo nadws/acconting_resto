@@ -74,7 +74,7 @@ class Gudang extends Controller
             'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', '1'],['jenis', $id]])->get()
+            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', '1'], ['jenis', $id]])->get()
 
         ];
         return view('gudang.produk', $data);
@@ -83,11 +83,11 @@ class Gudang extends Controller
     public function loadEditBahan(Request $r)
     {
         $data = [
-            'id_list_bahan' => $r->idListBahan, 
+            'id_list_bahan' => $r->idListBahan,
             'detail' => DB::table('tb_list_bahan')->where('id_list_bahan', $r->idListBahan)->first(),
             'satuan' => DB::table('tb_satuan')->get(),
             'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
-        ];  
+        ];
         return view('gudang.load_edit_bahan', $data);
     }
 
@@ -105,7 +105,7 @@ class Gudang extends Controller
 
     public function save_opname(Request $r)
     {
-   
+
         $id_list_bahan = $r->id_list_bahan;
         $stok_ak = $r->stok_ak;
         $stok_po = $r->stok_po;
@@ -128,6 +128,44 @@ class Gudang extends Controller
                     'no_nota' => 'Testing'
                 ];
                 DB::table('stok_ts')->insert($data);
+
+                $harga = DB::query("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
+                where a.opname = 'T' and id_list_bahan = '$id_list_bahan[$i]' group by a.id_bahan ")->get();
+
+                $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+
+                if (empty($urutan->urutan)) {
+                    $no_urutan = '1001';
+                } else {
+                    $no_urutan = $urutan->urutan + 1;
+                }
+                $total_rp = ($total * -1) * ($harga->hrga / $harga->qty);
+
+                $data = [
+                    'tgl' => date("Y-m-d"),
+                    'id_akun' => 6,
+                    'ket' => 'Pemutihan daging & ayam',
+                    'no_nota' => 'TKM' . $no_urutan,
+                    'kredit' => $total_rp,
+                    'id_buku' => '3',
+                    'kd_gabungan' => 'TKM' . $no_urutan,
+                    'id_lokasi' => '1',
+                    'urutan' => $no_urutan,
+                ];
+                DB::table('tb_jurnal')->insert($data);
+
+                $data = [
+                    'tgl' => date("Y-m-d"),
+                    'id_akun' => 7,
+                    'ket' => 'Pemutihan daging & ayam',
+                    'no_nota' => 'TKM' . $no_urutan,
+                    'debit' => $total_rp,
+                    'id_buku' => '3',
+                    'kd_gabungan' => 'TKM' . $no_urutan,
+                    'id_lokasi' => '1',
+                    'urutan' => $no_urutan,
+                ];
+                DB::table('tb_jurnal')->insert($data);
             } else {
                 $data = [
                     'id_bahan' => $id_list_bahan[$i],
@@ -139,6 +177,43 @@ class Gudang extends Controller
                     'no_nota' => 'Testing'
                 ];
                 DB::table('stok_ts')->insert($data);
+                $harga = DB::query("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
+                where a.opname = 'T' and id_list_bahan = '$id_list_bahan[$i]' group by a.id_bahan ")->get();
+
+                $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+
+                if (empty($urutan->urutan)) {
+                    $no_urutan = '1001';
+                } else {
+                    $no_urutan = $urutan->urutan + 1;
+                }
+                $total_rp = ($total) * ($harga->hrga / $harga->qty);
+
+                $data = [
+                    'tgl' => date("Y-m-d"),
+                    'id_akun' => 7,
+                    'ket' => 'Pemutihan daging & ayam',
+                    'no_nota' => 'TKM' . $no_urutan,
+                    'kredit' => $total_rp,
+                    'id_buku' => '3',
+                    'kd_gabungan' => 'TKM' . $no_urutan,
+                    'id_lokasi' => '1',
+                    'urutan' => $no_urutan,
+                ];
+                DB::table('tb_jurnal')->insert($data);
+
+                $data = [
+                    'tgl' => date("Y-m-d"),
+                    'id_akun' => 6,
+                    'ket' => 'Pemutihan daging & ayam',
+                    'no_nota' => 'TKM' . $no_urutan,
+                    'debit' => $total_rp,
+                    'id_buku' => '3',
+                    'kd_gabungan' => 'TKM' . $no_urutan,
+                    'id_lokasi' => '1',
+                    'urutan' => $no_urutan,
+                ];
+                DB::table('tb_jurnal')->insert($data);
             }
         }
         return redirect()->route("gudang", ['id_kategori' => $r->id_kategori ?? 1])->with('sukses', 'Data berhasil di input');
@@ -252,7 +327,7 @@ class Gudang extends Controller
         $data = [
             'title' => 'Kategori Makanan',
             'id_jenis' => $id,
-            'kat' => DB::table('tb_kategori_makanan')->where([['id_lokasi', 1],['jenis', $id]])->get(),
+            'kat' => DB::table('tb_kategori_makanan')->where([['id_lokasi', 1], ['jenis', $id]])->get(),
         ];
         return view('gudang.kategori_makanan', $data);
     }
@@ -266,8 +341,8 @@ class Gudang extends Controller
         ]);
         return redirect()->route('kategoriMakanan', $r->id_jenis)->with('sukses', 'Berhasil tambah kategori makanan');
     }
-    
-    public function hapus_kategori_makanan($id,$id_jenis)
+
+    public function hapus_kategori_makanan($id, $id_jenis)
     {
         DB::table('tb_kategori_makanan')->where('id_kategori_makanan', $id)->delete();
         return redirect()->route('kategoriMakanan', $id_jenis)->with('sukses', 'Berhasil hapus kategori makanan');

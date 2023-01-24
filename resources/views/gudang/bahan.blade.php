@@ -88,7 +88,8 @@ background-position: 0;
                                     <td>{{$j->nm_kategori}}</td>
                                     <td>{{$j->admin}}</td>
                                     <td align="center">
-                                        <a href="" class="btn btn-sm btn-warning editMerk" ><i class="fas fa-pen"></i></a>
+                                        <a href="" class="btn btn-sm btn-warning editMerk"><i
+                                                class="fas fa-pen"></i></a>
                                         <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
