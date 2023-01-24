@@ -27,6 +27,9 @@
 
 
     <style>
+        .modal-lg-max {
+            max-width: 1200px;
+        }
         .select2 {
             width: 100% !important;
 
@@ -79,7 +82,7 @@
         $(document).ready(function () {
             
             $('.select2').select2({
-                dropdownParent: $('#tambah')
+                    dropdownParent: $('#tambah .modal-content')
                 });
 
                 $('#tb_bkin').DataTable({

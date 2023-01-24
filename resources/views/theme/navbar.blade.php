@@ -64,21 +64,21 @@
 
                     </ul>
                 </li>
-                <li class="sidebar-item  has-sub">
+                <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-caret-down-square-fill"></i>
                         <span>More</span>
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
+                            <a href="{{route('akun')}}">Post Akun</a>
+                        </li>
+                        <li class="submenu-item ">
                             <a href="{{route('user')}}">User</a>
                         </li>
 
                     </ul>
                 </li>
-
-
-
 
             </ul>
         </div>
