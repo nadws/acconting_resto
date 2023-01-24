@@ -26,7 +26,7 @@ class Jurnal_pengeluaran extends Controller
         $data = [
             'title' => 'Jurnal Pengeluaran',
             'jurnal' => $j_pengeluaran,
-            'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get()
+            'akun' => DB::table('tb_akun_fix')->where('id_lokasi', '1')->get()
         ];
         return view('jurnal_pengeluaran.index', $data);
     }
@@ -34,7 +34,7 @@ class Jurnal_pengeluaran extends Controller
     public function get_isi_jurnal(Request $r)
     {
         $id = $r->id_debit;
-        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
@@ -42,8 +42,12 @@ class Jurnal_pengeluaran extends Controller
             'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
             'kelompok' => DB::table('tb_kelompok_aktiva')->get()
         ];
-        if ($id == '228') {
-            return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+        if ($akun->id_kategori == '1') {
+            if ($akun->id_penyesuaian == '4') {
+                return view('jurnal_pengeluaran.get_isi_jurnal', $data);
+            } else {
+                # code...
+            }
         } elseif ($id == '143') {
             return view('get_jurnal.get_isi_aktiva', $data);
         } else {
@@ -60,12 +64,12 @@ class Jurnal_pengeluaran extends Controller
         $id_list = $r->id_list_bahan;
 
         $list =  DB::table('tb_list_bahan')->where('id_list_bahan', $id_list)->first();
-        $d = DB::table('tb_satuan')->where('id', $list->id_satuan)->first();
+        $d = DB::table('tb_satuan')->where('id_satuan', $list->id_satuan)->first();
 
 
         $output = [
-            'id_satuan' => $d->id,
-            'satuan' => $d->n
+            'id_satuan' => $d->id_satuan,
+            'satuan' => $d->nm_satuan
         ];
 
         echo json_encode($output);

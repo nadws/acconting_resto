@@ -35,7 +35,7 @@ class AkunController extends Controller
 
         $id1 = $akun->id;
 
-        if (!empty($r->id_penyesuaian)) {
+        if (!empty($r->nm_kelompok)) {
             $nm_kelompok = $r->nm_kelompok;
             $umur = $r->umur;
             $satuan_aktiva = $r->satuan_aktiva;
@@ -56,7 +56,7 @@ class AkunController extends Controller
             }
         }
 
-        if(!empty($r->no_akun2)) {
+        if (!empty($r->no_akun2)) {
             $data = [
                 'no_akun' => $r->no_akun2,
                 'kd_akun' => $r->kd_akun2,
@@ -78,13 +78,13 @@ class AkunController extends Controller
 
         $id_kategori = $r->id_kategori;
 
-        if($id_kategori == 5) {
+        if ($id_kategori == 5) {
             $data = [
                 'id_akun' => $id1,
                 'id_sub_menu_akun' => 27
             ];
             DB::table('tb_permission_akun')->insert($data);
-        } elseif($id_kategori == 4) {
+        } elseif ($id_kategori == 4) {
             $data = [
                 'id_akun' => $id1,
                 'id_sub_menu_akun' => '26'
@@ -150,7 +150,7 @@ class AkunController extends Controller
         ];
         return view('akun.edit_kelompok', $data);
     }
-    
+
     public function save_kelompok_baru(Request $r)
     {
         $nm_kelompok = $r->nm_kelompok;
@@ -201,6 +201,5 @@ class AkunController extends Controller
     public function delete_post(Request $r)
     {
         DB::table('tb_post_center')->where('id_post', $r->id_post)->delete();
-        
     }
 }
