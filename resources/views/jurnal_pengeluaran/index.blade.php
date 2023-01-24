@@ -6,7 +6,6 @@
             <i class="bi bi-justify fs-3"></i>
         </a>
     </header>
-
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -64,7 +63,8 @@
                                     <td style="white-space: nowrap">
                                         <a href="" data-bs-toggle="modal" data-bs-target="#edit"
                                             no_nota="{{$j->no_nota}}" class="btn btn-sm btn-warning edit"><i
-                                                class="fas fa-edit"></i></a>
+                                                class="fas fa-edit"></i>
+                                        </a>
                                         <a href="{{route('hapus_stok_daging',['no_nota' => $j->no_nota])}}"
                                             class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                     </td>
@@ -88,7 +88,7 @@
             max-width: 1350px;
         }
     </style>
-    <form action="{{ route('save_stok_daging')}}" method="post">
+    <form method="post" id="form-jurnal" action="">
         @csrf
         <div id="tambah" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog  modal-lg-max2" role="document">
@@ -119,8 +119,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label for="list_kategori">Akun</label>
-                                    <select name="id_akun" id="id_pilih" class="choices form-select id_dipilih"
-                                        required="">
+                                    <select name="id_akun" id="id_pilih" class="select2 id_dipilih" required="">
                                         <option value="">- Pilih Akun -</option>
                                         @foreach ($akun as $ak)
                                         <option value="{{ $ak->id_akun }}">{{ $ak->nm_akun }}</option>
@@ -156,7 +155,7 @@
 
                             <div class="col-sm-3 col-md-3">
                                 <div class="form-group">
-                                    <select name="metode" id="metode" class="choices form-select" required="">
+                                    <select name="metode" id="metode" class="select2" required="">
                                         <option value="" data-select2-id="13">-Pilih Akun-</option>
                                         @foreach ($akun as $a)
                                         <option value="{{$a->id_akun}}">{{$a->nm_akun}}</option>
@@ -306,20 +305,40 @@
 
         $(document).on('change', '.id_dipilih', function() {
             var id_debit = $(this).val();
-           
-            $.ajax({
-                    url: "{{ route('get_isi_jurnal') }}",
+                $.ajax({
+                        url: "{{ route('get_isi_jurnal') }}",
+                        data: {
+                            id_debit: id_debit,
+                        },
+                        type: "GET",
+                        success: function(data) {
+                            $('#input_jurnal').html(data);
+                            $(".select").select2({
+                                dropdownParent: $('#tambah .modal-content')
+                            });
+                        }
+                });
+                $.ajax({
+                    url: "{{ route('get_save_jurnal') }}",
                     data: {
-                        id_debit: id_debit,
+                        id_debit: id_debit
                     },
                     type: "GET",
                     success: function(data) {
-                        $('#input_jurnal').html(data);
-                        $(".select").select2({
-                            dropdownParent: $('#tambah .modal-content')
-                        });
+                        if (data == 'biaya-daging') {
+                            $("#form-jurnal").attr("action",
+                                "{{ route('save_stok_daging') }}");
+                        }
+                        if (data == 'biaya') {
+                            $("#form-jurnal").attr("action",
+                                "{{ route('save_jurnal_biaya') }}");
+                        }
+                        if (data == 'biaya-aktiva') {
+                            $("#form-jurnal").attr("action",
+                                "{{ route('save_jurnal_aktiva') }}");
+                        }
                     }
-            });
+                });
 
             
            
@@ -576,6 +595,112 @@
                     }
                 });
             });
+    });
+</script>
+{{-- Tambah Biaya --}}
+<script>
+    $(document).ready(function() {
+        var count = 1;
+        $(document).on('click', '.tbh-biaya', function() {
+            count = count + 1;
+            id_akun =  $(this).attr('id_akun');
+            $.ajax({
+                    url: "{{ route('tambah_jurnal_biaya') }}?count=" + count + "&id_akun=" + id_akun,
+                    type: "Get",
+                    success: function(data) {
+                        $('#tambah_input_jurnal_biaya').append(data);
+                        $(".select").select2({
+                            dropdownParent: $('#tambah .modal-content')
+                        });
+                    }
+                });
+                
+        });
+        $(document).on('keyup', '.rupiah_biaya', function(){
+            var debit = 0;
+                $(".rupiah_biaya:not([disabled=disabled]").each(function() {
+                    debit += parseFloat($(this).val());
+            });
+            var debit = $('.total').val(debit);
+        
+        });
+        $(document).on('click', '.remove_lain', function() {
+                var delete_row = $(this).attr('count');
+
+                $('#biaya' + delete_row).remove();
+
+                var debit = 0;
+                $(".rupiah_biaya:not([disabled=disabled]").each(function() {
+                    debit += parseFloat($(this).val());
+                });
+                var debit = $('.total').val(debit);
+            });
+    });
+</script>
+{{-- Tambah Aktiva --}}
+<script>
+    $(document).ready(function() {
+        $(document).on('keyup', '.qty_aktiva', function(){
+            var qty = $('.qty_aktiva').val();
+            var rp_satuan = $('.rps_aktiva').val();
+            var ppn = $('.ppn_biaya').val();
+
+            var total = parseFloat(qty) * parseFloat(rp_satuan);
+            var ppn = total * 0.1;
+
+            $('.ppn_biaya').val(ppn);
+
+            var total_semua = parseFloat(total) + parseFloat(ppn);
+
+            $('.ttl_rp_aktiva').val(total_semua);
+
+            var debit = 0;
+                $(".ttl_rp_aktiva:not([disabled=disabled]").each(function() {
+                    debit += parseFloat($(this).val());
+            });
+            var debit = $('.total').val(debit);
+        
+        });
+        $(document).on('keyup', '.rps_aktiva', function(){
+            var qty = $('.qty_aktiva').val();
+            var rp_satuan = $('.rps_aktiva').val();
+            var ppn = $('.ppn_biaya').val();
+
+            var total = parseFloat(qty) * parseFloat(rp_satuan);
+            var ppn = total * 0.1;
+
+            $('.ppn_biaya').val(ppn);
+
+            var total_semua = parseFloat(total) + parseFloat(ppn);
+
+            $('.ttl_rp_aktiva').val(total_semua);
+
+            var debit = 0;
+                $(".ttl_rp_aktiva:not([disabled=disabled]").each(function() {
+                    debit += parseFloat($(this).val());
+            });
+            var debit = $('.total').val(debit);
+        
+        });
+        $(document).on('keyup', '.ppn_biaya', function(){
+            var qty = $('.qty_aktiva').val();
+            var rp_satuan = $('.rps_aktiva').val();
+            var ppn = $('.ppn_biaya').val();
+
+            var total = parseFloat(qty) * parseFloat(rp_satuan);
+
+            var total_semua = parseFloat(total) + parseFloat(ppn);
+
+            $('.ttl_rp_aktiva').val(total_semua);
+
+            var debit = 0;
+                $(".ttl_rp_aktiva:not([disabled=disabled]").each(function() {
+                    debit += parseFloat($(this).val());
+            });
+            var debit = $('.total').val(debit);
+        
+        });
+        
     });
 </script>
 
