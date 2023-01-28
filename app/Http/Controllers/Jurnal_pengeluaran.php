@@ -199,19 +199,21 @@ class Jurnal_pengeluaran extends Controller
             DB::table('stok_ts')->insert($data);
         }
 
-        for ($x = 0; $x < count($id_akun_lain); $x++) {
-            $data = [
-                'tgl' => $tgl,
-                'id_akun' => $id_akun_lain[$x],
-                'ket' => "Biaya lain-lain",
-                'no_nota' => 'TKM' . $no_urutan,
-                'debit' => $debit_lain[$x],
-                'id_buku' => '3',
-                'kd_gabungan' => 'TKM' . $no_urutan,
-                'id_lokasi' => '1',
-                'urutan' => $no_urutan,
-            ];
-            DB::table('tb_jurnal')->insert($data);
+        if(!empty($id_akun_lain)){
+            for ($x = 0; $x < count($id_akun_lain); $x++) {
+                $data = [
+                    'tgl' => $tgl,
+                    'id_akun' => $id_akun_lain[$x],
+                    'ket' => "Biaya lain-lain",
+                    'no_nota' => 'TKM' . $no_urutan,
+                    'debit' => $debit_lain[$x],
+                    'id_buku' => '3',
+                    'kd_gabungan' => 'TKM' . $no_urutan,
+                    'id_lokasi' => '1',
+                    'urutan' => $no_urutan,
+                ];
+                DB::table('tb_jurnal')->insert($data);
+            }
         }
         $tgl1 = date('Y-m-01', strtotime($r->tgl));
         return redirect()->route("jurnal_pengeluaran", ['tgl1' => $tgl1, 'tgl2' => $r->tgl])->with('sukses', 'Data berhasil di input');

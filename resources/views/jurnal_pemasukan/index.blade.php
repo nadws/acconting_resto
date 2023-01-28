@@ -44,18 +44,26 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach ($jurnal as $no => $d)
+                                <tr>
+                                    <td>{{ $no+1 }}</td>
+                                    <td>{{ $d->tgl }}</td>
+                                    <td>{{ $d->no_nota }}</td>
+                                    <td>{{ $d->ket }}</td>
+                                    <td>{{ $d->no_akun }}</td>
+                                    <td>{{ $d->nm_akun }}</td>
+                                    <td>{{ number_format($d->debit,0) }}</td>
+                                    <td>{{ number_format($d->kredit,0) }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
-
                     </table>
-
-
                 </div>
             </div>
         </section>
     </div>
 
-    <footer>
+    {{-- <footer>
         <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
                 <p>2021 &copy; Mazer</p>
@@ -65,14 +73,14 @@
                         href="https://saugi.me">Saugi</a></p>
             </div>
         </div>
-    </footer>
+    </footer> --}}
 </div>
 @endsection
 
 @section('scripts')
 
 
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('#kunjungan').DataTable({
             processing: true,
@@ -95,5 +103,5 @@
         });
             
         });
-</script>
+</script> --}}
 @endsection

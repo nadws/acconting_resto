@@ -94,9 +94,9 @@ background-position: 0;
         <div class="modal-dialog modal-lg" role="document">
 
             <div class="modal-content">
-                <div class="modal-header bg-costume">
+                <div class="modal-header ">
                     <h5 class="modal-title" id="exampleModalLabel">Post Center</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -107,7 +107,7 @@ background-position: 0;
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -119,14 +119,46 @@ background-position: 0;
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-costume">
+                <div class="modal-header ">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Akun</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div id="loadEditAkun"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save/Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="tambah_post_makanan">
+    <div class="modal fade" id="tbh_post_makanan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Post</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label for="">List Bahan</label>
+                        <select name="id_list_bahan[]" id="" class="choices form-select multiple-remove"
+                        multiple="multiple">
+                        @foreach ($bahan as $b)
+                            <option value="{{ $b->id_list_bahan }}">{{ $b->nm_bahan }}</option>
+                        @endforeach
+                        </select>
+                        <input type="hidden" class="form-control" id="id_akun_bahan" name="id_akun">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Save/Edit</button>
@@ -142,9 +174,9 @@ background-position: 0;
         <div class="modal-dialog" role="document">
 
             <div class="modal-content">
-                <div class="modal-header bg-costume">
+                <div class="modal-header ">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Post</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -167,9 +199,9 @@ background-position: 0;
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-costume">
+            <div class="modal-header ">
                 <h5 class="modal-title" id="exampleModalLabel">Kelompok Akun</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -181,7 +213,7 @@ background-position: 0;
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -192,9 +224,9 @@ background-position: 0;
         <div class="modal-dialog modal-lg-max" role="document">
 
             <div class="modal-content">
-                <div class="modal-header bg-costume">
+                <div class="modal-header ">
                     <h5 class="modal-title" id="exampleModalLabel">Kelompok Akun</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -249,9 +281,9 @@ background-position: 0;
         <div class="modal-dialog modal-lg-max" role="document">
 
             <div class="modal-content">
-                <div class="modal-header bg-costume">
+                <div class="modal-header ">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Kelompok Akun</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -579,6 +611,23 @@ background-position: 0;
                     }
                 });
         }
+        function load_post_makanan(id_akun) {
+            $.ajax({
+                    url: "{{route('post_center_makanan')}}",
+                    method: "GET",
+                    data: {
+                        id_akun: id_akun,
+                    },
+                    success: function(data) {
+                        $('#post_center2').html(data);
+                        $("#tb-history").DataTable({
+                            "lengthChange": false,
+                            "autoWidth": false,
+                            "stateSave": true,
+                        })
+                    }
+                });
+        }
 
         function load_kelompok(id_akun) {
             $.ajax({
@@ -726,7 +775,11 @@ background-position: 0;
         $(document).on('click', '.post_center', function(){
             $("#post_center").modal('show')
             var id_akun = $(this).attr("id_akun");
-            load_post(id_akun)
+            if(id_akun == 22) {
+                load_post_makanan(id_akun)
+            } else {
+                load_post(id_akun)
+            }
         })
 
         $(document).on('click', '.edit_kelompok', function(){
@@ -819,6 +872,14 @@ background-position: 0;
             $("#tbh_post").modal('show')
         });
 
+        $(document).on('click', '.tbh_post_makanan', function(){
+            var id_akun = $(this).attr("id_akun");
+            $("#id_akun_bahan").val(id_akun);
+            $("#tbh_post_makanan").modal('show')
+        })
+
+        
+
         $(document).on('submit', '#tambah_post', function(e) {
             e.preventDefault()
             var nm_post = $(".nm_post").val();
@@ -838,6 +899,24 @@ background-position: 0;
 
                     $('#tbh_post').modal('hide');
                     load_post(id_akun)
+                }
+            });
+
+        });
+
+        $(document).on('submit', '#tambah_post_makanan', function(e) {
+            e.preventDefault()
+
+            var data = $("#tambah_post_makanan").serialize()
+            var id_akun = $("#id_akun_bahan").val();
+            $.ajax({
+                type: "GET",
+                url: "{{ route('tambah_post_makanan') }}?"+data,
+                success: function(response) {
+                    toast('Berhasil tambah post center')
+
+                    $('#tbh_post_makanan').modal('hide');
+                    load_post_makanan(id_akun)
                 }
             });
 

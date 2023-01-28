@@ -67,6 +67,17 @@
                 </li>
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
+                        <i class="bi bi-house-door-fill"></i>
+                        <span>Homepage</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="{{route('cashflow')}}">Cashflow</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-caret-down-square-fill"></i>
                         <span>More</span>
                     </a>
