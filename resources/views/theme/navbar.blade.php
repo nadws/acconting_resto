@@ -29,6 +29,17 @@
                 </li>
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
+                        <i class="bi bi-receipt-cutoff"></i>
+                        <span>Purchase</span>
+                    </a>
+                    <ul class="submenu ">
+                        <li class="submenu-item ">
+                            <a href="{{ route('sistem_po') }}">Pengajuan Pembelian</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item  has-sub">
+                    <a href="#" class='sidebar-link'>
                         <i class="fas fa-warehouse"></i>
                         <span>Warehouse</span>
                     </a>
