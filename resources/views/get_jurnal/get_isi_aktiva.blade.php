@@ -9,11 +9,8 @@
     <div class="col-md-2">
         <div class="form-group">
             <label for="list_kategori">Post Center</label>
-            <select name="id_post_center[]" id="" class="select form-control">
-                <option value="">-Pilih Post Center-</option>
-                @foreach ($post_center as $p)
-                <option value="{{$p->id_post}}">{{$p->nm_post}}</option>
-                @endforeach
+            <select name="id_post_center[]" id="" class="select form-control post_center_aktiva">
+
             </select>
         </div>
     </div>

@@ -34,7 +34,7 @@
             <select name="id_satuanBeli[]" id="satuanBeli{{$count}}" class="form-control select satuan input_detail "
                 required>
                 <?php foreach ($satuan as $p) : ?>
-                <option value="{{$p->id}}">{{$p->n}}</option>
+                <option value="{{$p->id_satuan}}">{{$p->nm_satuan}}</option>
                 <?php endforeach; ?>
             </select>
         </div>

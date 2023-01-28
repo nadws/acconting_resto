@@ -55,7 +55,7 @@ class Jurnal_pengeluaran extends Controller
                 # code...
             }
         } else {
-            if ($akun->id_kategori == '5') {
+            if ($akun->id_kategori == '5' || $akun->id_kategori == '7') {
                 return view('jurnal_pengeluaran.get_jurnal_biaya', $data);
             } else {
                 # code...
@@ -387,11 +387,12 @@ class Jurnal_pengeluaran extends Controller
     public function tambah_jurnal_biaya(Request $r)
     {
         $id = $r->id_akun;
-        $akun = DB::table('tb_akun')->where('id_akun', $id)->first();
+
+        $akun = DB::table('tb_akun_fix')->where('id_akun', $id)->first();
         $data = [
             'satuan' => DB::table('tb_satuan')->get(),
             'id_akun' => $id,
-            'lBahanDaging' => DB::table('tb_list_bahan')->where([['id_lokasi', 1], ['id_kategori_makanan', $akun->id_kategori_makanan]])->get(),
+
             'post_center' => DB::table('tb_post_center')->where('id_akun', $akun->id_akun)->get(),
             'count' => $r->count
         ];
@@ -535,7 +536,34 @@ class Jurnal_pengeluaran extends Controller
             ];
             DB::table('tb_jurnal')->insert($data);
         }
+        // $kelompok = DB::table('tb_kelompok_aktiva')->where('id_kelompok', $id_kelompok)->first();
+        // $susut = $kelompok->tarif;
+
+        // $data = [
+        //     'tgl' => $r->tgl,
+        //     'id_post' => $id_post,
+        //     'id_kelompok' => $id_kelompok,
+        //     'qty' => $qty,
+        //     'no_nota' => 'AGR-' . $no_urutan,
+        //     'id_satuan' => $id_satuan,
+        //     'debit_aktiva' => $debit,
+        //     'b_penyusutan' => (($debit * $qty) * $susut) / 12,
+        //     'admin' => Auth::user()->name,
+        //     'id_akun' => $r->id_akun
+        // ];
+        // DB::table('aktiva')->insert($data);
         $tgl1 = date('Y-m-01', strtotime($r->tgl));
         return redirect()->route("jurnal_pengeluaran", ['tgl1' => $tgl1, 'tgl2' => $r->tgl])->with('sukses', 'Data berhasil di input');
+    }
+
+    public function get_post_aktiva(Request $r)
+    {
+        $id_kredit = $r->id_kredit;
+        $post = DB::select("SELECT * FROM tb_post_center as a where a.id_akun = '$id_kredit' and a.id_post not in (SELECT b.id_post FROM aktiva as b )");
+
+        echo '<option>--Pilih Post Center--</option>';
+        foreach ($post as $p) {
+            echo "<option value='$p->id_post'>$p->nm_post</option>";
+        }
     }
 }

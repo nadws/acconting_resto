@@ -33,6 +33,7 @@
         .modal-md {
             max-width: 700px;
         }
+
         .select2 {
             width: 100% !important;
 
@@ -40,18 +41,17 @@
 
         .select2-container--default .select2-selection--single {
             background-color: #fff;
-            border: 1px solid #ced4da;
+            border: 1px solid rgb(237, 238, 241);
             border-radius: 4px;
             height: 35px;
         }
 
-        .form-control {
-            border: 1px solid #ced4da;
+        input:read-only {
+            background-color: #E9ECEF;
         }
 
-        .form-control:read-only {
-            background-color: #e9ecef;
-            opacity: 1;
+        input:active {
+            background-color: #E9ECEF;
         }
     </style>
     @yield('styles')
@@ -84,11 +84,12 @@
     <script>
         $(document).ready(function () {
             
+            $('.select_view').select2();
+             });
             $('.select2').select2({
                     dropdownParent: $('#tambah .modal-content')
-                });
-
-                $('#tb_bkin').DataTable({
+            });
+             $('#tb_bkin').DataTable({
                 "paging": false,
                 "pageLength": 100,
                 "scrollY": "100%",
@@ -100,8 +101,6 @@
                 // "order": [ 5, 'DESC' ],
                 "searching": true,
             });
-            
-        });
     </script>
     @if (session()->has('sukses'))
     <script>

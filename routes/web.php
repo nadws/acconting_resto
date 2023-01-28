@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
 use App\Http\Controllers\Jurnal_pengeluaran;
+use App\Http\Controllers\Sistem_po;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::get('/get_save_jurnal', [Jurnal_pengeluaran::class, 'get_save_jurnal'])->
 Route::post('/save_jurnal_biaya', [Jurnal_pengeluaran::class, 'save_jurnal_biaya'])->name('save_jurnal_biaya');
 Route::post('/save_jurnal_aktiva', [Jurnal_pengeluaran::class, 'save_jurnal_aktiva'])->name('save_jurnal_aktiva');
 Route::get('/tambah_jurnal_barang', [Jurnal_pengeluaran::class, 'tambah_jurnal_barang'])->name('tambah_jurnal_barang');
+
+Route::get('/get_post_aktiva', [Jurnal_pengeluaran::class, 'get_post_aktiva'])->name('get_post_aktiva');
 
 
 
@@ -91,5 +94,13 @@ Route::get('/deleteSubKategori', [CashflowController::class, 'deleteSubKategori'
 Route::get('/loadAkunSubKategori', [CashflowController::class, 'loadAkunSubKategori'])->name('loadAkunSubKategori');
 Route::get('/saveAkunSubKategori', [CashflowController::class, 'saveAkunSubKategori'])->name('saveAkunSubKategori');
 Route::get('/loadDetailAkun', [CashflowController::class, 'loadDetailAkun'])->name('loadDetailAkun');
+
+Route::get('/sistem_po', [Sistem_po::class, 'index'])->name('sistem_po');
+Route::get('/tambah_po', [Sistem_po::class, 'tambah_po'])->name('tambah_po');
+Route::get('/tambah_baris_po', [Sistem_po::class, 'tambah_baris_po'])->name('tambah_baris_po');
+Route::post('/save_po', [Sistem_po::class, 'save_po'])->name('save_po');
+Route::get('/hrga_terakhir_po', [Sistem_po::class, 'hrga_terakhir_po'])->name('hrga_terakhir_po');
+Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
+
 
 require __DIR__ . '/auth.php';

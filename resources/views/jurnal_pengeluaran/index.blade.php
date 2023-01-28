@@ -709,22 +709,35 @@
 <script>
     $(document).ready(function() {
         var count = 1;
-            $(document).on('click', '.tbh-stok-barang', function() {
-                count = count + 1;
-                var id_akun = $(this).attr('id_akun');
-                $.ajax({
-                    url: "{{ route('tambah_jurnal_barang') }}?count=" + count + "&id_debit=" + id_akun,
-                    type: "Get",
-                    success: function(data) {
-                        $('#tambah_input_jurnal-barang').append(data);
-                        $(".select").select2({
-                            dropdownParent: $('#tambah .modal-content')
-                        });
-                    }
-                });
+        $(document).on('click', '.tbh-stok-barang', function() {
+            count = count + 1;
+            var id_akun = $(this).attr('id_akun');
+            $.ajax({
+                url: "{{ route('tambah_jurnal_barang') }}?count=" + count + "&id_debit=" + id_akun,
+                type: "Get",
+                success: function(data) {
+                    $('#tambah_input_jurnal-barang').append(data);
+                    $(".select").select2({
+                        dropdownParent: $('#tambah .modal-content')
+                    });
+                }
             });
-            
+        });
         
+        $(document).on('change', '#metode', function() {
+            var id_kredit = $(this).val();
+            $.ajax({
+                url: "{{ route('get_post_aktiva') }}?id_kredit=" + id_kredit,
+                type: "Get",
+                success: function(data) {
+                    $('.post_center_aktiva').html(data);
+                    $(".select").select2({
+                        dropdownParent: $('#tambah .modal-content')
+                    });
+                }
+            });
+        });
+        // 
     });
 </script>
 
