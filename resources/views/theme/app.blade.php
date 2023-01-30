@@ -30,6 +30,9 @@
         .modal-lg-max {
             max-width: 1200px;
         }
+        .modal-md {
+            max-width: 700px;
+        }
 
         .select2 {
             width: 100% !important;

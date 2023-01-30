@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\Buku_besar;
+use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
@@ -75,13 +76,25 @@ Route::get('/save_kelompok_baru', [AkunController::class, 'save_kelompok_baru'])
 Route::get('/tambah_kelompok_aktiva', [AkunController::class, 'tambah_kelompok_aktiva'])->name('tambah_kelompok_aktiva');
 Route::get('/delete_kelompok_baru', [AkunController::class, 'delete_kelompok_baru'])->name('delete_kelompok_baru');
 Route::get('/post_center_akun', [AkunController::class, 'post_center_akun'])->name('post_center_akun');
+Route::get('/post_center_makanan', [AkunController::class, 'post_center_makanan'])->name('post_center_makanan');
 Route::get('/tambah_post', [AkunController::class, 'tambah_post'])->name('tambah_post');
+Route::get('/tambah_post_makanan', [AkunController::class, 'tambah_post_makanan'])->name('tambah_post_makanan');
 Route::get('/delete_post', [AkunController::class, 'delete_post'])->name('delete_post');
 Route::get('/loadEditkelompok', [AkunController::class, 'loadEditkelompok'])->name('loadEditkelompok');
 Route::get('/edit_kelompok_baru', [AkunController::class, 'edit_kelompok_baru'])->name('edit_kelompok_baru');
 Route::get('/loadEditAkun', [AkunController::class, 'loadEditAkun'])->name('loadEditAkun');
 Route::get('/get_kategori_kelompok', [AkunController::class, 'get_kategori_kelompok'])->name('get_kategori_kelompok');
 
+// cashflow
+Route::get('/cashflow', [CashflowController::class, 'index'])->name('cashflow');
+Route::get('/cashflloadTabelow', [CashflowController::class, 'loadTabel'])->name('loadTabel');
+Route::get('/loadSubKategori', [CashflowController::class, 'loadSubKategori'])->name('loadSubKategori');
+Route::get('/saveSubKategori', [CashflowController::class, 'saveSubKategori'])->name('saveSubKategori');
+Route::get('/editSubKategori', [CashflowController::class, 'editSubKategori'])->name('editSubKategori');
+Route::get('/deleteSubKategori', [CashflowController::class, 'deleteSubKategori'])->name('deleteSubKategori');
+Route::get('/loadAkunSubKategori', [CashflowController::class, 'loadAkunSubKategori'])->name('loadAkunSubKategori');
+Route::get('/saveAkunSubKategori', [CashflowController::class, 'saveAkunSubKategori'])->name('saveAkunSubKategori');
+Route::get('/loadDetailAkun', [CashflowController::class, 'loadDetailAkun'])->name('loadDetailAkun');
 
 Route::get('/sistem_po', [Sistem_po::class, 'index'])->name('sistem_po');
 Route::get('/tambah_po', [Sistem_po::class, 'tambah_po'])->name('tambah_po');

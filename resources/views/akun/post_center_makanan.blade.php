@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-lg-12">
         <a href="#" id_akun="{{ $id_akun }}"
-            class="btn btn-primary btn-sm tbh_post" style="float: right"><i class="fas fa-plus"></i>Post Center</a>
+            class="btn btn-primary btn-sm tbh_post_makanan" style="float: right"><i class="fas fa-plus"></i>Post Center</a>
         <br>
         <br>
         <table class="table" id="tb-history">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Post Center</th>
+                    <th>Post Center Makanan</th>
                     {{-- <th>NPWP</th>
                     <th>No Telpon</th> --}}
                     <th>
@@ -36,8 +36,8 @@
                     </td> --}}
                     <td>
                         <center>
-                            <a href="#" id_akun="{{$id_akun}}" nm_post="{{ $p->nm_post }}" id_post="<?= $p->id_post ?>"
-                                class="btn btn-sm btn-primary btn_edit_post"><i class="fas fa-edit"></i></a>
+                            {{-- <a href="#" id_akun="{{$id_akun}}" nm_post="{{ $p->nm_post }}" id_post="<?= $p->id_post ?>"
+                                class="btn btn-sm btn-primary btn_edit_post"><i class="fas fa-edit"></i></a> --}}
                             <a href="#" id_post="<?= $p->id_post ?>" id_akun2='<?= $id_akun ?>'
                                 class="btn btn-sm btn-danger delete_post"><i class="fas fa-trash-alt"></i></a>
                         </center>
@@ -49,3 +49,4 @@
         </table>
     </div>
 </div>
+

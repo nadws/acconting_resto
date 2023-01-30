@@ -17,6 +17,7 @@ class AkunController extends Controller
             'no_akun' => 1,
             'kategori' => KategoriAkun::all(),
             'satuan' => DB::table('tb_satuan')->get(),
+            'bahan' => DB::table('tb_list_bahan')->where('id_lokasi', 1)->get(),
             'kategori_makan' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
         ];
         return view('akun.akun', $data);
@@ -33,6 +34,7 @@ class AkunController extends Controller
             'id_satuan' => empty($r->id_satuan) ? '0' : $r->id_satuan,
             'id_kategori_makanan' => empty($r->id_kategori_makanan) ? '0' : $r->id_kategori_makanan,
             'jenis_gudang' => empty($r->jenis) ? '0' : $r->jenis,
+            'id_lokasi' => 1
 
         ];
         $akun = Akun::create($data);
@@ -187,6 +189,16 @@ class AkunController extends Controller
         ];
         return view('akun.post_center', $data);
     }
+    public function post_center_makanan(Request $r)
+    {
+        $id_akun = $r->id_akun;
+
+        $data = [
+            'post_center' => DB::select("SELECT * FROM tb_post_center as a where a.id_akun = '$id_akun'"),
+            'id_akun' => $id_akun
+        ];
+        return view('akun.post_center_makanan', $data);
+    }
 
     public function delete_kelompok_baru(Request $r)
     {
@@ -203,6 +215,20 @@ class AkunController extends Controller
             DB::table('tb_post_center')->insert($data);
         } else {
             DB::table('tb_post_center')->where('id_post', $request->id_post)->update($data);
+        }
+    }
+
+    public function tambah_post_makanan(Request $r)
+    {
+        foreach($r->id_list_bahan as $i => $d) {
+            $bahan = DB::table('tb_list_bahan')->where('id_list_bahan', $d)->first()->nm_bahan;
+            $data = [
+                'id_akun' => $r->id_akun,
+                'nm_post' => $bahan,
+                'id_bahan' => $d,
+
+            ];
+            DB::table('tb_post_center')->insert($data);
         }
     }
 
