@@ -18,7 +18,6 @@ class Gudang extends Controller
             FROM stok_ts as b 
             group by b.id_bahan
         ) as b on b.id_bahan = a.id_list_bahan
-        
         left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
         left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
         left join tb_satuan as e on e.id_satuan = a.id_satuan

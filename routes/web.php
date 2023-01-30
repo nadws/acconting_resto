@@ -7,7 +7,9 @@ use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
 use App\Http\Controllers\Jurnal_pengeluaran;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Sistem_po;
+use App\Http\Controllers\TimbangController;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
@@ -102,5 +104,12 @@ Route::post('/save_po', [Sistem_po::class, 'save_po'])->name('save_po');
 Route::get('/hrga_terakhir_po', [Sistem_po::class, 'hrga_terakhir_po'])->name('hrga_terakhir_po');
 Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
 
+Route::get('timbang', [TimbangController::class, 'index'])->name('timbang');
+Route::get('timbangDetail/{no_po}', [TimbangController::class, 'timbangDetail'])->name('timbangDetail');
+Route::get('timbangView/{no_po}', [TimbangController::class, 'timbangView'])->name('timbangView');
+Route::get('timbangEdit/{no_po}', [TimbangController::class, 'timbangEdit'])->name('timbangEdit');
+Route::post('save_timbang', [TimbangController::class, 'save_timbang'])->name('save_timbang');
+Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name('detail_timbang');
 
+Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
 require __DIR__ . '/auth.php';

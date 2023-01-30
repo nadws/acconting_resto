@@ -36,6 +36,12 @@
                         <li class="submenu-item ">
                             <a href="{{ route('sistem_po') }}">Pengajuan Pembelian</a>
                         </li>
+                        <li class="submenu-item ">
+                            <a href="{{ route('timbang') }}">Timbang</a>
+                        </li>
+                        <li class="submenu-item ">
+                            <a href="{{ route('pembayaran') }}">Pembayaran</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidebar-item  has-sub">
