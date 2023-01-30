@@ -26,9 +26,6 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{route('tambah_po')}}" class="btn icon icon-left btn-primary" style="float: right"><i
-                            class="bi bi-plus-circle"></i> Tambah
-                    </a>
                 </div>
                 <div class="card-body">
                     <table class="table" id="table1">
@@ -37,8 +34,11 @@
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>No Po</th>
-                                <th>Admin</th>
-                                <th>Total Rp</th>
+                                <th>Total Rp Po</th>
+                                <th>Total Rp Beli</th>
+                                <th>Admin Po</th>
+                                <th>Admin Beli</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -47,17 +47,28 @@
                             <tr>
                                 <td>{{$i+1}}</td>
                                 <td>{{date('d-m-Y',strtotime($p->tgl))}}</td>
-                                <td><a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
-                                        no_po="{{$p->no_po}}">{{$p->no_po}}</a></td>
-                                <td>{{$p->admin}}</td>
-                                <td>Rp. {{number_format($p->total,0)}}</td>
                                 <td>
-                                    <a href="{{route('print_po',['no_po' => $p->no_po])}}" target="_blank"
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
+                                        no_po="{{$p->no_po}}">{{$p->no_po}}</a>
+                                </td>
+
+                                <td>Rp. {{number_format($p->total,0)}}</td>
+                                <td>Rp. {{number_format($p->total_beli,0)}}</td>
+                                <td>{{$p->admin}}</td>
+                                <td>{{$p->admin_beli}}</td>
+                                <td>
+                                    <h5><span class=" badge bg-{{$p->beli == 'T' ? 'danger' : 'success'}}"><i
+                                                class="fas {{$p->beli == 'T' ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
+                                            {{$p->beli == 'T'
+                                            ? 'Diproses' : 'Selesai'}}</span></h5>
+                                </td>
+                                <td>
+                                    <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                        class="btn btn-sm btn-primary {{$p->beli == 'T' ? '' : 'disabled'}}"><i
+                                            class="fas fa-shopping-cart"></i>
+                                    </a>
+                                    <a href="{{route('print_pembelian',['no_po' => $p->no_po])}}" target="_blank"
                                         class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a>
-                                    <a href="{{route('edit_po',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-primary {{$p->beli == 'Y' ? 'disabled' : ''}}"><i
-                                            class="fas fa-pen"></i></a>
-                                    <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -68,29 +79,30 @@
             </div>
         </section>
     </div>
+    <style>
+        .modal-lg-max2 {
+            max-width: 1350px;
+        }
+    </style>
 
     <div id="detail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-dialog  modal-lg-max2" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel33">
-                        Detail {{$title}}
+                        Daftar {{$title}}
                     </h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <i data-feather="x"></i>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="detail_po"></div>
+                    <div id=detail_po></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Close</span>
-                    </button>
-                    <button type="submit" class="btn btn-primary ml-1">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Save</span>
                     </button>
                 </div>
 
@@ -117,15 +129,18 @@
 <script>
     $(document).ready(function() {
         $(document).on('click', '.detail', function() {
-        var no_po = $(this).attr('no_po');
+            
+            var no_po = $(this).attr('no_po');
             $.ajax({
-                url: "{{ route('detail_po') }}?no_po=" + no_po,
+                url: "{{ route('detail_po2') }}?no_po=" + no_po,
                 type: "Get",
                 success: function(data) {
+                 
                     $('#detail_po').html(data);
                 }
             });
         });
+        
     });
 </script>
 @endsection

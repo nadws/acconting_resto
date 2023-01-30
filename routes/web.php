@@ -8,6 +8,7 @@ use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
 use App\Http\Controllers\Jurnal_pengeluaran;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\Pembelian_purchase;
 use App\Http\Controllers\Sistem_po;
 use App\Http\Controllers\TimbangController;
 use App\Http\Controllers\User;
@@ -103,6 +104,9 @@ Route::get('/tambah_baris_po', [Sistem_po::class, 'tambah_baris_po'])->name('tam
 Route::post('/save_po', [Sistem_po::class, 'save_po'])->name('save_po');
 Route::get('/hrga_terakhir_po', [Sistem_po::class, 'hrga_terakhir_po'])->name('hrga_terakhir_po');
 Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
+Route::get('/print_po', [Sistem_po::class, 'print_po'])->name('print_po');
+Route::get('/edit_po', [Sistem_po::class, 'edit_po'])->name('edit_po');
+Route::post('/edit_save_po', [Sistem_po::class, 'edit_save_po'])->name('edit_save_po');
 
 Route::get('timbang', [TimbangController::class, 'index'])->name('timbang');
 Route::get('timbangDetail/{no_po}', [TimbangController::class, 'timbangDetail'])->name('timbangDetail');
@@ -112,4 +116,11 @@ Route::post('save_timbang', [TimbangController::class, 'save_timbang'])->name('s
 Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name('detail_timbang');
 
 Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
+
+Route::get('/pembelian_po', [Pembelian_purchase::class, 'index'])->name('pembelian_po');
+Route::get('/tambah_beli', [Pembelian_purchase::class, 'tambah_beli'])->name('tambah_beli');
+Route::post('/save_pembelian_po', [Pembelian_purchase::class, 'save_pembelian_po'])->name('save_pembelian_po');
+Route::get('/detail_po2', [Pembelian_purchase::class, 'detail_po2'])->name('detail_po2');
+Route::get('/print_pembelian', [Pembelian_purchase::class, 'print_pembelian'])->name('print_pembelian');
+
 require __DIR__ . '/auth.php';
