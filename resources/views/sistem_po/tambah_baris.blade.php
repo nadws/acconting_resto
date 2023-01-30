@@ -8,7 +8,7 @@
         </select>
     </td>
     <td>
-        <input type="number" name="qty[]" style="text-align: right;" class="form-control qty_beli qty_beli{{$count}}"
+        <input type="text" name="qty[]" style="text-align: right;" class="form-control qty_beli qty_beli{{$count}}"
             value="0" detail='{{$count}}'>
     </td>
     <td>
@@ -20,11 +20,11 @@
         </select>
     </td>
     <td>
-        <input type="number" name="h_satuan[]" style="text-align: right;"
-            class="form-control h_satuan h_satuan{{$count}}" value="0" detail='{{$count}}'>
+        <input type="text" name="h_satuan[]" style="text-align: right;" class="form-control h_satuan h_satuan{{$count}}"
+            value="0" detail='{{$count}}'>
     </td>
     <td>
-        <input type="number" name="ttl_rp[]" style="text-align: right;" class="form-control total{{$count}}" value="0"
+        <input type="text" name="ttl_rp[]" style="text-align: right;" class="form-control total{{$count}}" value="0"
             readonly>
     </td>
     <td><a href="#" class="btn rounded-pill remove_baris" count="{{$count}}"><i

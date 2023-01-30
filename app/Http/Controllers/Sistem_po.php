@@ -11,7 +11,7 @@ class Sistem_po extends Controller
     {
         $data = [
             'title' => 'Pengajuan Pembelian',
-            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total FROM purchase as a group by a.no_po order by a.id_purchase DESC"),
+            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli FROM purchase as a group by a.no_po order by a.id_purchase DESC"),
         ];
         return view('sistem_po.index', $data);
     }
@@ -83,6 +83,41 @@ class Sistem_po extends Controller
         }
         return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di input');
     }
+    public function edit_save_po(Request $r)
+    {
+        $tgl = $r->tgl;
+        $no_po = $r->no_po;
+
+        DB::table('purchase')->where('no_po', $no_po)->delete();
+        DB::table('pembelian_purchase')->where('no_po', $no_po)->delete();
+
+        $ket = $r->ket;
+
+        $id_bahan = $r->id_bahan;
+        $qty = $r->qty;
+        $id_satuan = $r->id_satuan;
+        $h_satuan = $r->h_satuan;
+        $ttl_rp = $r->ttl_rp;
+
+
+
+        for ($x = 0; $x < count($id_bahan); $x++) {
+            $data = [
+                'tgl' => $tgl,
+                'no_po' => $no_po,
+                'ket' => $ket,
+                'id_bahan' => $id_bahan[$x],
+                'qty' => $qty[$x],
+                'id_satuan_beli' => $id_satuan[$x],
+                'rp_satuan' => $h_satuan[$x],
+                'ttl_rp' => $ttl_rp[$x],
+                'admin' => 'Nanda',
+                'urutan' => $no_po
+            ];
+            DB::table('purchase')->insert($data);
+        }
+        return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di input');
+    }
 
     public function hrga_terakhir_po(Request $r)
     {
@@ -108,5 +143,49 @@ class Sistem_po extends Controller
             'purchase' => $detail
         ];
         return view('sistem_po.detail', $data);
+    }
+
+    public function print_po(Request $r)
+    {
+        $no_po = $r->no_po;
+        $detail = DB::select("SELECT a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
+        $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
+
+        $data = [
+            'title' => 'Print Purchase',
+            'po' => $no_po,
+            'purchase' => $detail,
+            'detail2' => $detail2
+        ];
+        return view('sistem_po.print', $data);
+    }
+
+    public function edit_po(Request $r)
+    {
+        $no_po = $r->no_po;
+        $detail = DB::select("SELECT a.id_purchase, a.tgl, a.id_bahan, a.id_satuan_beli, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, a.ket FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
+        $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp , a.ket FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
+
+        $data = [
+            'title' => 'Edit Pengajuan Pembelian',
+            'list_bahan' => DB::table('tb_list_bahan')->get(),
+            'satuan' => DB::table('tb_satuan')->get(),
+            'no_po' => $no_po,
+            'detail' => $detail,
+            'detail2' => $detail2
+        ];
+        return view('sistem_po.edit_po', $data);
     }
 }

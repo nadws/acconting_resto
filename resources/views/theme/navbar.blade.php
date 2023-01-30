@@ -35,6 +35,7 @@
                     <ul class="submenu ">
                         <li class="submenu-item ">
                             <a href="{{ route('sistem_po') }}">Pengajuan Pembelian</a>
+                            <a href="{{ route('pembelian_po') }}">Pembelian Bahan</a>
                         </li>
                     </ul>
                 </li>
