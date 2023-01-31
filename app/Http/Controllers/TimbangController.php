@@ -97,7 +97,7 @@ class TimbangController extends Controller
                 left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
                 left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
                 where a.no_po = '$no_po'
-                order by a.id_purchese DESC
+                order by a.id_purchase DESC
                 ");
 
         $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, e.qty, e.h_satuan as rp_satuan,e.ttl_rp,d.tgl,d.qty as qty_timbang,d.h_satuan as hrga_satuan_timbang,d.ttl_rp as ttl_rp_timbang FROM timbang_purchase as d
@@ -106,7 +106,7 @@ class TimbangController extends Controller
                 left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
                 left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
                 where a.no_po = '$no_po'
-                order by a.id_purchese DESC
+                order by a.id_purchase DESC
                 ");
 
         $data = [
