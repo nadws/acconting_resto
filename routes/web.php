@@ -116,6 +116,7 @@ Route::post('save_timbang', [TimbangController::class, 'save_timbang'])->name('s
 Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name('detail_timbang');
 
 Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
+Route::get('pembayaran_bahan', [PembayaranController::class, 'pembayaran_bahan'])->name('pembayaran_bahan');
 
 Route::get('/pembelian_po', [Pembelian_purchase::class, 'index'])->name('pembelian_po');
 Route::get('/tambah_beli', [Pembelian_purchase::class, 'tambah_beli'])->name('tambah_beli');
