@@ -72,7 +72,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" name="qty[]" style="text-align: right;"
+                                        <input type="text" name="qty[]" style="text-align: right;"
                                             class="form-control qty_beli qty_beli1" value="0" detail='1'>
                                     </td>
                                     <td>
@@ -84,11 +84,11 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" name="h_satuan[]" style="text-align: right;"
+                                        <input type="text" name="h_satuan[]" style="text-align: right;"
                                             class="form-control h_satuan h_satuan1" value="0" detail='1'>
                                     </td>
                                     <td>
-                                        <input type="number" name="ttl_rp[]" style="text-align: right;"
+                                        <input type="text" name="ttl_rp[]" style="text-align: right;"
                                             class="form-control total1" value="0" readonly>
                                     </td>
                                     <td></td>

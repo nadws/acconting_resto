@@ -38,6 +38,8 @@
                                 <label for="">No Po</label>
                                 <input type="text" name="no_po" class="form-control form-control-lg" readonly
                                     value="{{$detail2->no_po}}">
+                                <input type="hidden" name="urutan" class="form-control form-control-lg" readonly
+                                    value="{{$detail2->urutan}}">
                             </div>
                             <div class="col-lg-6">
                                 <label for="">Keterangan</label>
@@ -66,7 +68,8 @@
                                 <tr id="baris{{$d->id_purchase}}">
                                     <td>
                                         <select name="id_bahan[]" id=""
-                                            class="form-control  select_view id_bahan id_bahan1" detail='1'>
+                                            class="form-control  select_view id_bahan id_bahan{{$d->id_purchase}}"
+                                            detail='{{$d->id_purchase}}'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
                                             <option value="{{$l->id_list_bahan}}" {{$d->id_bahan == $l->id_list_bahan
@@ -76,7 +79,8 @@
                                     </td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli1" value="{{$d->qty}}" detail='1'>
+                                            class="form-control qty_beli qty_beli{{$d->id_purchase}}"
+                                            value="{{$d->qty}}" detail='{{$d->id_purchase}}'>
                                     </td>
                                     <td>
                                         <select name="id_satuan[]" id="" class="form-control  select_view">
@@ -89,12 +93,13 @@
                                     </td>
                                     <td>
                                         <input type="number" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan1" value="{{$d->rp_satuan}}"
-                                            detail='1'>
+                                            class="form-control h_satuan h_satuan{{$d->id_purchase}}"
+                                            value="{{$d->rp_satuan}}" detail='{{$d->id_purchase}}'>
                                     </td>
                                     <td>
                                         <input type="number" name="ttl_rp[]" style="text-align: right;"
-                                            class="form-control total1" value="{{$d->ttl_rp}}" readonly>
+                                            class="form-control total{{$d->id_purchase}}" value="{{$d->ttl_rp}}"
+                                            readonly>
                                     </td>
                                     <td><a href="#" class="btn rounded-pill remove_baris" count="{{$d->id_purchase}}"><i
                                                 class="fas fa-trash text-danger"></i></a>

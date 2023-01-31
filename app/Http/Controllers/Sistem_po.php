@@ -98,6 +98,7 @@ class Sistem_po extends Controller
         $id_satuan = $r->id_satuan;
         $h_satuan = $r->h_satuan;
         $ttl_rp = $r->ttl_rp;
+        $urutan = $r->urutan;
 
 
 
@@ -112,7 +113,7 @@ class Sistem_po extends Controller
                 'rp_satuan' => $h_satuan[$x],
                 'ttl_rp' => $ttl_rp[$x],
                 'admin' => 'Nanda',
-                'urutan' => $no_po
+                'urutan' => $urutan
             ];
             DB::table('purchase')->insert($data);
         }
@@ -125,9 +126,13 @@ class Sistem_po extends Controller
         $max = DB::selectOne("SELECT  max(a.id_purchase) as max_id FROM purchase as a where a.id_bahan = '$id_bahan'");
 
 
-        $bahan = DB::selectOne("SELECT a.rp_satuan FROM purchase as a where a.id_purchase = '$max->max_id'");
+        $bahan = DB::selectOne("SELECT a.h_satuan FROM pembelian_purchase as a where a.id_purchase = '$max->max_id'");
 
-        echo $bahan->rp_satuan;
+        if (empty($bahan)) {
+            echo 0;
+        } else {
+            echo $bahan->h_satuan;
+        }
     }
 
     public function detail_po(Request $r)
@@ -137,10 +142,15 @@ class Sistem_po extends Controller
         left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
+        $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
 
         $data = [
             'po' => $no_po,
-            'purchase' => $detail
+            'purchase' => $detail,
+            'detail2' => $detail2
         ];
         return view('sistem_po.detail', $data);
     }
@@ -169,11 +179,11 @@ class Sistem_po extends Controller
     public function edit_po(Request $r)
     {
         $no_po = $r->no_po;
-        $detail = DB::select("SELECT a.id_purchase, a.tgl, a.id_bahan, a.id_satuan_beli, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, a.ket FROM purchase as a
+        $detail = DB::select("SELECT  a.id_purchase, a.tgl, a.id_bahan, a.id_satuan_beli, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, a.ket FROM purchase as a
         left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
-        $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp , a.ket FROM purchase as a
+        $detail2 = DB::selectOne("SELECT a.urutan, a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp , a.ket FROM purchase as a
         left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");

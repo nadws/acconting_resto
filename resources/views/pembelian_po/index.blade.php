@@ -67,6 +67,10 @@
                                         class="btn btn-sm btn-primary {{$p->beli == 'T' ? '' : 'disabled'}}"><i
                                             class="fas fa-shopping-cart"></i>
                                     </a>
+                                    <a href="{{route('edit_pembelian',['no_po' => $p->no_po])}}"
+                                        class="btn btn-sm btn-success {{$p->timbang == 'T' ? '' : 'disabled'}}"><i
+                                            class="fas fa-pen"></i>
+                                    </a>
                                     <a href="{{route('print_pembelian',['no_po' => $p->no_po])}}" target="_blank"
                                         class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a>
                                 </td>

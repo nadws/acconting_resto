@@ -14,9 +14,10 @@ class TimbangController extends Controller
             'pembelian' => DB::select("SELECT a.timbang,a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp FROM pembelian_purchase as a
             LEFT JOIN purchase as b ON a.id_purchase = b.id_purchase
             GROUP BY a.no_po
+            order by a.no_po DESC
             ")
         ];
-        return view('timbang.timbang',$data);
+        return view('timbang.timbang', $data);
     }
 
     public function timbangView($no_po)
@@ -30,7 +31,7 @@ class TimbangController extends Controller
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po
         ];
-        return view('timbang.timbang_detail',$data);
+        return view('timbang.timbang_detail', $data);
     }
 
     public function timbangEdit($no_po)
@@ -47,15 +48,15 @@ class TimbangController extends Controller
             'no_po' => $no_po,
             'getNoPo' => $getNoPo
         ];
-        return view('timbang.timbang_detail',$data);
+        return view('timbang.timbang_detail', $data);
     }
 
     public function save_timbang(Request $r)
     {
         $user = 'aldi';
         $id_lokasi = 1;
-        if($r->timbang[0] == 'T'){
-            for ($i=0; $i < count($r->id_pembelian); $i++) { 
+        if ($r->timbang[0] == 'T') {
+            for ($i = 0; $i < count($r->id_pembelian); $i++) {
                 DB::table('timbang_purchase')->insert([
                     'tgl' => $r->tgl,
                     'no_po' => $r->no_po,
@@ -68,11 +69,11 @@ class TimbangController extends Controller
                     'ket' => $r->ket,
                     'id_lokasi' => $id_lokasi
                 ]);
-    
+
                 DB::table('pembelian_purchase')->where('no_po', $r->no_po)->update(['timbang' => 'Y']);
             }
         } else {
-            for ($i=0; $i < count($r->id_pembelian); $i++) { 
+            for ($i = 0; $i < count($r->id_pembelian); $i++) {
                 DB::table('timbang_purchase')->where('id_timbang', $r->id_pembelian[$i])->update([
                     'tgl' => $r->tgl,
                     'qty' => $r->qty[$i],
@@ -82,7 +83,6 @@ class TimbangController extends Controller
                     'ttl_rp' => $r->ttl_rp[$i],
                     'ket' => $r->ket,
                 ]);
-    
             }
         }
         return redirect()->route('timbang')->with('sukses', 'Berhasil timbang');
@@ -96,12 +96,24 @@ class TimbangController extends Controller
         LEFT JOIN purchase as a ON a.id_purchase = e.id_purchase
                 left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
                 left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
-                where a.no_po = '$no_po';");
+                where a.no_po = '$no_po'
+                order by a.id_purchese DESC
+                ");
+
+        $detail2 = DB::selectOne("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, e.qty, e.h_satuan as rp_satuan,e.ttl_rp,d.tgl,d.qty as qty_timbang,d.h_satuan as hrga_satuan_timbang,d.ttl_rp as ttl_rp_timbang FROM timbang_purchase as d
+        LEFT JOIN pembelian_purchase as e ON d.id_pembelian = e.id_pembelian_purchase
+        LEFT JOIN purchase as a ON a.id_purchase = e.id_purchase
+                left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+                left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+                where a.no_po = '$no_po'
+                order by a.id_purchese DESC
+                ");
 
         $data = [
             'po' => $no_po,
-            'purchase' => $detail
+            'purchase' => $detail,
+            'detail2' => $detail2
         ];
-        return view('timbang.detail', $data);
+        return view('timbang.detail2', $data);
     }
 }

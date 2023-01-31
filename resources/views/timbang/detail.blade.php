@@ -34,7 +34,8 @@
                     <td>{{$p->nm_satuan}}</td>
                     <td>{{number_format($p->rp_satuan,0)}}</td>
                     <td style="border-right: 2px solid #435EBE">{{number_format($p->ttl_rp,0)}}</td>
-                    <td><span class="{{$p->qty == $p->qty_timbang ? '' : 'text-danger'}}">{{$p->qty_timbang}}</span></td>
+                    <td><span class="{{$p->qty == $p->qty_timbang ? '' : 'text-danger'}}">{{$p->qty_timbang}}</span>
+                    </td>
                     <td>{{$p->nm_satuan}}</td>
                     <td>{{number_format($p->hrga_satuan_timbang,0)}}</td>
                     <td>{{number_format($p->ttl_rp_timbang,0)}}</td>
