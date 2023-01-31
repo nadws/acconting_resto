@@ -122,5 +122,7 @@ Route::get('/tambah_beli', [Pembelian_purchase::class, 'tambah_beli'])->name('ta
 Route::post('/save_pembelian_po', [Pembelian_purchase::class, 'save_pembelian_po'])->name('save_pembelian_po');
 Route::get('/detail_po2', [Pembelian_purchase::class, 'detail_po2'])->name('detail_po2');
 Route::get('/print_pembelian', [Pembelian_purchase::class, 'print_pembelian'])->name('print_pembelian');
+Route::get('/edit_pembelian', [Pembelian_purchase::class, 'edit_pembelian'])->name('edit_pembelian');
+Route::post('/edit_save_pembelian_po', [Pembelian_purchase::class, 'edit_save_pembelian_po'])->name('edit_save_pembelian_po');
 
 require __DIR__ . '/auth.php';

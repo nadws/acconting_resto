@@ -68,9 +68,13 @@
             </div>
         </section>
     </div>
-
+    <style>
+        .modal-lg-max2 {
+            max-width: 1350px;
+        }
+    </style>
     <div id="detail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-dialog  modal-lg-max2" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel33">
