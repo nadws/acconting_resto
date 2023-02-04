@@ -62,6 +62,7 @@
                                         <th colspan="4" style="text-align: center">Beli</th>
                                     </tr>
                                     <tr>
+                                        <th>Belanja Pasar</th>
                                         <th>Bahan</th>
                                         <th>Qty</th>
                                         <th>Satuan Beli</th>
@@ -73,10 +74,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($purchase as $p)
+                                    @foreach ($purchase as $no => $p)
                                     <tr>
+                                        <td align="center"><input class="form-check-input total" name="cek[]" value="Y" type="checkbox"
+                                            id="check{{ $no + 1 }}"></td>
                                         <td>
-                                            {{$p->nm_bahan}}
+                                            <label for="check{{$no+1}}">{{$p->nm_bahan}}</label>
                                             <input type="hidden" name="id_purchase[]" value="{{$p->id_purchase}}">
                                         </td>
                                         <td>
@@ -109,8 +112,10 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" style="float: right; margin-left: 8px;"
+                        <button type="submit" name="action" value="pasar" id="simpan" style="float: right; margin-left: 8px;"
                             class="btn btn-primary">Simpan</button>
+                        <button type="submit" name="action" value="dimuka" id="simpanPembayaranDimuka" style="float: right; margin-left: 8px;"
+                            class="btn btn-primary btnSimpan">Pembayaran Dimuka</button>
                         <a href="{{route('sistem_po')}}" style="float: right" class="btn btn-outline-primary">Batal</a>
                     </div>
                 </div>
@@ -157,6 +162,11 @@
             $('.total' + detail).val(total);
                 
         });
+
+        $(document).on('click', '#simpanPembayaranDimuka', function(){
+
+            location.href = "{{route('save_pembelian_po')}}?jenis=dimuka"
+        })
     });
 </script>
 @endsection

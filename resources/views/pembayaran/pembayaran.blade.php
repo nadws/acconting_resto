@@ -32,7 +32,7 @@
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#tambah" id="btn_pembayaran"
                                     class="btn icon icon-left btn-primary" style="float: right"><i
                                         class="bi bi-plus-circle"></i>
-                                    Pembayaran</a>
+                                    Dibukukan</a>
                             </div>
                             <div class="card-body">
 
