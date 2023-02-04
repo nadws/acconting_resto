@@ -80,10 +80,17 @@
 
 
 
-
     <script>
         $(document).ready(function () {
             
+
+
+            $(document).on('click', '.remove_baris', function(e) {
+                e.preventDefault()
+                var delete_row = $(this).attr('count');
+                $('#baris' + delete_row).remove();
+            });
+
             $('.select_view').select2();
              });
             $('.select2').select2({
@@ -131,6 +138,8 @@
                 close:true,
                 avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
             }).showToast();
+
+            
             });
     </script>
     @endif

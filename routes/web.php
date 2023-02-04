@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Gudang;
 use App\Http\Controllers\Jurnal_pemasukan;
 use App\Http\Controllers\Jurnal_pengeluaran;
+use App\Http\Controllers\OpnamePeralatanController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Pembelian_purchase;
 use App\Http\Controllers\Sistem_po;
@@ -126,5 +127,12 @@ Route::get('/print_pembelian', [Pembelian_purchase::class, 'print_pembelian'])->
 Route::get('/edit_pembelian', [Pembelian_purchase::class, 'edit_pembelian'])->name('edit_pembelian');
 Route::post('/edit_save_pembelian_po', [Pembelian_purchase::class, 'edit_save_pembelian_po'])->name('edit_save_pembelian_po');
 Route::get('/print_timbangan', [TimbangController::class, 'print_nota'])->name('print_timbangan');
+Route::get('/tambah_pembayaran_dimuka', [Pembelian_purchase::class, 'tambah_pembayaran_dimuka'])->name('tambah_pembayaran_dimuka');
+Route::get('/tambah_pembayaran_dipasar', [Pembelian_purchase::class, 'tambah_pembayaran_dipasar'])->name('tambah_pembayaran_dipasar');
+Route::post('/save_pembelian_po_pasar', [Pembelian_purchase::class, 'save_pembelian_po_pasar'])->name('save_pembelian_po_pasar');
+Route::get('/tambah_biaya_lain2', [Pembelian_purchase::class, 'tambah_biaya_lain2'])->name('tambah_biaya_lain2');
+
+// opname peralatan
+Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');
 
 require __DIR__ . '/auth.php';

@@ -30,7 +30,7 @@
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-receipt-cutoff"></i>
-                        <span>Purchase</span>
+                        <span>Pembelian</span>
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
@@ -41,14 +41,14 @@
                             <a href="{{ route('timbang') }}">Timbang</a>
                         </li>
                         <li class="submenu-item ">
-                            <a href="{{ route('pembayaran') }}">Pembayaran</a>
+                            <a href="{{ route('pembayaran') }}">Di bukukan</a>
                         </li>
                     </ul>
                 </li>
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-warehouse"></i>
-                        <span>Warehouse</span>
+                        <span>Gudang</span>
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">

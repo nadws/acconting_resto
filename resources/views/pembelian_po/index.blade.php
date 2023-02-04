@@ -64,7 +64,7 @@
                                 </td>
                                 <td>
                                     <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-primary {{$p->beli == 'T' ? '' : 'disabled'}}"><i
+                                        class="btn btn-sm btn-primary"><i
                                             class="fas fa-shopping-cart"></i>
                                     </a>
                                     <a href="{{route('edit_pembelian',['no_po' => $p->no_po])}}"
@@ -144,6 +144,8 @@
                 }
             });
         });
+
+        
         
     });
 </script>

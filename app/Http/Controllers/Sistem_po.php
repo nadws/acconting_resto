@@ -100,8 +100,6 @@ class Sistem_po extends Controller
         $ttl_rp = $r->ttl_rp;
         $urutan = $r->urutan;
 
-
-
         for ($x = 0; $x < count($id_bahan); $x++) {
             $data = [
                 'tgl' => $tgl,
@@ -125,13 +123,20 @@ class Sistem_po extends Controller
         $id_bahan = $r->id_bahan;
         $max = DB::selectOne("SELECT  max(a.id_purchase) as max_id FROM purchase as a where a.id_bahan = '$id_bahan'");
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4abdecaba32d10d41f123eb74248c2635e39f1e1
         $bahan = DB::selectOne("SELECT a.rp_satuan FROM purchase as a where a.id_purchase = '$max->max_id'");
 
         if (empty($bahan)) {
             echo 0;
         } else {
+<<<<<<< HEAD
             echo $bahan->rp_satuan;
+=======
+            echo $bahan->rp_satuan; 
+>>>>>>> 4abdecaba32d10d41f123eb74248c2635e39f1e1
         }
     }
 
