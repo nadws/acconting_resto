@@ -53,6 +53,9 @@ class Pembelian_purchase extends Controller
         $h_satuan = $r->h_satuan;
         $ttl_rp = $r->ttl_rp;
 
+        $sub_nota = str_pad(10, 4, '0', STR_PAD_LEFT);
+
+
         for ($x = 0; $x < count($id_purchase); $x++) {
             $data = [
                 'tgl' => $tgl,

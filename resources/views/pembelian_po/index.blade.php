@@ -39,7 +39,7 @@
                                 <th>Admin Po</th>
                                 <th>Admin Beli</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th>Aksi </th>
                             </tr>
                         </thead>
                         <tbody>

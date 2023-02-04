@@ -126,12 +126,12 @@ class Sistem_po extends Controller
         $max = DB::selectOne("SELECT  max(a.id_purchase) as max_id FROM purchase as a where a.id_bahan = '$id_bahan'");
 
 
-        $bahan = DB::selectOne("SELECT a.h_satuan FROM pembelian_purchase as a where a.id_purchase = '$max->max_id'");
+        $bahan = DB::selectOne("SELECT a.rp_satuan FROM purchase as a where a.id_purchase = '$max->max_id'");
 
         if (empty($bahan)) {
             echo 0;
         } else {
-            echo $bahan->h_satuan;
+            echo $bahan->rp_satuan;
         }
     }
 

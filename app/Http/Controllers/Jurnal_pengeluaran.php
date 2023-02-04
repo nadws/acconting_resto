@@ -199,7 +199,7 @@ class Jurnal_pengeluaran extends Controller
             DB::table('stok_ts')->insert($data);
         }
 
-        if(!empty($id_akun_lain)){
+        if (!empty($id_akun_lain)) {
             for ($x = 0; $x < count($id_akun_lain); $x++) {
                 $data = [
                     'tgl' => $tgl,
