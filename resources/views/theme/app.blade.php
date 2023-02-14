@@ -30,6 +30,7 @@
         .modal-lg-max {
             max-width: 1200px;
         }
+
         .modal-md {
             max-width: 700px;
         }
@@ -77,6 +78,7 @@
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     {{-- <script src="{{ asset('theme') }}/assets/js/select2.min.js"></script> --}}
     <script src="{{ asset('theme') }}/assets/extensions/toastify-js/src/toastify.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -85,11 +87,11 @@
             
 
 
-            $(document).on('click', '.remove_baris', function(e) {
-                e.preventDefault()
-                var delete_row = $(this).attr('count');
-                $('#baris' + delete_row).remove();
-            });
+            // $(document).on('click', '.remove_baris', function(e) {
+            //     e.preventDefault()
+            //     var delete_row = $(this).attr('count');
+            //     $('#baris' + delete_row).remove();
+            // });
 
             $('.select_view').select2();
              });

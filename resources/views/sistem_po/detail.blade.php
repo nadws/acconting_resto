@@ -36,7 +36,13 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                $total = 0;
+                @endphp
                 @foreach ($purchase as $p)
+                @php
+                $total += $p->ttl_rp
+                @endphp
                 <tr>
                     <td style="text-align: center">{{$p->nm_bahan}}</td>
                     <td style="text-align: right">{{$p->qty}}</td>
@@ -47,6 +53,12 @@
                 @endforeach
 
             </tbody>
+            <tfoot>
+                <tr>
+                    <th style="text-align: center" colspan="4">Total</th>
+                    <th style="text-align: right">{{number_format($total,0)}}</th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 

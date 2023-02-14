@@ -55,7 +55,7 @@
                     <tbody>
                         @foreach ($purchase as $p)
                         <tr>
-                            <td style="text-align: center">{{$p->nm_bahan}}</td>
+                            <td style="text-align: center">{{$p->nm_post}}</td>
                             <td style="text-align: right">{{$p->qty}}</td>
                             <td style="text-align: center">{{$p->nm_satuan}}</td>
                             <td style="text-align: right">{{$p->qty_beli}}</td>

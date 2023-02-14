@@ -44,7 +44,7 @@
                     @foreach ($purchase as $p)
                     <tr>
                         <td>{{$p->tgl}}</td>
-                        <td>{{$p->nm_bahan}}</td>
+                        <td>{{$p->nm_post}}</td>
                         <td style="text-align: right">{{$p->qty}}</td>
                         <td>{{$p->nm_satuan}}</td>
                         <td style="text-align: right">{{number_format($p->h_satuan,0)}}</td>

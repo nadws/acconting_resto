@@ -56,19 +56,23 @@
                                         <td><a href="#" class="detailPo" sub_no_po="{{$d->sub_no_po}}">{{ $d->sub_no_po
                                                 }}</a></td>
                                         <td>{{ $d->admin }}</td>
-                                        <td>Rp. {{ number_format($d->ttl_rp,0) }}</td>
+                                        <td>Rp. {{ number_format($d->ttl_rp + $d->lain,0) }}</td>
                                         <td>
                                             <h5>
-                                                <span class=" badge bg-{{$d->timbang == 'T' ? 'danger' : 'success'}}"><i
-                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
+                                                <span
+                                                    class=" badge bg-{{$d->timbang == 'T' ? 'danger' : $d->selesai == 'T' ? 'success' : 'primary'}}"><i
+                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' : $d->selesai == 'T' ? 'fa-tasks' : 'fas fa-book'}} "></i>
                                                     {{$d->timbang == 'T'
-                                                    ? 'Diproses' : 'Selesai'}}</span>
+                                                    ? 'Diproses' : $d->selesai == 'T' ? 'Selesai' : 'Pembukuan'}}</span>
+
+
                                             </h5>
                                         </td>
                                         <td>
                                             @if ($d->timbang == 'Y')
                                             <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-pen"></i></a>
+                                                class="btn btn-sm btn-success {{$d->selesai == 'T' ? '' : 'disabled'}} "><i
+                                                    class="fas fa-pen"></i></a>
                                             @else
                                             <a href="{{ route('timbangView', $d->sub_no_po) }}"
                                                 class="btn btn-sm btn-primary"><i class="fas fa-balance-scale"></i></a>

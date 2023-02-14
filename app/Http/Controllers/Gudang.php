@@ -9,8 +9,7 @@ class Gudang extends Controller
 {
     public function index(Request $r)
     {
-        $id_kategori = $r->id_kategori ?? '';
-        $isi = !empty($id_kategori) ? "AND a.id_kategori_makanan = $id_kategori" : '';
+
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
@@ -18,6 +17,7 @@ class Gudang extends Controller
             FROM stok_ts as b 
             group by b.id_bahan
         ) as b on b.id_bahan = a.id_list_bahan
+        
         left join tb_lokasi as c on c.id_lokasi = a.id_lokasi
         left join tb_kategori_makanan as d on d.id_kategori_makanan = a.id_kategori_makanan
         left join tb_satuan as e on e.id_satuan = a.id_satuan
@@ -27,18 +27,15 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '1' and a.monitoring ='Y' $isi
-        order by a.id_list_bahan DESC
-        ");
+        where a.id_lokasi = '1' 
+        order by (b.debit - b.kredit) DESC");
         $data = [
             'title' => 'Opname Bahan',
             'gudang' => $gudang,
-            'id_kategori' => $id_kategori,
             'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
             'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
-
         ];
         return view('gudang.index', $data);
     }
@@ -128,43 +125,43 @@ class Gudang extends Controller
                 ];
                 DB::table('stok_ts')->insert($data);
 
-                $harga = DB::query("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
-                where a.opname = 'T' and id_list_bahan = '$id_list_bahan[$i]' group by a.id_bahan ")->get();
+                // $harga = DB::selectOne("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
+                // where a.opname = 'T' and id_bahan = '$id_list_bahan[$i]' group by a.id_bahan ");
 
-                $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+                // $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
 
-                if (empty($urutan->urutan)) {
-                    $no_urutan = '1001';
-                } else {
-                    $no_urutan = $urutan->urutan + 1;
-                }
-                $total_rp = ($total * -1) * ($harga->hrga / $harga->qty);
+                // if (empty($urutan->urutan)) {
+                //     $no_urutan = '1001';
+                // } else {
+                //     $no_urutan = $urutan->urutan + 1;
+                // }
+                // $total_rp = ($total * -1) * ($harga->hrga / $harga->qty);
 
-                $data = [
-                    'tgl' => date("Y-m-d"),
-                    'id_akun' => 6,
-                    'ket' => 'Pemutihan daging & ayam',
-                    'no_nota' => 'TKM' . $no_urutan,
-                    'kredit' => $total_rp,
-                    'id_buku' => '3',
-                    'kd_gabungan' => 'TKM' . $no_urutan,
-                    'id_lokasi' => '1',
-                    'urutan' => $no_urutan,
-                ];
-                DB::table('tb_jurnal')->insert($data);
+                // $data = [
+                //     'tgl' => date("Y-m-d"),
+                //     'id_akun' => 6,
+                //     'ket' => 'Pemutihan daging & ayam',
+                //     'no_nota' => 'TKM' . $no_urutan,
+                //     'kredit' => $total_rp,
+                //     'id_buku' => '3',
+                //     'kd_gabungan' => 'TKM' . $no_urutan,
+                //     'id_lokasi' => '1',
+                //     'urutan' => $no_urutan,
+                // ];
+                // DB::table('tb_jurnal')->insert($data);
 
-                $data = [
-                    'tgl' => date("Y-m-d"),
-                    'id_akun' => 7,
-                    'ket' => 'Pemutihan daging & ayam',
-                    'no_nota' => 'TKM' . $no_urutan,
-                    'debit' => $total_rp,
-                    'id_buku' => '3',
-                    'kd_gabungan' => 'TKM' . $no_urutan,
-                    'id_lokasi' => '1',
-                    'urutan' => $no_urutan,
-                ];
-                DB::table('tb_jurnal')->insert($data);
+                // $data = [
+                //     'tgl' => date("Y-m-d"),
+                //     'id_akun' => 7,
+                //     'ket' => 'Pemutihan daging & ayam',
+                //     'no_nota' => 'TKM' . $no_urutan,
+                //     'debit' => $total_rp,
+                //     'id_buku' => '3',
+                //     'kd_gabungan' => 'TKM' . $no_urutan,
+                //     'id_lokasi' => '1',
+                //     'urutan' => $no_urutan,
+                // ];
+                // DB::table('tb_jurnal')->insert($data);
             } else {
                 $data = [
                     'id_bahan' => $id_list_bahan[$i],
@@ -176,46 +173,46 @@ class Gudang extends Controller
                     'no_nota' => 'Testing'
                 ];
                 DB::table('stok_ts')->insert($data);
-                $harga = DB::query("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
-                where a.opname = 'T' and id_list_bahan = '$id_list_bahan[$i]' group by a.id_bahan ")->get();
+                // $harga = DB::selectOne("SELECT sum(a.unit_prize) as hrga, sum(a.debit) as qty FROM stok_ts as a 
+                // where a.opname = 'T' and  a.id_bahan = '$id_list_bahan[$i]' group by a.id_bahan ");
 
-                $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
+                // $urutan = DB::selectOne("SELECT max(a.urutan) as urutan FROM tb_jurnal as a where a.id_lokasi = '1' ");
 
-                if (empty($urutan->urutan)) {
-                    $no_urutan = '1001';
-                } else {
-                    $no_urutan = $urutan->urutan + 1;
-                }
-                $total_rp = ($total) * ($harga->hrga / $harga->qty);
+                // if (empty($urutan->urutan)) {
+                //     $no_urutan = '1001';
+                // } else {
+                //     $no_urutan = $urutan->urutan + 1;
+                // }
+                // $total_rp = ($total) * ($harga->hrga / $harga->qty);
 
-                $data = [
-                    'tgl' => date("Y-m-d"),
-                    'id_akun' => 7,
-                    'ket' => 'Pemutihan daging & ayam',
-                    'no_nota' => 'TKM' . $no_urutan,
-                    'kredit' => $total_rp,
-                    'id_buku' => '3',
-                    'kd_gabungan' => 'TKM' . $no_urutan,
-                    'id_lokasi' => '1',
-                    'urutan' => $no_urutan,
-                ];
-                DB::table('tb_jurnal')->insert($data);
+                // $data = [
+                //     'tgl' => date("Y-m-d"),
+                //     'id_akun' => 7,
+                //     'ket' => 'Pemutihan daging & ayam',
+                //     'no_nota' => 'TKM' . $no_urutan,
+                //     'kredit' => $total_rp,
+                //     'id_buku' => '3',
+                //     'kd_gabungan' => 'TKM' . $no_urutan,
+                //     'id_lokasi' => '1',
+                //     'urutan' => $no_urutan,
+                // ];
+                // DB::table('tb_jurnal')->insert($data);
 
-                $data = [
-                    'tgl' => date("Y-m-d"),
-                    'id_akun' => 6,
-                    'ket' => 'Pemutihan daging & ayam',
-                    'no_nota' => 'TKM' . $no_urutan,
-                    'debit' => $total_rp,
-                    'id_buku' => '3',
-                    'kd_gabungan' => 'TKM' . $no_urutan,
-                    'id_lokasi' => '1',
-                    'urutan' => $no_urutan,
-                ];
-                DB::table('tb_jurnal')->insert($data);
+                // $data = [
+                //     'tgl' => date("Y-m-d"),
+                //     'id_akun' => 6,
+                //     'ket' => 'Pemutihan daging & ayam',
+                //     'no_nota' => 'TKM' . $no_urutan,
+                //     'debit' => $total_rp,
+                //     'id_buku' => '3',
+                //     'kd_gabungan' => 'TKM' . $no_urutan,
+                //     'id_lokasi' => '1',
+                //     'urutan' => $no_urutan,
+                // ];
+                // DB::table('tb_jurnal')->insert($data);
             }
         }
-        return redirect()->route("gudang", ['id_kategori' => $r->id_kategori ?? 1])->with('sukses', 'Data berhasil di input');
+        return redirect()->route("gudang")->with('sukses', 'Data berhasil di input');
     }
 
     public function save_bahan(Request $r)

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Listbahan;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +30,7 @@ class Sistem_po extends Controller
 
         $data = [
             'title' => 'Tambah Pengajuan Pembelian',
-            'list_bahan' => DB::table('tb_list_bahan')->get(),
+            'list_bahan' => Listbahan::whereMonitoring('Y')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po
         ];
@@ -39,7 +41,7 @@ class Sistem_po extends Controller
     {
         $data = [
             'title' => 'Tambah Pengajuan Pembelian',
-            'list_bahan' => DB::table('tb_list_bahan')->get(),
+            'list_bahan' => Listbahan::whereMonitoring('Y')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'count' => $r->count
         ];
@@ -122,21 +124,44 @@ class Sistem_po extends Controller
     {
         $id_bahan = $r->id_bahan;
         $max = DB::selectOne("SELECT  max(a.id_purchase) as max_id FROM purchase as a where a.id_bahan = '$id_bahan'");
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 4abdecaba32d10d41f123eb74248c2635e39f1e1
-        $bahan = DB::selectOne("SELECT a.rp_satuan FROM purchase as a where a.id_purchase = '$max->max_id'");
+        $bahan = DB::selectOne("SELECT a.h_satuan FROM pembelian_purchase as a where a.id_purchase = '$max->max_id'");
 
         if (empty($bahan)) {
-            echo 0;
+            $rupiah =  0;
         } else {
-<<<<<<< HEAD
-            echo $bahan->rp_satuan;
-=======
-            echo $bahan->rp_satuan; 
->>>>>>> 4abdecaba32d10d41f123eb74248c2635e39f1e1
+            $rupiah = $bahan->h_satuan;
+        }
+
+
+
+        $data = [
+            'rupiah' => $rupiah,
+        ];
+
+        echo json_encode($data);
+    }
+
+    public function satuan_terakhir_po(Request $r)
+    {
+        $id_bahan = $r->id_bahan;
+        $max = DB::selectOne("SELECT  max(a.id_purchase) as max_id FROM purchase as a where a.id_bahan = '$id_bahan'");
+        $bahan = DB::selectOne("SELECT a.h_satuan FROM pembelian_purchase as a where a.id_purchase = '$max->max_id'");
+        $po = DB::selectOne("SELECT a.id_satuan_beli FROM purchase as a where a.id_purchase = '$max->max_id'");
+        $satuan = Satuan::all();
+
+
+
+        if (empty($po->id_satuan_beli)) {
+            $id_satuan = 0;
+        } else {
+            $id_satuan = $po->id_satuan_beli;
+        }
+        foreach ($satuan as $s) {
+            if ($s->id_satuan == $id_satuan) {
+                echo "<option value='$s->id_satuan'  selected>$s->nm_satuan</option>";
+            } else {
+                echo "<option value='$s->id_satuan'  >$s->nm_satuan</option>";
+            }
         }
     }
 
@@ -184,18 +209,18 @@ class Sistem_po extends Controller
     public function edit_po(Request $r)
     {
         $no_po = $r->no_po;
-        $detail = DB::select("SELECT  a.id_purchase, a.tgl, a.id_bahan, a.id_satuan_beli, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, a.ket FROM purchase as a
-        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        $detail = DB::select("SELECT a.id_purchase, a.tgl, b.id_post, a.id_satuan_beli, a.no_po, a.urutan, a.ket, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_post_center as b on b.id_post = a.id_post
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
-        $detail2 = DB::selectOne("SELECT a.urutan, a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp , a.ket FROM purchase as a
-        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        $detail2 = DB::selectOne("SELECT a.id_purchase, b.id_post, a.admin, a.tgl, a.urutan,a.ket, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_post_center as b on b.id_post = a.id_post
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
 
         $data = [
             'title' => 'Edit Pengajuan Pembelian',
-            'list_bahan' => DB::table('tb_list_bahan')->get(),
+            'list_bahan' => DB::table('tb_post_center')->whereIn('id_akun', ['6', '20'])->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
             'detail' => $detail,

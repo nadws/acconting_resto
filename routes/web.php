@@ -104,6 +104,7 @@ Route::get('/tambah_po', [Sistem_po::class, 'tambah_po'])->name('tambah_po');
 Route::get('/tambah_baris_po', [Sistem_po::class, 'tambah_baris_po'])->name('tambah_baris_po');
 Route::post('/save_po', [Sistem_po::class, 'save_po'])->name('save_po');
 Route::get('/hrga_terakhir_po', [Sistem_po::class, 'hrga_terakhir_po'])->name('hrga_terakhir_po');
+Route::get('/satuan_terakhir_po', [Sistem_po::class, 'satuan_terakhir_po'])->name('satuan_terakhir_po');
 Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
 Route::get('/print_po', [Sistem_po::class, 'print_po'])->name('print_po');
 Route::get('/edit_po', [Sistem_po::class, 'edit_po'])->name('edit_po');
@@ -118,6 +119,9 @@ Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name
 
 Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
 Route::get('pembayaran_bahan', [PembayaranController::class, 'pembayaran_bahan'])->name('pembayaran_bahan');
+Route::post('save_pembukuan', [PembayaranController::class, 'save_pembukuan'])->name('save_pembukuan');
+Route::get('cancel_pembukuan', [PembayaranController::class, 'cancel_pembukuan'])->name('cancel_pembukuan');
+Route::get('tambah_baris_pembyaran', [PembayaranController::class, 'tambah_baris_pembyaran'])->name('tambah_baris_pembyaran');
 
 Route::get('/pembelian_po', [Pembelian_purchase::class, 'index'])->name('pembelian_po');
 Route::get('/tambah_beli', [Pembelian_purchase::class, 'tambah_beli'])->name('tambah_beli');

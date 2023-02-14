@@ -77,7 +77,7 @@
                                     </td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" value="0"
+                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" value="{{$d->qty}}"
                                             detail='{{ $detail+1 }}'>
                                         <input type="hidden" name="qty_beli[]" style="text-align: right;"
                                             class="form-control qty_beli" value="{{$d->qty}}">
@@ -93,8 +93,8 @@
                                     </td>
                                     <td>
                                         <input type="number" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan{{ $detail+1 }}" value="0" readonly
-                                            detail='{{ $detail+1 }}'>
+                                            class="form-control h_satuan h_satuan{{ $detail+1 }}"
+                                            value="{{$d->h_satuan}}" readonly detail='{{ $detail+1 }}'>
                                     </td>
                                     <td>
                                         <input type="number" name="ttl_rp[]" style="text-align: right;"

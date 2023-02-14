@@ -42,36 +42,12 @@ background-position: 0;
                 @csrf
                 <div class="card">
                     <div class="card-header">
-                        <input type="hidden" name="id_kategori" value="{{ Request::get('id_kategori') }}">
-                        <div class="row">
-
-                            <div class="col-lg-6 ">
-                                <table class="table">
-                                    <td width="15%" style="white-space: nowrap; vertical-align: middle">Filter Kategori
-                                    </td>
-                                    <td width="2%" style="white-space: nowrap; vertical-align: middle">:</td>
-                                    <td> <select name="" id="" class="select2 filterKategoriMakanan">
-                                            <option value="">ALL</option>
-                                            @foreach ($kategori as $d)
-                                            <option {{$d->id_kategori_makanan == $id_kategori ? 'selected' : ''}}
-                                                value="{{
-                                                $d->id_kategori_makanan }}">{{ $d->nm_kategori }}</option>
-                                            @endforeach
-                                        </select></td>
-                                </table>
-
-                            </div>
-                            <div class="col-lg-6">
-                                <button type="submit" class="btn icon icon-left btn-primary "
-                                    style="float: right; margin-left: 2px"><i class="far fa-save"></i>
-                                    Opname</button>
-                                <a href="{{ route('export_opname') }}" class="btn icon icon-left btn-primary"
-                                    style="float: right;margin-left: 2px"><i class="bi bi-file-earmark-excel"></i>
-                                    Export</a>
-                            </div>
-
-                        </div>
-
+                        <button type="submit" class="btn icon icon-left btn-primary "
+                            style="float: right; margin-left: 2px"><i class="far fa-save"></i>
+                            Opname</button>
+                        <a href="{{ route('export_opname') }}" class="btn icon icon-left btn-primary"
+                            style="float: right;margin-left: 2px"><i class="bi bi-file-earmark-excel"></i>
+                            Export</a>
                     </div>
                     <div class="card-body">
 
@@ -80,7 +56,6 @@ background-position: 0;
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Bahan</th>
-                                    <th>Kategori </th>
                                     <th>Stok Program</th>
                                     <th>Stok Aktual</th>
                                     <th>Satuan </th>
@@ -94,8 +69,6 @@ background-position: 0;
                                     <td><a href="#" class="history" id_list_bahan="{{ $j->id_list_bahan }}"
                                             data-bs-toggle="modal" data-bs-target="#history">{{ $j->nm_bahan }}</a>
                                     </td>
-                                    <td>{{ $j->nm_kategori }}</td>
-
                                     @php
                                     $debit = empty($j->debit) ? '0' : $j->debit;
                                     $kredit = empty($j->kredit) ? '0' : $j->kredit;
@@ -103,15 +76,12 @@ background-position: 0;
                                     $tgl1 = date('Y-m-d');
                                     $tgl2 = date('Y-m-d', strtotime('30 days', strtotime($j->tgl)));
 
-                                    if (empty($j->tgl)) {
-                                    $tKerja = '0';
-                                    } else {
                                     $totalKerja = new DateTime($tgl1);
                                     $today = new DateTime($tgl2);
                                     $tKerja = $today->diff($totalKerja);
-                                    }
+
                                     @endphp
-                                    <td align="right">{{ number_format($stk, 0) }}</td>
+                                    <td align="right">{{ number_format($stk, 0) }} </td>
                                     <td width="15%">
                                         <input style="text-align: right" type="text" name="stok_ak[]"
                                             class="form-control" value="{{ $stk }}">
@@ -124,7 +94,7 @@ background-position: 0;
                                     <td>{{ $j->n }}</td>
 
 
-                                    <td align="center">{{ $tKerja == '0' ? ' - ' : $tKerja->d }} </td>
+                                    <td align="center">{{ $tKerja == '0' ? ' - ' : $tKerja->days }} </td>
 
                                 </tr>
                                 @endforeach

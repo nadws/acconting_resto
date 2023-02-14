@@ -1,172 +1,108 @@
-@if (empty($no_po))
-<center>
-    <div class="modal-body">
-        <br>
-        <img src="{{asset('assets')}}/img/no-data.svg" width="200px" alt="">
-        <h3 class="mt-2">Data tidak ditemukan</h3>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" id="btn_bayar" disabled class="btn btn-primary">Edit/Save</button>
-    </div>
-</center>
-@else
 <div class="modal-body">
-    <label for="">Tanggal</label>
-    <input type="date" name="tgl" class="form-control mb-4" style="width: 200px;" required>
-    <label for="" style="font-weight: bold; font-size: larger; color: #629779;">Persediaan Makanan </label>
-    <table width="100%" class="table table-bordered">
+    <table width="100%" class="table table-bordered table-striped">
         <thead class="bg-costume">
-            <tr>
-                <th>No PO</th>
-                <th>Nama Bahan</th>
-                <th>Akun</th>
-                <th>Keterangan</th>
+            <tr style="background-color: #3950A3; color: white">
+                <th style="text-align: center">Bahan</th>
                 <th style="text-align: right">Qty</th>
-                <th style="text-align: right">Harga Satuan</th>
+                <th style="text-align: center">Satuan</th>
+                <th style="text-align: right">Rp Satuan</th>
                 <th style="text-align: right">Total Rp</th>
             </tr>
         </thead>
         <tbody>
             @php
-                $total = 0;
+            $total1 = 0;
             @endphp
-            @foreach ($no_po as $d)
-                @php
-                    $po = DB::select("SELECT b.timbang,a.id_timbang as id_pembelian,c.id_bahan,d.nm_bahan,e.nm_satuan,c.id_satuan_beli,a.h_satuan,a.qty,sum(a.ttl_rp) as ttl_rp FROM `timbang_purchase` as a
-                    LEFT JOIN pembelian_purchase as b on a.id_pembelian = b.id_pembelian_purchase
-                    LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
-                    LEFT JOIN tb_list_bahan as d ON d.id_list_bahan = c.id_bahan
-                    LEFT JOIN tb_satuan as e ON c.id_satuan_beli = e.id_satuan
-                    WHERE a.no_po = '$d' GROUP BY c.id_bahan;");
-
-                    // $total += $po->ttl_rp;
-                @endphp 
-                {{-- @if (!empty($po))
-                <tr>
-                    <td>{{ $d }}</td>
-                    <td>{{ $po->nm_bahan }}</td>
-                    <td>Akun</td>
-                    <td>ket</td>
-                    <td>{{ $po->qty }}</td>
-                    <td>{{ $po->h_satuan }}</td>
-                    <td>{{ $po->ttl_rp }}</td>
-                </tr>
-                @endif --}}
-                
+            @foreach ($detail as $d)
+            <tr>
+                <td style="text-align: center">{{$d->nm_bahan}}
+                    {{-- <input type="hidden" name="id_akun[]" value="{{$d->id_akun}}"> --}}
+                    <input type="hidden" name="id_bahan[]" value="{{$d->id_bahan}}">
+                    <input type="hidden" name="qty[]" value="{{$d->qty}}">
+                    <input type="hidden" name="id_satuan[]" value="{{$d->id_satuan}}">
+                    <input type="hidden" name="ttl_rp[]" value="{{$d->ttl_rp}}">
+                    <input type="hidden" name="tgl" value="{{$d->tgl}}">
+                    <input type="hidden" name="no_po" value="{{$d->no_po}}">
+                    <input type="hidden" name="h_satuan[]" value="{{$d->h_satuan}}">
+                </td>
+                <td style="text-align: right">{{$d->qty}}</td>
+                <td style="text-align: center">{{$d->nm_satuan}}</td>
+                <td style="text-align: right">Rp.{{number_format($d->h_satuan,0)}}</td>
+                <td style="text-align: right">Rp.{{number_format($d->ttl_rp,0)}}</td>
+            </tr>
+            @php
+            $total1 +=$d->ttl_rp
+            @endphp
             @endforeach
         </tbody>
+
     </table>
-    <br>
-    <br>
-    <label for="" style="font-weight: bold; font-size: larger; color: #629779;">BCA </label>
-    <table width="100%" class="table table-bordered">
-        <thead class="bg-costume">
-            <tr>
-                <th>CFM Invoice</th>
-                <th>Nama Customer</th>
-                <th>Akun</th>
-                <th>Keterangan</th>
-                <th style="text-align: right">Total Kg</th>
-                <th style="text-align: right">Harga</th>
-                <th style="text-align: right">Total Rp</th>
-                <th style="text-align: right">Total Rp / Invoce</th>
-            </tr>
-        </thead>
-        {{-- <tbody>
-            @php
-            $total = 0;
-            @endphp
-            @foreach ($nota as $n)
-            @php
-            $invoice = DB::selectOne("SELECT a.no_nota as nota_telur, b.id_akun, d.nm_post, a.urutan, b.no_nota,
-            b.tgl,c.nm_akun,
-            b.debit
-            FROM invoice_telur AS a
-            LEFT JOIN tb_jurnal AS b ON b.no_nota = concat('T-',a.no_nota)
-            LEFT JOIN tb_akun AS c ON c.id_akun = b.id_akun
-            LEFT JOIN tb_post_center AS d ON d.id_post = a.id_post
-            WHERE b.id_buku = '1' AND b.id_akun = '32' AND b.setor = 'T' and b.no_nota = '$n'
-            GROUP BY a.no_nota
-            order by a.id_invoice_telur ASC");
+    <div class="row">
+        <div class="col-lg-5">
 
-            $ket = DB::select("SELECT a.no_nota, b.jenis, a.pcs, a.kg_jual, a.rupiah,a.rp_kg
-            From invoice_telur as a
-            LEFT JOIN tb_jenis_telur AS b ON b.id = a.id_jenis_telur
-            where concat('T-',a.no_nota) = '$n'
-            ")
-            @endphp
+        </div>
+        <div class="col-lg-7">
+            <hr style="border:1px solid #3950A3">
+            <table class="table" width="100%">
+                <tbody>
 
-            @if (empty($invoice))
+                    @php
+                    $total2=0;
+                    @endphp
+                    @foreach ($biaya as $b)
+                    @php
+                    $total2+= $b->rupiah
+                    @endphp
+                    <tr>
+                        <td>
+                            {{$b->nm_akun}}
+                            <input type="hidden" name="id_akun_tambahan[]" value="{{$b->id_akun}}">
+                            <input type="hidden" name="rupiah[]" value="{{$b->rupiah}}">
+                        </td>
+                        <td>:</td>
+                        <td align="right" colspan="2">Rp. {{number_format($b->rupiah,0)}}</td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                    <tr>
+                        <th>Total</th>
+                        <th>:</th>
+                        <th style="text-align: right" colspan="2">Rp.{{ number_format($total1 + $total2,0) }}
+                            <input type="hidden" id="total_rp" name="total_rp" value="{{$total1 + $total2}}">
+                            <input type="hidden" class="total_hitung" value="">
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th style="border-top: 3px solid #3950A3">Pembayaran</th>
+                        <th style="border-top: 3px solid #3950A3">:</th>
+                        <td width="25%" style="border-top: 3px solid #3950A3; ">
+                            <select class="select form-control " id="swal-input2" name="akun2[]" required>
+                                <option value="">-Pilih Pembayaran-</option>
+                                @foreach ($akun as $a)
+                                <option value="{{$a->id_akun}}">{{$a->nm_akun}}</option>
+                                @endforeach
+                            </select>
 
-            @else
-            <tr>
-                <td style="vertical-align: middle;">{{$n}}</td>
-                <td style="vertical-align: middle;">{{$invoice->nm_post}} {{$invoice->urutan}}</td>
-                <td style="vertical-align: middle;">{{$invoice->nm_akun}}</td>
-                <td>
-                    @foreach ($ket as $k)
-                    @if ($k->kg_jual == 0)
-                    @php
-                    continue;
-                    @endphp
-                    @endif
-                    {{$k->jenis}} <br>
-                    @endforeach
-                </td>
-                <td style="text-align: right">
-                    @foreach ($ket as $k)
-                    @if ($k->kg_jual == 0)
-                    @php
-                    continue;
-                    @endphp
-                    @endif
-                    {{$k->kg_jual}} <br>
-                    @endforeach
-                </td>
-                <td style="text-align: right">
-                    @foreach ($ket as $k)
-                    @if ($k->kg_jual == 0)
-                    @php
-                    continue;
-                    @endphp
-                    @endif
-                    {{number_format($k->rupiah,0)}} <br>
-                    @endforeach
-                </td>
-                <td style="text-align: right">
-                    @foreach ($ket as $k)
-                    @if ($k->kg_jual == 0)
-                    @php
-                    continue;
-                    @endphp
-                    @endif
-                    {{number_format($k->rp_kg,0)}} <br>
-                    @endforeach
-                </td>
-                <td style="text-align: right; vertical-align: middle;">
-                    {{number_format($invoice->debit,0)}}
-                    <input type="hidden" name="no_nota[]" value="{{$n}}">
-                    <input type="hidden" name="debit[]" value="{{$invoice->debit}}">
-                    <input type="hidden" name="id_akun[]" value="{{$invoice->id_akun}}">
-                </td>
-            </tr>
-            @php
-            $total += $invoice->debit;
-            @endphp
-            @endif
-            @endforeach
-        </tbody> --}}
-        <tfoot>
-            <tr class="bg-costume">
-                <th colspan="6"></th>
-                <th style="text-align: right">Total</th>
-                <th style="text-align: right;">{{number_format($total,0)}}</th>
-            </tr>
-        </tfoot>
-    </table>
+                        </td>
+                        <td width="25%" style="border-top: 3px solid #3950A3; ">
+                            <input name="pembayaran[]" type="text" class="form-control bayar bayar1" urutan='1'
+                                style="text-align: right">
+                        </td>
+                        <td width="5%" style="border-top: 3px solid #3950A3; ">
+                            <a href="#" class="btn rounded-pill tambah_pembayaran"><i
+                                    class="fas fa-plus text-secondary"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody id="tbh_pembayaran">
+
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
+
 </div>
-<div class="modal-footer">
-    <button type="submit" id="btn_bayar" class="btn btn-primary">Edit/Save</button>
-</div>
-
-@endif

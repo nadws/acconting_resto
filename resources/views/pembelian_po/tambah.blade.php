@@ -51,22 +51,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-
-
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th></th>
-                                        <th colspan="3" style="text-align: center;border-right: 2px solid #435EBE">PO
-                                        </th>
-                                        <th colspan="4" style="text-align: center">Beli</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Belanja Pasar</th>
+                                        <th style="text-align: center;">#</th>
                                         <th>Bahan</th>
-                                        <th>Qty</th>
-                                        <th>Satuan Beli</th>
-                                        <th style="border-right: 2px solid #435EBE">Rp Satuan</th>
                                         <th width="10%" style="text-align: center;">Qty</th>
                                         <th>Satuan</th>
                                         <th width="15%" style="text-align: center;">Rp Satuan</th>
@@ -76,32 +65,27 @@
                                 <tbody>
                                     @foreach ($purchase as $no => $p)
                                     <tr>
-                                        <td align="center"><input class="form-check-input total" name="cek[]" value="Y" type="checkbox"
-                                            id="check{{ $no + 1 }}"></td>
+                                        <td align="center"><input
+                                                class="form-check-input checklist checklist{{$p->id_purchase}}  total"
+                                                name="cek[]" value="{{$p->id_purchase}}" type="checkbox"
+                                                id="check{{ $no + 1 }}" id_purchase='{{$p->id_purchase}}'>
+                                        </td>
                                         <td>
                                             <label for="check{{$no+1}}">{{$p->nm_bahan}}</label>
                                             <input type="hidden" name="id_purchase[]" value="{{$p->id_purchase}}">
                                         </td>
                                         <td>
-                                            {{$p->qty}}
-                                        </td>
-                                        <td>
-                                            {{$p->nm_satuan}}
-                                        </td>
-                                        <td style="border-right: 2px solid #435EBE">
-                                            {{number_format($p->rp_satuan,0)}}
-                                        </td>
-                                        <td>
                                             <input type="text" name="qty[]" style="text-align: right;"
-                                                class="form-control qty_beli qty_beli{{$p->id_purchase}}" value="0"
-                                                detail='{{$p->id_purchase}}'>
+                                                class="form-control input_purchase{{$p->id_purchase}} qty_beli qty_beli{{$p->id_purchase}}"
+                                                value="0" detail='{{$p->id_purchase}}' disabled>
                                         </td>
                                         <td>{{$p->nm_satuan}}</td>
                                         <td><input type="text" name="h_satuan[]" style="text-align: right;"
-                                                class="form-control h_satuan h_satuan{{$p->id_purchase}}" value="0"
-                                                detail='{{$p->id_purchase}}'></td>
+                                                class="form-control h_satuan input_purchase{{$p->id_purchase}} h_satuan{{$p->id_purchase}}"
+                                                value="0" detail='{{$p->id_purchase}}' disabled></td>
                                         <td><input type="text" name="ttl_rp[]" style="text-align: right;"
-                                                class="form-control total{{$p->id_purchase}}" value="0" readonly></td>
+                                                class="form-control input_purchase{{$p->id_purchase}} total{{$p->id_purchase}}"
+                                                value="0" readonly disabled></td>
                                     </tr>
                                     @endforeach
 
@@ -112,10 +96,11 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" name="action" value="pasar" id="simpan" style="float: right; margin-left: 8px;"
-                            class="btn btn-primary">Simpan</button>
-                        <button type="submit" name="action" value="dimuka" id="simpanPembayaranDimuka" style="float: right; margin-left: 8px;"
-                            class="btn btn-primary btnSimpan">Pembayaran Dimuka</button>
+                        <button type="submit" name="action" value="pasar" id="simpan"
+                            style="float: right; margin-left: 8px;" class="btn btn-primary">Simpan</button>
+                        <button type="submit" name="action" value="dimuka" id="simpanPembayaranDimuka"
+                            style="float: right; margin-left: 8px;" class="btn btn-primary btnSimpan">Pembayaran
+                            Dimuka</button>
                         <a href="{{route('sistem_po')}}" style="float: right" class="btn btn-outline-primary">Batal</a>
                     </div>
                 </div>
@@ -166,7 +151,18 @@
         $(document).on('click', '#simpanPembayaranDimuka', function(){
 
             location.href = "{{route('save_pembelian_po')}}?jenis=dimuka"
-        })
+        });
+        
+
+        $(document).on('click', '.checklist', function(){
+            var id_purchase = $(this).attr('id_purchase');
+            if($('.checklist' + id_purchase).prop("checked") == true){
+                    $('.input_purchase' + id_purchase).removeAttr('disabled');
+                }
+                else if($('.checklist' + id_purchase).prop("checked") == false){
+                    $('.input_purchase' + id_purchase).attr('disabled', 'true');
+            }
+        });
     });
 </script>
 @endsection
