@@ -80,7 +80,7 @@
                 </a>
             </div>
             <div class="col-lg-4 .col-6">
-                <a href="">
+                <a href="{{route('login',['id_lokasi' => '2'])}}">
                     <div class="card shadow-lg" style="rou">
                         <div class="card-body text-center">
                             <img src="/img/soondobu.jpg" class=" img-fluid" alt="" width=" 63%">

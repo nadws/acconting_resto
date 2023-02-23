@@ -71,7 +71,8 @@
 
                 <form class="login100-form validate-form" action="{{ route('login') }}" method="post">
                     <center>
-                        <img src="/img/Takemori.svg" alt="" width="80px">
+                        <img src="{{$id_lokasi == '1' ? '/img/Takemori.svg' : '/img/soondobu.jpg'}}" alt=""
+                            width="80px">
                     </center>
                     @csrf
                     <span class="login100-form-title p-b-43">
@@ -80,10 +81,11 @@
                     <center>
                         <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" />
                     </center>
-
+                    <input type="hidden" name="id_lokasi" value="{{$id_lokasi}}">
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                        <input class="input100" name="username" type="text" name="username" :value="old('username')"
+                        <input class="input100" name="username" type="text" name="username" :value="old(' username')"
                             required>
+
                         <span class="focus-input100"></span>
                         <span class="label-input100">Username</span>
                     </div>
@@ -98,7 +100,8 @@
                     </div>
                     <br>
                     <div class="container-login100-form-btn mt-4">
-                        <button class="login100-form-btn" type="submit" style="background-color: #4DFF06">
+                        <button class="login100-form-btn" type="submit"
+                            style="background-color: {{$id_lokasi == '1' ? '#4DFF06' : '#DD0023'}} ">
                             Login
                         </button>
 
@@ -112,7 +115,8 @@
                     </div>
                 </form>
 
-                <div class="login100-more" style="background-image: url({{asset('/img/login_takemori.jpg')}});">
+                <div class="login100-more"
+                    style="background-image: url({{$id_lokasi == '1' ? '/img/login_takemori.jpg' : '/img/login_soondobu.jpg'}});">
                 </div>
             </div>
         </div>
