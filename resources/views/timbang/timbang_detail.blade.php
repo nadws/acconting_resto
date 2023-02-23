@@ -83,10 +83,19 @@
                                             class="form-control qty_beli" value="{{$d->qty}}">
                                     </td>
                                     <td>
-                                        <select disabled name="id_satuan[]" id="" class="form-control  select_view">
+                                        @php
+                                        if (empty($d->id_satuan_timbang))
+                                        {
+                                        $id_satuan = $d->id_satuan_beli;
+                                        } else {
+                                        $id_satuan = $d->id_satuan_timbang;
+                                        }
+
+                                        @endphp
+                                        <select name="id_satuan[]" id="" class="form-control  select_view">
                                             <option value="">Pilih Satuan</option>
                                             @foreach ($satuan as $l)
-                                            <option {{$l->id_satuan == $d->id_satuan_beli ? 'selected' : ''}}
+                                            <option {{$l->id_satuan == $id_satuan ? 'selected' : ''}}
                                                 value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>
                                             @endforeach
                                         </select>

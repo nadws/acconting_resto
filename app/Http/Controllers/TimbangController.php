@@ -51,11 +51,11 @@ class TimbangController extends Controller
         $getNoPo = DB::table('timbang_purchase')->where('no_po', $no_po)->get();
         $data = [
             'title' => 'Detail Edit Timbang',
-            'pembelian' => DB::select("SELECT b.timbang,a.id_timbang as id_pembelian,c.id_post,c.id_satuan_beli,a.h_satuan,a.qty,b.ttl_rp FROM `timbang_purchase` as a
+            'pembelian' => DB::select("SELECT a.id_satuan_timbang, b.timbang,a.id_timbang as id_pembelian,c.id_bahan,c.id_satuan_beli,a.h_satuan,a.qty,b.ttl_rp FROM `timbang_purchase` as a
             LEFT JOIN pembelian_purchase as b on a.id_pembelian = b.id_pembelian_purchase
             LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
-            WHERE a.no_po = '$no_po' GROUP BY c.id_post;"),
-            'list_bahan' => DB::table('tb_post_center')->whereIn('id_akun', ['6', '20'])->get(),
+            WHERE a.no_po = '$no_po' GROUP BY c.id_bahan"),
+            'list_bahan' => Listbahan::all(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
             'getNoPo' => $getNoPo
@@ -85,7 +85,8 @@ class TimbangController extends Controller
                     'qty' => $r->qty[$i],
                     'ttl_rp' => $r->ttl_rp[$i],
                     'ket' => $r->ket,
-                    'id_lokasi' => $id_lokasi
+                    'id_lokasi' => $id_lokasi,
+                    'id_satuan_timbang' => $r->id_satuan[$i]
                 ]);
                 DB::table('pembelian_purchase')->where('sub_no_po', $r->no_po)->update(['timbang' => 'Y']);
 
@@ -106,6 +107,7 @@ class TimbangController extends Controller
                     'qty' => $r->qty[$i],
                     'ttl_rp' => $r->ttl_rp[$i],
                     'ket' => $r->ket,
+                    'id_satuan_timbang' => $r->id_satuan[$i]
                 ]);
             }
         }
@@ -115,19 +117,20 @@ class TimbangController extends Controller
     public function detail_timbang(Request $r)
     {
         $sub_no_po = $r->sub_no_po;
-        $detail = DB::select("SELECT  a.*, c.nm_post, d.nm_satuan, e.qty AS qty_timbang, e.h_satuan AS rp_satuan_timbang, 
-        e.ttl_rp AS ttl_rp_timbang
+        $detail = DB::select("SELECT  a.*, c.nm_bahan, d.nm_satuan, e.qty AS qty_timbang, e.h_satuan AS rp_satuan_timbang, 
+        e.ttl_rp AS ttl_rp_timbang, f.nm_satuan as satuan_timbang
         FROM pembelian_purchase AS a
         LEFT JOIN purchase AS b ON b.id_purchase = a.id_purchase
-        LEFT JOIN tb_post_center AS c ON c.id_post = b.id_post
+        LEFT JOIN tb_list_bahan AS c ON c.id_list_bahan = b.id_bahan
         LEFT JOIN tb_satuan AS d ON d.id_satuan= b.id_satuan_beli
         LEFT JOIN timbang_purchase AS e ON e.id_pembelian = a.id_pembelian_purchase
+        LEFT JOIN tb_satuan AS f ON f.id_satuan= e.id_satuan_timbang
         WHERE  a.sub_no_po = '$sub_no_po'");
 
-        $detail2 = DB::selectOne("SELECT a.*, c.nm_post, d.nm_satuan
+        $detail2 = DB::selectOne("SELECT a.*, c.nm_bahan, d.nm_satuan
         FROM pembelian_purchase AS a
         LEFT JOIN purchase AS b ON b.id_purchase = a.id_purchase
-        LEFT JOIN tb_post_center AS c ON c.id_post = b.id_post
+        LEFT JOIN tb_list_bahan AS c ON c.id_list_bahan = b.id_bahan
         LEFT JOIN tb_satuan AS d ON d.id_satuan= b.id_satuan_beli
         WHERE  a.sub_no_po = '$sub_no_po'");
         $data = [
@@ -138,24 +141,25 @@ class TimbangController extends Controller
         return view('timbang.detail2', $data);
     }
 
-    public function print_nota(Request $r)
+    public function print_timbang(Request $r)
     {
         $sub_no_po = $r->sub_no_po;
         $detail = DB::select("SELECT  a.*, c.nm_bahan, d.nm_satuan, e.qty AS qty_timbang, e.h_satuan AS rp_satuan_timbang, 
-        e.ttl_rp AS ttl_rp_timbang
+        e.ttl_rp AS ttl_rp_timbang, f.nm_satuan as satuan_timbang
         FROM pembelian_purchase AS a
         LEFT JOIN purchase AS b ON b.id_purchase = a.id_purchase
         LEFT JOIN tb_list_bahan AS c ON c.id_list_bahan = b.id_bahan
         LEFT JOIN tb_satuan AS d ON d.id_satuan= b.id_satuan_beli
         LEFT JOIN timbang_purchase AS e ON e.id_pembelian = a.id_pembelian_purchase
-        WHERE a.beli = 'Y' AND a.sub_no_po = '$sub_no_po'");
+        LEFT JOIN tb_satuan AS f ON f.id_satuan= e.id_satuan_timbang
+        WHERE  a.sub_no_po = '$sub_no_po'");
 
         $detail2 = DB::selectOne("SELECT a.*, c.nm_bahan, d.nm_satuan
         FROM pembelian_purchase AS a
         LEFT JOIN purchase AS b ON b.id_purchase = a.id_purchase
         LEFT JOIN tb_list_bahan AS c ON c.id_list_bahan = b.id_bahan
         LEFT JOIN tb_satuan AS d ON d.id_satuan= b.id_satuan_beli
-        WHERE a.beli = 'Y' AND a.sub_no_po = '$sub_no_po'");
+        WHERE  a.sub_no_po = '$sub_no_po'");
         $data = [
             'po' => $sub_no_po,
             'purchase' => $detail,

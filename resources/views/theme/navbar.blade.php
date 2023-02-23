@@ -27,6 +27,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-receipt-cutoff"></i>
@@ -107,6 +108,19 @@
                             <a href="{{route('user')}}">User</a>
                         </li>
                     </ul>
+                </li>
+                <br>
+                <hr>
+                <li class="sidebar-item  ">
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a type="submit" class='sidebar-link' onclick="event.preventDefault();
+                        this.closest('form').submit();">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </form>
                 </li>
             </ul>
         </div>

@@ -15,7 +15,14 @@ use App\Http\Controllers\TimbangController;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [Dashboard::class, 'index'])->name('dashboard');
+Route::get('/', function () {
+    return view('welcome');
+});
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
+Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+
 
 Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
 Route::get('/data_pemasukan', [Jurnal_pemasukan::class, 'data_pemasukan'])->name('data_pemasukan');
@@ -116,6 +123,7 @@ Route::get('timbangView/{no_po}', [TimbangController::class, 'timbangView'])->na
 Route::get('timbangEdit/{no_po}', [TimbangController::class, 'timbangEdit'])->name('timbangEdit');
 Route::post('save_timbang', [TimbangController::class, 'save_timbang'])->name('save_timbang');
 Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name('detail_timbang');
+Route::get('print_timbang', [TimbangController::class, 'print_timbang'])->name('print_timbang');
 
 Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
 Route::get('pembayaran_bahan', [PembayaranController::class, 'pembayaran_bahan'])->name('pembayaran_bahan');
@@ -135,6 +143,7 @@ Route::get('/tambah_pembayaran_dimuka', [Pembelian_purchase::class, 'tambah_pemb
 Route::get('/tambah_pembayaran_dipasar', [Pembelian_purchase::class, 'tambah_pembayaran_dipasar'])->name('tambah_pembayaran_dipasar');
 Route::post('/save_pembelian_po_pasar', [Pembelian_purchase::class, 'save_pembelian_po_pasar'])->name('save_pembelian_po_pasar');
 Route::get('/tambah_biaya_lain2', [Pembelian_purchase::class, 'tambah_biaya_lain2'])->name('tambah_biaya_lain2');
+Route::get('/print_detail', [Pembelian_purchase::class, 'print_detail'])->name('print_detail');
 
 // opname peralatan
 Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');

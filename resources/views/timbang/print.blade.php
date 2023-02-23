@@ -27,7 +27,7 @@
                         <td>{{date('d-m-Y',strtotime($detail2->tgl))}}</td>
                     </tr>
                     <tr>
-                        <td width="15%">Nomor Po</td>
+                        <td width="15%">Nomor Pembelian</td>
                         <td width="1%">:</td>
                         <td>{{$detail2->sub_no_po}}</td>
                         <td width="20%">Departement</td>
@@ -62,14 +62,11 @@
                             <td>{{$p->nm_satuan}}</td>
                             <td style="text-align: right">{{number_format($p->h_satuan,0)}}</td>
                             <td style="text-align: right">{{number_format($p->ttl_rp,0)}}</td>
-                            <td
-                                style="text-align: right; background-color: {{$p->qty == $p->qty_timbang ? '' : 'red; color:white'}}">
-                                <span>{{$p->qty_timbang}}
-                                </span>
+                            <td style="text-align: right"><span
+                                    class="{{$p->qty == $p->qty_timbang ? '' : 'text-danger'}}">{{$p->qty_timbang}}</span>
                             </td>
-                            <td>{{$p->nm_satuan}}</td>
-                            <td style=" text-align: right">{{number_format($p->rp_satuan_timbang,0)}}
-                            </td>
+                            <td>{{$p->satuan_timbang}}</td>
+                            <td style="text-align: right">{{number_format($p->rp_satuan_timbang,0)}}</td>
                             <td style="text-align: right">{{number_format($p->ttl_rp_timbang,0)}}</td>
                         </tr>
                         @endforeach
@@ -82,6 +79,9 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+    </script>
+    <script>
+        window.print()
     </script>
 </body>
 

@@ -72,8 +72,9 @@
                                             detail='{{$d->id_purchase}}'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
-                                            <option value="{{$l->id_post}}" {{$d->id_post == $l->id_post
-                                                ?'Selected' : ''}}>{{$l->nm_post}}</option>
+                                            <option value="{{$l->id_list_bahan}}" {{$d->id_list_bahan ==
+                                                $l->id_list_bahan
+                                                ?'Selected' : ''}}>{{$l->nm_bahan}}</option>
                                             @endforeach
                                         </select>
                                     </td>

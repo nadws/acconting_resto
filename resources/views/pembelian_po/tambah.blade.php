@@ -77,7 +77,7 @@
                                         <td>
                                             <input type="text" name="qty[]" style="text-align: right;"
                                                 class="form-control input_purchase{{$p->id_purchase}} qty_beli qty_beli{{$p->id_purchase}}"
-                                                value="0" detail='{{$p->id_purchase}}' disabled>
+                                                value="{{$p->qty}}" detail='{{$p->id_purchase}}' disabled>
                                         </td>
                                         <td>{{$p->nm_satuan}}</td>
                                         <td><input type="text" name="h_satuan[]" style="text-align: right;"

@@ -32,7 +32,7 @@ class PembayaranController extends Controller
        LEFT JOIN pembelian_purchase as b ON a.id_pembelian = b.id_pembelian_purchase
        LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
        LEFT JOIN tb_list_bahan as d ON c.id_bahan = d.id_list_bahan
-       LEFT JOIN tb_satuan as e ON c.id_satuan_beli = e.id_satuan
+       LEFT JOIN tb_satuan as e ON a.id_satuan_timbang = e.id_satuan
        WHERE a.no_po = '$nopo'
        GROUP BY a.id_timbang");
         $detail2 = DB::selectOne("SELECT a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan , a.qty, e.nm_satuan,
@@ -97,7 +97,7 @@ class PembayaranController extends Controller
         for ($x = 0; $x < count($id_bahan); $x++) {
             $data = [
                 'tgl' => $tgl,
-                'id_akun' => '228',
+                'id_akun' => '7',
                 'debit' => $ttl_rp[$x],
                 'id_buku' => '3',
                 'no_nota' => $no_po,

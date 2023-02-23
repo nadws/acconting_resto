@@ -11,9 +11,13 @@ class Pembelian_purchase extends Controller
     {
         $data = [
             'title' => 'Pembelian Bahan',
-            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli, sum(b.ttl_rp) as total_beli, b.admin as admin_beli, b.timbang
+            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, count(a.beli) AS po, b.beli, b.total_beli, b.admin as admin_beli, b.timbang
             FROM purchase as a 
-            left join pembelian_purchase as b on b.no_po = a.no_po
+            left JOIN (
+				SELECT SUM(b.ttl_rp) AS total_beli, b.no_po, b.admin, b.timbang, COUNT(b.id_purchase) AS beli
+				FROM pembelian_purchase as b
+				GROUP BY b.no_po
+				) AS b ON b.no_po = a.no_po
             group by a.no_po 
             order by a.id_purchase DESC"),
         ];
@@ -139,7 +143,7 @@ class Pembelian_purchase extends Controller
         $data = [
             'title' => 'Pembelian Bahan',
             'no_po' => $no_po,
-            'akun' => DB::table('tb_akun_fix')->whereIn('id_kategori', [5, 8])->get(),
+            'akun' => DB::table('tb_akun_fix')->whereIn('id_kategori', [6])->get(),
             'purchase' => $detail,
             'detail2' => $detail2,
             'sub_no_po' => $sub_no_po
@@ -152,7 +156,7 @@ class Pembelian_purchase extends Controller
     {
         $data = [
             'title' => 'Tambah Baris',
-            'akun' => DB::table('tb_akun_fix')->whereIn('id_kategori', [5, 8])->get(),
+            'akun' => DB::table('tb_akun_fix')->whereIn('id_kategori', [6])->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'count' => $r->count
         ];
@@ -162,13 +166,17 @@ class Pembelian_purchase extends Controller
     public function save_pembelian_po_pasar(Request $r)
     {
         for ($i = 0; $i < count($r->id_akun); $i++) {
-            $data = [
-                'sub_no_po' => $r->sub_no_po,
-                'id_akun' => $r->id_akun[$i],
-                'rupiah' => $r->rupiah[$i],
-                'id_lokasi' => 1,
-            ];
-            DB::table('purchase_biaya')->insert($data);
+            if (empty($r->id_akun[$i])) {
+                # code...
+            } else {
+                $data = [
+                    'sub_no_po' => $r->sub_no_po,
+                    'id_akun' => $r->id_akun[$i],
+                    'rupiah' => $r->rupiah[$i],
+                    'id_lokasi' => 1,
+                ];
+                DB::table('purchase_biaya')->insert($data);
+            }
         }
         return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
     }
@@ -210,18 +218,18 @@ class Pembelian_purchase extends Controller
     public function detail_po2(Request $r)
     {
         $no_po = $r->no_po;
-        $detail = DB::select("SELECT a.admin, a.tgl, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, 
+        $detail = DB::select("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, 
 
         d.qty AS qty_beli, d.h_satuan AS hrga_satuan_beli, d.ttl_rp AS ttl_rp_pembelian
         
         FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         left join pembelian_purchase as d on d.id_purchase = a.id_purchase
         where a.no_po = '$no_po'");
 
-        $detail2 = DB::selectOne("SELECT a.admin, a.id_purchase, a.tgl, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ket, a.ttl_rp FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        $detail2 = DB::selectOne("SELECT a.admin, a.id_purchase, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ket, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
 
@@ -236,18 +244,18 @@ class Pembelian_purchase extends Controller
     public function print_pembelian(Request $r)
     {
         $no_po = $r->no_po;
-        $detail = DB::select("SELECT a.admin, a.tgl, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, 
+        $detail = DB::select("SELECT a.admin, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp, 
 
         d.qty AS qty_beli, d.h_satuan AS hrga_satuan_beli, d.ttl_rp AS ttl_rp_pembelian
         
         FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         left join pembelian_purchase as d on d.id_purchase = a.id_purchase
         where a.no_po = '$no_po'");
 
-        $detail2 = DB::selectOne("SELECT a.admin, a.id_purchase, a.tgl, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ket, a.ttl_rp FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        $detail2 = DB::selectOne("SELECT a.admin, a.id_purchase, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ket, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
 
@@ -287,5 +295,16 @@ class Pembelian_purchase extends Controller
             'detail2' => $detail2
         ];
         return view('pembelian_po.edit', $data);
+    }
+
+    public function print_detail(Request $r)
+    {
+        $no_po =  $r->no_po;
+        $sub_no = DB::select("SELECT a.sub_no_po FROM pembelian_purchase as a where a.no_po = '$no_po' group by a.sub_no_po");
+
+        $data = [
+            'sub_no' => $sub_no
+        ];
+        return view('pembelian_po.print_detail', $data);
     }
 }

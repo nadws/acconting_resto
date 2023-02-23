@@ -10,7 +10,7 @@ class Gudang extends Controller
     public function index(Request $r)
     {
 
-        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
+        $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl as tgl1
         FROM tb_list_bahan as a
         LEFT join (
             SELECT b.id_bahan, SUM(b.debit) as debit, sum(b.kredit) as kredit

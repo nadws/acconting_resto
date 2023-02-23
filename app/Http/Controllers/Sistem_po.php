@@ -209,18 +209,18 @@ class Sistem_po extends Controller
     public function edit_po(Request $r)
     {
         $no_po = $r->no_po;
-        $detail = DB::select("SELECT a.id_purchase, a.tgl, b.id_post, a.id_satuan_beli, a.no_po, a.urutan, a.ket, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        $detail = DB::select("SELECT a.id_purchase, a.tgl, b.id_list_bahan, a.id_satuan_beli, a.no_po, a.urutan, a.ket, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
-        $detail2 = DB::selectOne("SELECT a.id_purchase, b.id_post, a.admin, a.tgl, a.urutan,a.ket, a.no_po, b.nm_post, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
-        left join tb_post_center as b on b.id_post = a.id_post
+        $detail2 = DB::selectOne("SELECT a.id_purchase, b.id_list_bahan, a.admin, a.tgl, a.urutan,a.ket, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
         where a.no_po = '$no_po'");
 
         $data = [
             'title' => 'Edit Pengajuan Pembelian',
-            'list_bahan' => DB::table('tb_post_center')->whereIn('id_akun', ['6', '20'])->get(),
+            'list_bahan' => Listbahan::whereMonitoring('Y')->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
             'detail' => $detail,

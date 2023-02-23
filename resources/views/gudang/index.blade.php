@@ -74,11 +74,18 @@ background-position: 0;
                                     $kredit = empty($j->kredit) ? '0' : $j->kredit;
                                     $stk = $debit - $kredit;
                                     $tgl1 = date('Y-m-d');
-                                    $tgl2 = date('Y-m-d', strtotime('30 days', strtotime($j->tgl)));
+                                    $tgl2 = date('Y-m-d', strtotime('30 days', strtotime($j->tgl1)));
 
+                                    if (empty($j->tgl1)) {
+                                    $tKerja='0';
+                                    } else {
                                     $totalKerja = new DateTime($tgl1);
                                     $today = new DateTime($tgl2);
                                     $tKerja = $today->diff($totalKerja);
+                                    }
+
+
+
 
                                     @endphp
                                     <td align="right">{{ number_format($stk, 0) }} </td>

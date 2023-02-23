@@ -58,15 +58,14 @@
                                         <td>{{ $d->admin }}</td>
                                         <td>Rp. {{ number_format($d->ttl_rp + $d->lain,0) }}</td>
                                         <td>
-                                            <h5>
-                                                <span
-                                                    class=" badge bg-{{$d->timbang == 'T' ? 'danger' : $d->selesai == 'T' ? 'success' : 'primary'}}"><i
-                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' : $d->selesai == 'T' ? 'fa-tasks' : 'fas fa-book'}} "></i>
-                                                    {{$d->timbang == 'T'
-                                                    ? 'Diproses' : $d->selesai == 'T' ? 'Selesai' : 'Pembukuan'}}</span>
+                                            <h6>
+                                                <span class=" badge bg-{{$d->timbang == 'T' ? 'danger' :  'success' }}">
+                                                    <i
+                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' :  'fa-tasks' }} "></i>
+                                                    {{$d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
 
 
-                                            </h5>
+                                            </h6>
                                         </td>
                                         <td>
                                             @if ($d->timbang == 'Y')
@@ -77,6 +76,9 @@
                                             <a href="{{ route('timbangView', $d->sub_no_po) }}"
                                                 class="btn btn-sm btn-primary"><i class="fas fa-balance-scale"></i></a>
                                             @endif
+                                            <a href="{{ route('print_timbang',['sub_no_po' => $d->sub_no_po]) }}"
+                                                target="_blank" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-print"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach

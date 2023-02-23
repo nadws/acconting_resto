@@ -9,7 +9,7 @@
 
     <div class="page-heading">
         <div class="page-title">
-            <div class="row">
+            <div class="row ">
                 <div class="col-12 col-md-6 order-md-1 order-last">
                     <h3>{{ $title }}</h3>
                 </div>
@@ -26,7 +26,7 @@
         <form action="{{ route('save_pembelian_po_pasar') }}" method="post">
             @csrf
             <section class="section">
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-3">
@@ -47,9 +47,9 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-lg-8">
+                </div> --}}
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
 
                         <div class="card">
                             <div class="card-body">
@@ -61,6 +61,7 @@
                                                 <th>Qty</th>
                                                 <th>Satuan Beli</th>
                                                 <th style="text-align: right">Rp Satuan</th>
+                                                <th style="text-align: right">Total Rp</th>
                                             </tr>
                                         </thead>
                                         @php
@@ -69,7 +70,7 @@
                                         <tbody>
                                             @foreach ($purchase as $no => $p)
                                             @php
-                                            $totalRpSatuan += $p->rp_satuan;
+                                            $totalRpSatuan += $p->ttl_rp;
                                             @endphp
                                             <input type="hidden" name="sub_no_po" value="{{ $p->sub_no_po }}">
                                             <tr>
@@ -86,6 +87,9 @@
                                                 </td>
                                                 <td align="right">
                                                     <span class="rpSatuan">{{ number_format($p->rp_satuan, 0) }}</span>
+                                                </td>
+                                                <td align="right">
+                                                    <span class="rpSatuan">{{ number_format($p->ttl_rp, 0) }}</span>
                                                 </td>
 
                                             </tr>
@@ -110,11 +114,13 @@
 
                                         </div>
                                         <div class="col-lg-8">
-                                            <hr>
+                                            <hr style="border: 2px solid #435EBE;">
+                                            <h5>Biaya Tambahan : </h5>
+                                            <br>
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <label for="">Pilih Akun</label>
-                                                    <select required name="id_akun[]" id="" class="select form-control">
+                                                    <select name="id_akun[]" id="" class="select form-control">
                                                         <option value="">- Pilih Akun -</option>
                                                         @foreach ($akun as $l)
                                                         <option value="{{ $l->id_akun }}">{{ $l->nm_akun }}</option>
@@ -127,7 +133,7 @@
                                                         type="text" class="form-control rpBiaya rpBiaya1">
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <label for="">Aksi</label>
+                                                    <label for="">Aksi</label> <br>
                                                     <button type="button" class="btn rounded-pill tbh_baris"
                                                         style="background-color: #F4F7F9; color: #8FA8BD;">
                                                         <i class="fas fa-plus"></i>
