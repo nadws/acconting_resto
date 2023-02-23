@@ -76,7 +76,7 @@
                                 <tbody>
                                     @foreach ($purchase as $no => $p)
                                     <tr>
-                                        <td align="center"><input class="form-check-input total" name="cek[]" value="Y" type="checkbox"
+                                        <td align="center"><input class="form-check-input total" name="cek[]" value="{{ $p->id_purchase }}" type="checkbox"
                                             id="check{{ $no + 1 }}"></td>
                                         <td>
                                             <label for="check{{$no+1}}">{{$p->nm_bahan}}</label>

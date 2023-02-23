@@ -23,7 +23,7 @@
             <tr>
                 <td>&emsp;&emsp;{{ ucwords($d->sub_kategori) }}</td>
                 <td></td>
-                <td><button class="btn btn-sm btn-primary btnSubKategoriAkun" id="{{ $d->id }}"><i class="bi bi-plus-circle"></i> Akun</button></td>
+                <td><button class="btn btn-sm btn-primary  btnSubKategoriAkun" id="{{ $d->id }}"><i class="bi bi-plus-circle"></i> Akun</button></td>
             </tr>
             @php
 

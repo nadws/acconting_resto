@@ -47,10 +47,10 @@ class Pembelian_purchase extends Controller
         if($r->action == 'dimuka') {
             return redirect()->route("tambah_pembayaran_dimuka", $r);
         } else {
+            
             $tgl = $r->tgl;
             $no_po = $r->no_po;
             $ket = $r->ket;
-
             $id_purchase = $r->id_purchase;
             $qty = $r->qty;
             $h_satuan = $r->h_satuan;
@@ -58,22 +58,24 @@ class Pembelian_purchase extends Controller
             $ambil = DB::table('pembelian_purchase')->where('no_po', $no_po)->latest('urutan')->first();
             $urutan = empty($ambil) ? 1 : $ambil->urutan+1;
             $sub_po = "$no_po-".str_pad($urutan, 3, '0', STR_PAD_LEFT);
+            $cek = $r->cek;
+            
             if(!empty($r->cek)) {
-                for ($x=0; $x < count($r->cek); $x++) { 
+                for ($x=0; $x < count($cek); $x++) { 
                         $data = [
                             'tgl' => $tgl,
                             'no_po' => $no_po,
                             'sub_no_po' => $sub_po,
                             'urutan' => $urutan,
                             'ket' => $ket,
-                            'id_purchase' => $id_purchase[$x],
-                            'qty' => $qty[$x],
-                            'h_satuan' => $h_satuan[$x],
-                            'ttl_rp' => $ttl_rp[$x],
+                            'id_purchase' => $cek[$x],
+                            'qty' => $qty[$cek[$x]],
+                            'h_satuan' => $h_satuan[$cek[$x]],
+                            'ttl_rp' => $ttl_rp[$cek[$x]],
                             'admin' => 'Aldi',
                         ];
                         DB::table('pembelian_purchase')->insert($data);
-                        DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update(['beli' => 'Y']);
+                        DB::table('purchase')->where('id_purchase', $cek[$x])->update(['beli' => 'Y']);
                 }
             }
             return redirect()->route("tambah_pembayaran_dipasar", $r);
@@ -97,6 +99,7 @@ class Pembelian_purchase extends Controller
             // }
             
         }
+
 
         // $tgl = $r->tgl;
         // $no_po = $r->no_po;
