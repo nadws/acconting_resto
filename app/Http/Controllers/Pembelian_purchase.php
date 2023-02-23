@@ -82,10 +82,10 @@ class Pembelian_purchase extends Controller
 
             return redirect()->route("tambah_pembayaran_dimuka", ['no_po' => $no_po, 'sub_no_po' => $sub_po]);
         } else {
+            
             $tgl = $r->tgl;
             $no_po = $r->no_po;
             $ket = $r->ket;
-
             $id_purchase = $r->id_purchase;
             $qty = $r->qty;
             $h_satuan = $r->h_satuan;

@@ -27,7 +27,6 @@ Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
 Route::get('/data_pemasukan', [Jurnal_pemasukan::class, 'data_pemasukan'])->name('data_pemasukan');
 
-
 Route::get('/jurnal_pengeluaran', [Jurnal_pengeluaran::class, 'index'])->name('jurnal_pengeluaran');
 Route::get('/get_isi_jurnal', [Jurnal_pengeluaran::class, 'get_isi_jurnal'])->name('get_isi_jurnal');
 Route::get('/get_satuan_bahan', [Jurnal_pengeluaran::class, 'get_satuan_bahan'])->name('get_satuan_bahan');
