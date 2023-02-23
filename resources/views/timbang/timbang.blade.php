@@ -41,7 +41,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Tanggal</th>
-                                        <th>No PO</th>
+                                        <th>No Po</th>
                                         <th>Admin</th>
                                         <th>Total Rp</th>
                                         <th>Status</th>
@@ -53,23 +53,32 @@
                                     <tr>
                                         <td>{{ $no+1 }}</td>
                                         <td>{{ date('d-m-Y', strtotime($d->tgl)) }}</td>
-                                        <td><a href="#" class="detailPo" no_po="{{$d->no_po}}">{{ $d->no_po }}</a></td>
+                                        <td><a href="#" class="detailPo" sub_no_po="{{$d->sub_no_po}}">{{ $d->sub_no_po
+                                                }}</a></td>
                                         <td>{{ $d->admin }}</td>
-                                        <td>Rp. {{ number_format($d->ttl_rp,0) }}</td>
+                                        <td>Rp. {{ number_format($d->ttl_rp + $d->lain,0) }}</td>
                                         <td>
-                                            <h5><span class=" badge bg-{{$d->timbang == 'T' ? 'danger' : 'success'}}"><i
-                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
-                                                    {{$d->timbang == 'T'
-                                                    ? 'Diproses' : 'Selesai'}}</span></h5>
+                                            <h6>
+                                                <span class=" badge bg-{{$d->timbang == 'T' ? 'danger' :  'success' }}">
+                                                    <i
+                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' :  'fa-tasks' }} "></i>
+                                                    {{$d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
+
+
+                                            </h6>
                                         </td>
                                         <td>
                                             @if ($d->timbang == 'Y')
-                                            <a href="{{ route('timbangEdit', $d->no_po) }}"
-                                                class="btn btn-sm btn-success"><i class="fas fa-pen"></i></a>
+                                            <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
+                                                class="btn btn-sm btn-success {{$d->selesai == 'T' ? '' : 'disabled'}} "><i
+                                                    class="fas fa-pen"></i></a>
                                             @else
-                                            <a href="{{ route('timbangView', $d->no_po) }}"
+                                            <a href="{{ route('timbangView', $d->sub_no_po) }}"
                                                 class="btn btn-sm btn-primary"><i class="fas fa-balance-scale"></i></a>
                                             @endif
+                                            <a href="{{ route('print_timbang',['sub_no_po' => $d->sub_no_po]) }}"
+                                                target="_blank" class="btn btn-sm btn-primary"><i
+                                                    class="fas fa-print"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -120,10 +129,10 @@
 @section('scripts')
 <script>
     $(document).ready(function () {
-        function loadDetail(no_po) {
+        function loadDetail(sub_no_po) {
             $.ajax({
                 type: "GET",
-                url: "{{ route('detail_timbang') }}?no_po=" + no_po,
+                url: "{{ route('detail_timbang') }}?sub_no_po=" + sub_no_po,
                 success: function (r) {
                     $('#detail_po').html(r);
                 }
@@ -131,9 +140,9 @@
         }
 
         $(document).on('click', '.detailPo', function(){
-            var no_po = $(this).attr('no_po')
+            var sub_no_po = $(this).attr('sub_no_po')
             $('#modalDetail').modal('show')
-            loadDetail(no_po)
+            loadDetail(sub_no_po)
         })
     });
 </script>

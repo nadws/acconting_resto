@@ -3,7 +3,7 @@
         <select name="id_bahan[]" id="" class="form-control  select id_bahan id_bahan{{$count}}" detail='{{$count}}'>
             <option value="">Pilih Bahan</option>
             @foreach ($list_bahan as $l)
-            <option value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
+            <option value="{{$l->id_list_bahan}}">{{$l->nm_bahan}} </option>
             @endforeach
         </select>
     </td>
@@ -12,7 +12,7 @@
             value="0" detail='{{$count}}'>
     </td>
     <td>
-        <select name="id_satuan[]" id="" class="form-control  select">
+        <select name="id_satuan[]" id="" class="form-control  satuan{{$count}} select">
             <option value="">Pilih Satuan</option>
             @foreach ($satuan as $l)
             <option value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>

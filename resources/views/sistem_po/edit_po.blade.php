@@ -65,14 +65,15 @@
                             </thead>
                             <tbody>
                                 @foreach ($detail as $d)
-                                <tr id="baris{{$d->id_purchase}}">
+                                <tr id="baris1{{$d->id_purchase}}">
                                     <td>
                                         <select name="id_bahan[]" id=""
                                             class="form-control  select_view id_bahan id_bahan{{$d->id_purchase}}"
                                             detail='{{$d->id_purchase}}'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
-                                            <option value="{{$l->id_list_bahan}}" {{$d->id_bahan == $l->id_list_bahan
+                                            <option value="{{$l->id_list_bahan}}" {{$d->id_list_bahan ==
+                                                $l->id_list_bahan
                                                 ?'Selected' : ''}}>{{$l->nm_bahan}}</option>
                                             @endforeach
                                         </select>
@@ -101,8 +102,8 @@
                                             class="form-control total{{$d->id_purchase}}" value="{{$d->ttl_rp}}"
                                             readonly>
                                     </td>
-                                    <td><a href="#" class="btn rounded-pill remove_baris" count="{{$d->id_purchase}}"><i
-                                                class="fas fa-trash text-danger"></i></a>
+                                    <td><a href="#" class="btn rounded-pill remove_baris1"
+                                            count="{{$d->id_purchase}}"><i class="fas fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -165,6 +166,13 @@
                     $(".select").select2();
                 }
             });
+        });
+        $(document).on('click', '.remove_baris1', function() {
+                var delete_row = $(this).attr('count');
+
+                $('#baris1' + delete_row).remove();
+
+
         });
         $(document).on('click', '.remove_baris', function() {
                 var delete_row = $(this).attr('count');

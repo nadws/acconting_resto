@@ -39,7 +39,7 @@
                                 <th>Admin Po</th>
                                 <th>Admin Beli</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th>Aksi </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,22 +57,24 @@
                                 <td>{{$p->admin}}</td>
                                 <td>{{$p->admin_beli}}</td>
                                 <td>
-                                    <h5><span class=" badge bg-{{$p->beli == 'T' ? 'danger' : 'success'}}"><i
-                                                class="fas {{$p->beli == 'T' ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
-                                            {{$p->beli == 'T'
+                                    <h5><span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
+                                                class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
+                                            {{$p->po != $p->beli
                                             ? 'Diproses' : 'Selesai'}}</span></h5>
                                 </td>
                                 <td>
                                     <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-primary"><i
-                                            class="fas fa-shopping-cart"></i>
+                                        class="btn btn-sm btn-primary"><i class="fas fa-shopping-cart"></i>
                                     </a>
                                     <a href="{{route('edit_pembelian',['no_po' => $p->no_po])}}"
                                         class="btn btn-sm btn-success {{$p->timbang == 'T' ? '' : 'disabled'}}"><i
                                             class="fas fa-pen"></i>
                                     </a>
-                                    <a href="{{route('print_pembelian',['no_po' => $p->no_po])}}" target="_blank"
-                                        class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#print"
+                                        class="btn btn-sm btn-primary print" no_po="{{$p->no_po}}"><i
+                                            class="fas fa-print"></i></a>
+                                    {{-- <a href="{{route('print_pembelian',['no_po' => $p->no_po])}}" target="_blank"
+                                        class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a> --}}
                                 </td>
                             </tr>
                             @endforeach
@@ -113,6 +115,30 @@
             </div>
         </div>
     </div>
+    <div id="print" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg-max2" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">
+                        Daftar {{$title}}
+                    </h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="nota"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Close</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <footer>
@@ -141,6 +167,18 @@
                 success: function(data) {
                  
                     $('#detail_po').html(data);
+                }
+            });
+        });
+        $(document).on('click', '.print', function() {
+            
+            var no_po = $(this).attr('no_po');
+            $.ajax({
+                url: "{{ route('print_detail') }}?no_po=" + no_po,
+                type: "Get",
+                success: function(data) {
+                 
+                    $('#nota').html(data);
                 }
             });
         });

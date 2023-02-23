@@ -16,7 +16,7 @@
                 <tr>
                     <td width="15%">Nomor Po</td>
                     <td width="1%">:</td>
-                    <td>{{$detail2->no_po}}</td>
+                    <td>{{$detail2->sub_no_po}}</td>
                     <td width="20%">Departement</td>
                     <td width="1%">:</td>
                     <td>Takemori</td>
@@ -29,7 +29,6 @@
                 <thead>
                     <tr style="background-color: #3950A3; color: white">
                         <th>Tanggal</th>
-                        <th>No Po</th>
                         <th>Bahan</th>
                         <th style="text-align: right">Qty Beli</th>
                         <th>Satuan</th>
@@ -45,17 +44,16 @@
                     @foreach ($purchase as $p)
                     <tr>
                         <td>{{$p->tgl}}</td>
-                        <td>{{$p->no_po}}</td>
                         <td>{{$p->nm_bahan}}</td>
                         <td style="text-align: right">{{$p->qty}}</td>
                         <td>{{$p->nm_satuan}}</td>
-                        <td style="text-align: right">{{number_format($p->rp_satuan,0)}}</td>
+                        <td style="text-align: right">{{number_format($p->h_satuan,0)}}</td>
                         <td style="text-align: right">{{number_format($p->ttl_rp,0)}}</td>
                         <td style="text-align: right"><span
                                 class="{{$p->qty == $p->qty_timbang ? '' : 'text-danger'}}">{{$p->qty_timbang}}</span>
                         </td>
-                        <td>{{$p->nm_satuan}}</td>
-                        <td style="text-align: right">{{number_format($p->hrga_satuan_timbang,0)}}</td>
+                        <td>{{$p->satuan_timbang}}</td>
+                        <td style="text-align: right">{{number_format($p->rp_satuan_timbang,0)}}</td>
                         <td style="text-align: right">{{number_format($p->ttl_rp_timbang,0)}}</td>
                     </tr>
                     @endforeach

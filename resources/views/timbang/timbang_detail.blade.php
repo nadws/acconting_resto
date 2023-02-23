@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('content')    
+@section('content')
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -70,25 +70,40 @@
                                             class="form-control  select_view id_bahan id_bahan1" detail='1'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
-                                                <option {{ $l->id_list_bahan == $d->id_bahan ? 'selected' : ''}} value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
+                                            <option {{ $l->id_list_bahan == $d->id_bahan ? 'selected' : ''}}
+                                                value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" value="{{ $d->qty }}" detail='{{ $detail+1 }}'>
+                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" value="{{$d->qty}}"
+                                            detail='{{ $detail+1 }}'>
+                                        <input type="hidden" name="qty_beli[]" style="text-align: right;"
+                                            class="form-control qty_beli" value="{{$d->qty}}">
                                     </td>
                                     <td>
-                                        <select disabled name="id_satuan[]" id="" class="form-control  select_view">
+                                        @php
+                                        if (empty($d->id_satuan_timbang))
+                                        {
+                                        $id_satuan = $d->id_satuan_beli;
+                                        } else {
+                                        $id_satuan = $d->id_satuan_timbang;
+                                        }
+
+                                        @endphp
+                                        <select name="id_satuan[]" id="" class="form-control  select_view">
                                             <option value="">Pilih Satuan</option>
                                             @foreach ($satuan as $l)
-                                            <option {{$l->id_satuan == $d->id_satuan_beli ? 'selected' : ''}} value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>
+                                            <option {{$l->id_satuan == $id_satuan ? 'selected' : ''}}
+                                                value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td>
                                         <input type="number" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan{{ $detail+1 }}" value="{{ $d->h_satuan }}" readonly detail='{{ $detail+1 }}'>
+                                            class="form-control h_satuan h_satuan{{ $detail+1 }}"
+                                            value="{{$d->h_satuan}}" readonly detail='{{ $detail+1 }}'>
                                     </td>
                                     <td>
                                         <input type="number" name="ttl_rp[]" style="text-align: right;"

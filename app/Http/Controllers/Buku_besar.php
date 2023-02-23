@@ -20,7 +20,7 @@ class Buku_besar extends Controller
         $buku = DB::select("SELECT  a.kd_gabungan, a.id_akun, b.no_akun, b.nm_akun, sum(a.debit) as debit, sum(a.kredit) as kredit
         FROM tb_jurnal as a 
         left join tb_akun_fix as b on b.id_akun = a.id_akun
-        where a.tgl BETWEEN '$tgl1' and '$tgl2' and a.id_lokasi = '1'
+        where a.tgl BETWEEN '$tgl1' and '$tgl2' 
         group by a.id_akun
         order by b.no_akun ASC
         ");
@@ -43,7 +43,7 @@ class Buku_besar extends Controller
         $buku = DB::select("SELECT  a.kd_gabungan, a.ket, a.id_akun, b.no_akun, b.nm_akun, sum(a.debit) as debit, sum(a.kredit) as kredit
         FROM tb_jurnal as a 
         left join tb_akun_fix as b on b.id_akun = a.id_akun
-        where a.tgl BETWEEN '$tgl1' and '$tgl2' and a.id_lokasi = '1' and a.id_akun = '$id_akun'
+        where a.tgl BETWEEN '$tgl1' and '$tgl2'  and a.id_akun = '$id_akun'
         group by a.id_jurnal
         order by b.no_akun ASC
         ");

@@ -15,7 +15,14 @@ use App\Http\Controllers\TimbangController;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [Dashboard::class, 'index'])->name('dashboard');
+Route::get('/', function () {
+    return view('welcome');
+});
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
+Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+
 
 Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
 Route::get('/data_pemasukan', [Jurnal_pemasukan::class, 'data_pemasukan'])->name('data_pemasukan');
@@ -103,6 +110,7 @@ Route::get('/tambah_po', [Sistem_po::class, 'tambah_po'])->name('tambah_po');
 Route::get('/tambah_baris_po', [Sistem_po::class, 'tambah_baris_po'])->name('tambah_baris_po');
 Route::post('/save_po', [Sistem_po::class, 'save_po'])->name('save_po');
 Route::get('/hrga_terakhir_po', [Sistem_po::class, 'hrga_terakhir_po'])->name('hrga_terakhir_po');
+Route::get('/satuan_terakhir_po', [Sistem_po::class, 'satuan_terakhir_po'])->name('satuan_terakhir_po');
 Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
 Route::get('/print_po', [Sistem_po::class, 'print_po'])->name('print_po');
 Route::get('/edit_po', [Sistem_po::class, 'edit_po'])->name('edit_po');
@@ -114,9 +122,13 @@ Route::get('timbangView/{no_po}', [TimbangController::class, 'timbangView'])->na
 Route::get('timbangEdit/{no_po}', [TimbangController::class, 'timbangEdit'])->name('timbangEdit');
 Route::post('save_timbang', [TimbangController::class, 'save_timbang'])->name('save_timbang');
 Route::get('detail_timbang', [TimbangController::class, 'detail_timbang'])->name('detail_timbang');
+Route::get('print_timbang', [TimbangController::class, 'print_timbang'])->name('print_timbang');
 
 Route::get('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran');
 Route::get('pembayaran_bahan', [PembayaranController::class, 'pembayaran_bahan'])->name('pembayaran_bahan');
+Route::post('save_pembukuan', [PembayaranController::class, 'save_pembukuan'])->name('save_pembukuan');
+Route::get('cancel_pembukuan', [PembayaranController::class, 'cancel_pembukuan'])->name('cancel_pembukuan');
+Route::get('tambah_baris_pembyaran', [PembayaranController::class, 'tambah_baris_pembyaran'])->name('tambah_baris_pembyaran');
 
 Route::get('/pembelian_po', [Pembelian_purchase::class, 'index'])->name('pembelian_po');
 Route::get('/tambah_beli', [Pembelian_purchase::class, 'tambah_beli'])->name('tambah_beli');
@@ -125,10 +137,12 @@ Route::get('/detail_po2', [Pembelian_purchase::class, 'detail_po2'])->name('deta
 Route::get('/print_pembelian', [Pembelian_purchase::class, 'print_pembelian'])->name('print_pembelian');
 Route::get('/edit_pembelian', [Pembelian_purchase::class, 'edit_pembelian'])->name('edit_pembelian');
 Route::post('/edit_save_pembelian_po', [Pembelian_purchase::class, 'edit_save_pembelian_po'])->name('edit_save_pembelian_po');
+Route::get('/print_timbangan', [TimbangController::class, 'print_nota'])->name('print_timbangan');
 Route::get('/tambah_pembayaran_dimuka', [Pembelian_purchase::class, 'tambah_pembayaran_dimuka'])->name('tambah_pembayaran_dimuka');
 Route::get('/tambah_pembayaran_dipasar', [Pembelian_purchase::class, 'tambah_pembayaran_dipasar'])->name('tambah_pembayaran_dipasar');
 Route::post('/save_pembelian_po_pasar', [Pembelian_purchase::class, 'save_pembelian_po_pasar'])->name('save_pembelian_po_pasar');
 Route::get('/tambah_biaya_lain2', [Pembelian_purchase::class, 'tambah_biaya_lain2'])->name('tambah_biaya_lain2');
+Route::get('/print_detail', [Pembelian_purchase::class, 'print_detail'])->name('print_detail');
 
 // opname peralatan
 Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');

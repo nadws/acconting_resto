@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label for="">Keterangan</label>
-                                <input type="text" name="ket" class="form-control form-control-lg">
+                                <input type="text" name="ket" class="form-control form-control-lg" required>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                                 <tr>
                                     <td>
                                         <select name="id_bahan[]" id=""
-                                            class="form-control  select_view id_bahan id_bahan1" detail='1'>
+                                            class="form-control  select_view id_bahan id_bahan1" detail='1' required>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
                                             <option value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
@@ -73,19 +73,16 @@
                                     </td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli1" value="0" detail='1'>
+                                            class="form-control qty_beli qty_beli1" value="0" detail='1' required>
                                     </td>
                                     <td>
-                                        <select name="id_satuan[]" id="" class="form-control  select_view">
-                                            <option value="">Pilih Satuan</option>
-                                            @foreach ($satuan as $l)
-                                            <option value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>
-                                            @endforeach
+                                        <select name="id_satuan[]" id="" class="form-control  satuan1 select_view"
+                                            required>
                                         </select>
                                     </td>
                                     <td>
                                         <input type="text" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan1" value="0" detail='1'>
+                                            class="form-control h_satuan h_satuan1" value="0" detail='1' required>
                                     </td>
                                     <td>
                                         <input type="text" name="ttl_rp[]" style="text-align: right;"
@@ -166,14 +163,25 @@
                     $.ajax({
                     url: "{{ route('hrga_terakhir_po') }}?detail=" + detail + '&id_bahan=' + id_bahan,
                     type: "Get",
+                    dataType: "json",
+                    success: function(r) {
+                        $('.h_satuan' + detail).val(r['rupiah']);
+                        $(".select").select2();
+                    }
+                 });
+                 $.ajax({
+                    url: "{{ route('satuan_terakhir_po') }}?detail=" + detail + '&id_bahan=' + id_bahan,
+                    type: "Get",
                     success: function(data) {
-                        $('.h_satuan' + detail).val(data);
+                        $('.satuan' + detail).html(data);
                         $(".select").select2();
                     }
                  });
 
 
+
         });
+   
         $(document).on('change keyup', '.qty_beli', function() {
       
             var detail = $(this).attr('detail');

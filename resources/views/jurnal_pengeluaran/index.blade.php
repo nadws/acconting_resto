@@ -509,7 +509,7 @@
                             dropdownParent: $('#tambah .modal-content')
                         });
                     }
-            });
+                    });
                 }
                 else if($(this).prop("checked") == false){
                     $('#biaya_lain').hide();
