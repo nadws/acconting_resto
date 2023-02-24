@@ -9,13 +9,15 @@ class PembayaranController extends Controller
 {
     public function pembayaran()
     {
-        $datas = DB::select("SELECT a.selesai, a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan FROM timbang_purchase as a
+        $datas = DB::select("SELECT a.selesai, b.dimuka, a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan FROM timbang_purchase as a
         LEFT JOIN pembelian_purchase as b ON a.id_pembelian = b.id_pembelian_purchase
         LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
         LEFT JOIN tb_list_bahan as d ON c.id_bahan = d.id_list_bahan
         LEFT JOIN tb_satuan as e ON c.id_satuan_beli = e.id_satuan
         WHERE b.timbang = 'Y' 
-        GROUP BY a.no_po;");
+        GROUP BY a.no_po
+        ORDER BY a.id_timbang DESC
+        ");
         $data = [
             'title' => 'Pembayaran',
             'pembayaran' => $datas
@@ -124,12 +126,12 @@ class PembayaranController extends Controller
             $data = [
                 'tgl' => $tgl,
                 'id_bahan' => $id_bahan[$x],
-                'debit' => $qty[$x] * 1000,
+                'debit' => $qty[$x],
                 'no_nota' => $no_po,
                 'admin' => 'Nanda',
-                'id_satuan' => '12',
+                'id_satuan' => $id_satuan[$x],
                 'id_satuan_beli' => $id_satuan[$x],
-                'unit_prize' => $h_satuan[$x] / 1000
+                'unit_prize' => $h_satuan[$x]
             ];
             DB::table('stok_ts')->insert($data);
         }

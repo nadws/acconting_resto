@@ -57,24 +57,22 @@
                                 <td>{{$p->admin}}</td>
                                 <td>{{$p->admin_beli}}</td>
                                 <td>
-                                    <h5><span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
-                                                class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
-                                            {{$p->po != $p->beli
-                                            ? 'Diproses' : 'Selesai'}}</span></h5>
+                                    <span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
+                                            class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
+                                        {{$p->po != $p->beli
+                                        ? 'Diproses' : 'Selesai'}}</span>
                                 </td>
                                 <td>
+                                    @if ($p->po != $p->beli)
                                     <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
                                         class="btn btn-sm btn-primary"><i class="fas fa-shopping-cart"></i>
                                     </a>
-                                    <a href="{{route('edit_pembelian',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-success {{$p->timbang == 'T' ? '' : 'disabled'}}"><i
-                                            class="fas fa-pen"></i>
+                                    @else
+                                    <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                        class="btn btn-sm btn-primary disabled"><i class="fas fa-shopping-cart"></i>
                                     </a>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#print"
-                                        class="btn btn-sm btn-primary print" no_po="{{$p->no_po}}"><i
-                                            class="fas fa-print"></i></a>
-                                    {{-- <a href="{{route('print_pembelian',['no_po' => $p->no_po])}}" target="_blank"
-                                        class="btn btn-sm btn-primary"><i class="fas fa-print"></i></a> --}}
+                                    @endif
+
                                 </td>
                             </tr>
                             @endforeach

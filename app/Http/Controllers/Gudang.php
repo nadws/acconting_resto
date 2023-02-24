@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Gudang extends Controller
 {
     public function index(Request $r)
     {
-
+        $id_lokasi = Session::get('id_lokasi');
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl as tgl1
         FROM tb_list_bahan as a
         LEFT join (
@@ -27,22 +28,22 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '1' 
+        where a.id_lokasi = '$id_lokasi' 
         order by (b.debit - b.kredit) DESC");
         $data = [
             'title' => 'Opname Bahan',
             'gudang' => $gudang,
-            'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
+            'akun' => DB::table('tb_akun')->where('id_lokasi', "$id_lokasi")->get(),
             'satuan' => DB::table('tb_satuan')->get(),
-            'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', '1')->get()
+            'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', "$id_lokasi")->get(),
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', "$id_lokasi")->get()
         ];
         return view('gudang.index', $data);
     }
 
     public function produk($id)
     {
-
+        $id_lokasi = Session::get('id_lokasi');
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
@@ -60,17 +61,17 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '1' AND a.jenis = '$id'
+        where a.id_lokasi = '$id_lokasi' AND a.jenis = '$id'
         order by a.id_list_bahan DESC
         ");
         $data = [
             'title' => 'Bahan & Barang',
             'gudang' => $gudang,
             'id_jenis' => $id,
-            'akun' => DB::table('tb_akun')->where('id_lokasi', '1')->get(),
+            'akun' => DB::table('tb_akun')->where('id_lokasi', "$id_lokasi")->get(),
             'satuan' => DB::table('tb_satuan')->get(),
-            'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', '1')->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', '1'], ['jenis', $id]])->get()
+            'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', "$id_lokasi")->get(),
+            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', "$id_lokasi"], ['jenis', $id]])->get()
 
         ];
         return view('gudang.produk', $data);
@@ -217,12 +218,13 @@ class Gudang extends Controller
 
     public function save_bahan(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'nm_bahan' => $r->nm_bahan,
             'id_satuan' => $r->id_satuan,
             'id_kategori_makanan' => $r->id_kategori_makanan,
             'monitoring' => empty($r->monitoring) ? 'T' : $r->monitoring,
-            'id_lokasi' => '1',
+            'id_lokasi' => "$id_lokasi",
             'admin' => 'aldi',
             'jenis' => $r->id_jenis,
             'tgl' => date('Y-m-d'),
@@ -253,17 +255,18 @@ class Gudang extends Controller
 
     public function merk_bahan(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Merk Bahan',
             'merkBahan' => DB::table('tb_merk_bahan as a')
                 ->join('tb_list_bahan as b', 'a.id_list_bahan', 'b.id_list_bahan')
                 ->join('tb_satuan as d', 'b.id_satuan', 'd.id_satuan')
                 ->join('tb_kategori_makanan as c', 'b.id_kategori_makanan', 'c.id_kategori_makanan')
-                ->where('a.id_lokasi', '1')
+                ->where('a.id_lokasi', "$id_lokasi")
                 ->orderBy('a.id_merk_bahan', 'DESC')
                 ->get(),
             'bahan' => DB::table('tb_list_bahan')->get(),
-            'id_lokasi' => '1'
+            'id_lokasi' => $id_lokasi
         ];
         return view('gudang.bahan', $data);
     }
