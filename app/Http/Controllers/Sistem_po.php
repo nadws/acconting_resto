@@ -33,11 +33,17 @@ class Sistem_po extends Controller
         } else {
             $no_po = $max->max_urutan + 1;
         }
+        if ($id_lokasi == '1') {
+            $kode = 'T';
+        } else {
+            $kode = 'S';
+        }
         $data = [
             'title' => 'Tambah Pengajuan Pembelian',
             'list_bahan' => Listbahan::whereMonitoringAndId_lokasi('Y', $id_lokasi)->get(),
             'satuan' => DB::table('tb_satuan')->get(),
-            'no_po' => $no_po
+            'no_po' => $no_po,
+            'kode' => $kode
         ];
         return view('sistem_po.tambah', $data);
     }
@@ -74,10 +80,17 @@ class Sistem_po extends Controller
             $no_po = $max->max_urutan + 1;
         }
 
+        if ($id_lokasi == '1') {
+            $kode = 'T';
+        } else {
+            $kode = 'S';
+        }
+
+
         for ($x = 0; $x < count($id_bahan); $x++) {
             $data = [
                 'tgl' => $tgl,
-                'no_po' => 'PO' . $no_po,
+                'no_po' => 'PO' . $kode . $no_po,
                 'ket' => $ket,
                 'id_bahan' => $id_bahan[$x],
                 'qty' => $qty[$x],
@@ -235,5 +248,11 @@ class Sistem_po extends Controller
             'detail2' => $detail2
         ];
         return view('sistem_po.edit_po', $data);
+    }
+
+    public function hapus_po(Request $r)
+    {
+        DB::table('purchase')->where('no_po', $r->no_po)->delete();
+        return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di hapus');
     }
 }

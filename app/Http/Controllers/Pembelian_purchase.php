@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Pembelian_purchase extends Controller
 {
     public function index(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Pembelian Bahan',
             'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, count(a.beli) AS po, b.beli, b.total_beli, b.admin as admin_beli, b.timbang
@@ -18,6 +21,7 @@ class Pembelian_purchase extends Controller
 				FROM pembelian_purchase as b
 				GROUP BY b.no_po
 				) AS b ON b.no_po = a.no_po
+            where a.id_lokasi = '$id_lokasi'
             group by a.no_po 
             order by a.id_purchase DESC"),
         ];
@@ -73,7 +77,7 @@ class Pembelian_purchase extends Controller
                         'qty' => $qty[$x],
                         'h_satuan' => $h_satuan[$x],
                         'ttl_rp' => $ttl_rp[$x],
-                        'admin' => 'Aldi',
+                        'admin' => Auth::User()->nama,
                         'dimuka' => 'Y'
                     ];
                     DB::table('pembelian_purchase')->insert($data);
@@ -107,7 +111,7 @@ class Pembelian_purchase extends Controller
                         'qty' => $qty[$x],
                         'h_satuan' => $h_satuan[$x],
                         'ttl_rp' => $ttl_rp[$x],
-                        'admin' => 'Aldi',
+                        'admin' => Auth::User()->nama,
                         'dimuka' => 'T'
                     ];
                     DB::table('pembelian_purchase')->insert($data);
@@ -208,6 +212,7 @@ class Pembelian_purchase extends Controller
         $id_satuan =  $r->id_satuan;
         $qty =  $r->qty;
         $id_purchase =  $r->id_purchase;
+        $id_lokasi = Session::get('id_lokasi');
 
         for ($i = 0; $i < count($id_akun_pembayaran); $i++) {
             $data = [
@@ -217,7 +222,8 @@ class Pembelian_purchase extends Controller
                 'id_buku' => '3',
                 'no_nota' => $r->sub_no_po,
                 'ket' => 'Pembayaran purchase ' . $r->sub_no_po,
-                'admin' => 'Nanda'
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
         }
@@ -231,7 +237,8 @@ class Pembelian_purchase extends Controller
                 'ket' => 'Pembayaran purchase ' . $r->sub_no_po,
                 'id_satuan' => $id_satuan[$x],
                 'qty' => $qty[$x],
-                'admin' => 'Nanda'
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
             DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update(['beli' => 'Y']);
@@ -246,7 +253,8 @@ class Pembelian_purchase extends Controller
                 'id_buku' => '3',
                 'no_nota' => $r->sub_no_po,
                 'ket' => 'Biaya lain-lain ' . $r->sub_no_po,
-                'admin' => 'Nanda'
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
         }
@@ -292,7 +300,7 @@ class Pembelian_purchase extends Controller
                 'qty' => $qty[$x],
                 'h_satuan' => $h_satuan[$x],
                 'ttl_rp' => $ttl_rp[$x],
-                'admin' => 'Aldi',
+                'admin' => Auth::User()->nama,
 
             ];
             DB::table('pembelian_purchase')->insert($data);

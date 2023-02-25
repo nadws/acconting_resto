@@ -57,7 +57,8 @@
                                     <a href="{{route('edit_po',['no_po' => $p->no_po])}}"
                                         class="btn btn-sm btn-primary {{$p->beli == 'Y' ? 'disabled' : ''}}"><i
                                             class="fas fa-pen"></i></a>
-                                    <a href="" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="{{route('hapus_po',['no_po' => $p->no_po ])}}"
+                                        class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                             </tr>
                             @endforeach

@@ -7,16 +7,19 @@ use App\Models\Listbahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class TimbangController extends Controller
 {
     public function index()
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Timbang',
             'pembelian' => DB::select("SELECT a.dimuka, a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(a.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
             LEFT JOIN purchase as b ON a.id_purchase = b.id_purchase
             left join ( SELECT sum(c.rupiah) as lain, c.sub_no_po FROM  purchase_biaya as c group by c.sub_no_po ) as c on c.sub_no_po = a.sub_no_po
+            where b.id_lokasi = '$id_lokasi'
             GROUP BY a.sub_no_po
             order by a.sub_no_po DESC;
             "),

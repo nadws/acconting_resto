@@ -48,10 +48,13 @@
                     </div>
 
                 </div> --}}
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="col-lg-10">
 
                         <div class="card">
+                            <div class="card-header">
+                                <h5>Detail Pembelian</h5>
+                            </div>
                             <div class="card-body">
                                 <div class="">
                                     <table class="table table-bordered">
@@ -115,7 +118,20 @@
                                         </div>
                                         <div class="col-lg-8">
                                             <hr style="border: 2px solid #435EBE;">
-                                            <h5>Biaya Tambahan : </h5>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label for="">Sub Total</label>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    {{-- <input type="text" class="viewRpSatuan"
+                                                        value="{{number_format($totalRpSatuan,0)}}"> --}}
+                                                    <label for="" style="float:right">Rp
+                                                        {{ number_format($totalRpSatuan, 0) }}</label>
+                                                </div>
+
+                                            </div>
+                                            <br>
+                                            <h6>Biaya Tambahan : </h6>
                                             <br>
                                             <div class="row">
                                                 <div class="col-lg-6">
@@ -144,12 +160,12 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="col-lg-6">
-                                                    <label for="">Total</label>
+                                                    <label for="" class="fw-bold">Total</label>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     {{-- <input type="text" class="viewRpSatuan"
                                                         value="{{number_format($totalRpSatuan,0)}}"> --}}
-                                                    <label for="" style="float:right" class="viewRpSatuan">Rp
+                                                    <label for="" style="float:right" class="viewRpSatuan fw-bold">Rp
                                                         {{ number_format($totalRpSatuan, 0) }}</label>
                                                 </div>
 

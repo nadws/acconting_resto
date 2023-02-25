@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detail_po', [Sistem_po::class, 'detail_po'])->name('detail_po');
     Route::get('/print_po', [Sistem_po::class, 'print_po'])->name('print_po');
     Route::get('/edit_po', [Sistem_po::class, 'edit_po'])->name('edit_po');
+    Route::get('/hapus_po', [Sistem_po::class, 'hapus_po'])->name('hapus_po');
     Route::post('/edit_save_po', [Sistem_po::class, 'edit_save_po'])->name('edit_save_po');
 
     Route::get('timbang', [TimbangController::class, 'index'])->name('timbang');
