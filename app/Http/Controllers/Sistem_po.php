@@ -5,43 +5,55 @@ namespace App\Http\Controllers;
 use App\Models\Listbahan;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Sistem_po extends Controller
 {
     public function index(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Pengajuan Pembelian',
-            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli FROM purchase as a group by a.no_po order by a.id_purchase DESC"),
+            'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli FROM purchase as a 
+            where a.id_lokasi = '$id_lokasi'
+            group by a.no_po order by a.id_purchase DESC"),
         ];
         return view('sistem_po.index', $data);
     }
 
     public function tambah_po(Request $r)
     {
-        $max = DB::selectOne("SELECT max(a.urutan) as max_urutan FROM purchase as a");
+        $id_lokasi = Session::get('id_lokasi');
+        $max = DB::selectOne("SELECT max(a.urutan) as max_urutan FROM purchase as a where a.id_lokasi = '$id_lokasi'");
 
         if (empty($max->max_urutan)) {
             $no_po = '1001';
         } else {
             $no_po = $max->max_urutan + 1;
         }
-
+        if ($id_lokasi == '1') {
+            $kode = 'T';
+        } else {
+            $kode = 'S';
+        }
         $data = [
             'title' => 'Tambah Pengajuan Pembelian',
-            'list_bahan' => Listbahan::whereMonitoring('Y')->get(),
+            'list_bahan' => Listbahan::whereMonitoringAndId_lokasi('Y', $id_lokasi)->get(),
             'satuan' => DB::table('tb_satuan')->get(),
-            'no_po' => $no_po
+            'no_po' => $no_po,
+            'kode' => $kode
         ];
         return view('sistem_po.tambah', $data);
     }
 
     public function tambah_baris_po(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Tambah Pengajuan Pembelian',
-            'list_bahan' => Listbahan::whereMonitoring('Y')->get(),
+            'list_bahan' => Listbahan::whereMonitoringAndId_lokasi('Y', $id_lokasi)->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'count' => $r->count
         ];
@@ -59,8 +71,8 @@ class Sistem_po extends Controller
         $id_satuan = $r->id_satuan;
         $h_satuan = $r->h_satuan;
         $ttl_rp = $r->ttl_rp;
-
-        $max = DB::selectOne("SELECT max(a.urutan) as max_urutan FROM purchase as a");
+        $id_lokasi = Session::get('id_lokasi');
+        $max = DB::selectOne("SELECT max(a.urutan) as max_urutan FROM purchase as a where a.id_lokasi = '$id_lokasi'");
 
         if (empty($max->max_urutan)) {
             $no_po = '1001';
@@ -68,18 +80,26 @@ class Sistem_po extends Controller
             $no_po = $max->max_urutan + 1;
         }
 
+        if ($id_lokasi == '1') {
+            $kode = 'T';
+        } else {
+            $kode = 'S';
+        }
+
+
         for ($x = 0; $x < count($id_bahan); $x++) {
             $data = [
                 'tgl' => $tgl,
-                'no_po' => 'PO' . $no_po,
+                'no_po' => 'PO' . $kode . $no_po,
                 'ket' => $ket,
                 'id_bahan' => $id_bahan[$x],
                 'qty' => $qty[$x],
                 'id_satuan_beli' => $id_satuan[$x],
                 'rp_satuan' => $h_satuan[$x],
                 'ttl_rp' => $ttl_rp[$x],
-                'admin' => 'Nanda',
-                'urutan' => $no_po
+                'admin' => Auth::user()->nama,
+                'urutan' => $no_po,
+                'id_lokasi' => Session::get('id_lokasi')
             ];
             DB::table('purchase')->insert($data);
         }
@@ -112,8 +132,9 @@ class Sistem_po extends Controller
                 'id_satuan_beli' => $id_satuan[$x],
                 'rp_satuan' => $h_satuan[$x],
                 'ttl_rp' => $ttl_rp[$x],
-                'admin' => 'Nanda',
-                'urutan' => $urutan
+                'admin' => Session::get('username'),
+                'urutan' => $urutan,
+                'id_lokasi' => Session::get('id_lokasi')
             ];
             DB::table('purchase')->insert($data);
         }
@@ -227,5 +248,11 @@ class Sistem_po extends Controller
             'detail2' => $detail2
         ];
         return view('sistem_po.edit_po', $data);
+    }
+
+    public function hapus_po(Request $r)
+    {
+        DB::table('purchase')->where('no_po', $r->no_po)->delete();
+        return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di hapus');
     }
 }

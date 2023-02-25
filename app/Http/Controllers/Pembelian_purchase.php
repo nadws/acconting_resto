@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Pembelian_purchase extends Controller
 {
     public function index(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Pembelian Bahan',
             'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, count(a.beli) AS po, b.beli, b.total_beli, b.admin as admin_beli, b.timbang
@@ -18,6 +21,7 @@ class Pembelian_purchase extends Controller
 				FROM pembelian_purchase as b
 				GROUP BY b.no_po
 				) AS b ON b.no_po = a.no_po
+            where a.id_lokasi = '$id_lokasi'
             group by a.no_po 
             order by a.id_purchase DESC"),
         ];
@@ -73,16 +77,17 @@ class Pembelian_purchase extends Controller
                         'qty' => $qty[$x],
                         'h_satuan' => $h_satuan[$x],
                         'ttl_rp' => $ttl_rp[$x],
-                        'admin' => 'Aldi',
+                        'admin' => Auth::User()->nama,
+                        'dimuka' => 'Y'
                     ];
                     DB::table('pembelian_purchase')->insert($data);
-                    DB::table('purchase')->where('id_purchase', $cek[$x])->update(['beli' => 'Y']);
+                    // DB::table('purchase')->where('id_purchase', $cek[$x])->update(['beli' => 'Y']);
                 }
             }
 
             return redirect()->route("tambah_pembayaran_dimuka", ['no_po' => $no_po, 'sub_no_po' => $sub_po]);
         } else {
-            
+
             $tgl = $r->tgl;
             $no_po = $r->no_po;
             $ket = $r->ket;
@@ -106,7 +111,8 @@ class Pembelian_purchase extends Controller
                         'qty' => $qty[$x],
                         'h_satuan' => $h_satuan[$x],
                         'ttl_rp' => $ttl_rp[$x],
-                        'admin' => 'Aldi',
+                        'admin' => Auth::User()->nama,
+                        'dimuka' => 'T'
                     ];
                     DB::table('pembelian_purchase')->insert($data);
                     DB::table('purchase')->where('id_purchase', $cek[$x])->update(['beli' => 'Y']);
@@ -119,7 +125,31 @@ class Pembelian_purchase extends Controller
 
     public function tambah_pembayaran_dimuka(Request $r)
     {
-        $data = [];
+        $no_po = $r->no_po;
+        $sub_no_po = $r->sub_no_po;
+
+
+        $detail = DB::select("SELECT d.id_purchase, a.id_bahan, c.id_satuan, d.sub_no_po,a.id_purchase,d.tgl, d.no_po, b.nm_bahan, c.nm_satuan, d.qty, d.h_satuan as rp_satuan, d.ttl_rp FROM pembelian_purchase as d
+        LEFT JOIN purchase as a ON a.id_purchase = d.id_purchase
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where d.sub_no_po = '$sub_no_po'");
+
+        $detail2 = DB::selectOne("SELECT a.id_purchase, a.tgl, a.no_po, b.nm_bahan, c.nm_satuan, a.qty, a.rp_satuan, a.ket, a.ttl_rp FROM purchase as a
+        left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
+        left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
+        where a.no_po = '$no_po'");
+
+        $data = [
+            'title' => 'Pembayaran dimuka',
+            'no_po' => $no_po,
+            'akun' => DB::table('tb_akun_fix')->whereIn('id_kategori', [6])->get(),
+            'purchase' => $detail,
+            'detail2' => $detail2,
+            'sub_no_po' => $sub_no_po,
+            'akun2' => DB::table('tb_akun_fix')->where([['id_kategori', '1'], ['id_penyesuaian', '0']])->get()
+        ];
+
         return view('pembelian_po.dibayar_dimuka', $data);
     }
 
@@ -129,7 +159,7 @@ class Pembelian_purchase extends Controller
         $sub_no_po = $r->sub_no_po;
 
 
-        $detail = DB::select("SELECT d.sub_no_po,a.id_purchase,d.tgl, d.no_po, b.nm_bahan, c.nm_satuan, d.qty, d.h_satuan as rp_satuan, d.ttl_rp FROM pembelian_purchase as d
+        $detail = DB::select("SELECT d.sub_no_po, a.id_purchase,d.tgl, d.no_po, b.nm_bahan, c.nm_satuan, d.qty, d.h_satuan as rp_satuan, d.ttl_rp FROM pembelian_purchase as d
         LEFT JOIN purchase as a ON a.id_purchase = d.id_purchase
         left join tb_list_bahan as b on b.id_list_bahan = a.id_bahan
         left join tb_satuan as c on c.id_satuan = a.id_satuan_beli
@@ -149,7 +179,7 @@ class Pembelian_purchase extends Controller
             'sub_no_po' => $sub_no_po
         ];
 
-        return view('pembelian_po.dibayar_dimuka', $data);
+        return view('pembelian_po.dibayar_dipasar', $data);
     }
 
     public function tambah_biaya_lain2(Request $r)
@@ -162,7 +192,74 @@ class Pembelian_purchase extends Controller
         ];
         return view('pembelian_po.tambah_biaya_lain2', $data);
     }
+    public function tambah_biaya_lain3(Request $r)
+    {
+        $data = [
+            'title' => 'Tambah Baris',
+            'akun' => DB::table('tb_akun_fix')->where([['id_kategori', '1'], ['id_penyesuaian', '0']])->get(),
+            'satuan' => DB::table('tb_satuan')->get(),
+            'count' => $r->count
+        ];
+        return view('pembelian_po.tambah_biaya_lain3', $data);
+    }
+    public function save_pembelian_po_dimuka(Request $r)
+    {
 
+        $id_akun_pembayaran =  $r->id_akun_pembayaran;
+        $rupiah_pembayaran =  $r->rupiah_pembayaran;
+        $rp_satuan =  $r->rp_satuan;
+        $id_bahan =  $r->id_bahan;
+        $id_satuan =  $r->id_satuan;
+        $qty =  $r->qty;
+        $id_purchase =  $r->id_purchase;
+        $id_lokasi = Session::get('id_lokasi');
+
+        for ($i = 0; $i < count($id_akun_pembayaran); $i++) {
+            $data = [
+                'tgl' => date('Y-m-d'),
+                'id_akun' => $id_akun_pembayaran[$i],
+                'kredit' => $rupiah_pembayaran[$i],
+                'id_buku' => '3',
+                'no_nota' => $r->sub_no_po,
+                'ket' => 'Pembayaran purchase ' . $r->sub_no_po,
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
+            ];
+            DB::table('tb_jurnal')->insert($data);
+        }
+        for ($x = 0; $x < count($id_bahan); $x++) {
+            $data = [
+                'tgl' => date('Y-m-d'),
+                'id_akun' => '7',
+                'debit' => $rp_satuan[$x],
+                'id_buku' => '3',
+                'no_nota' => $r->sub_no_po,
+                'ket' => 'Pembayaran purchase ' . $r->sub_no_po,
+                'id_satuan' => $id_satuan[$x],
+                'qty' => $qty[$x],
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
+            ];
+            DB::table('tb_jurnal')->insert($data);
+            DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update(['beli' => 'Y']);
+        }
+        $id_akun = $r->id_akun;
+        $rupiah = $r->rupiah;
+        for ($x = 0; $x < count($id_akun); $x++) {
+            $data = [
+                'tgl' => date('Y-m-d'),
+                'id_akun' => $id_akun[$x],
+                'debit' => $rupiah[$x],
+                'id_buku' => '3',
+                'no_nota' => $r->sub_no_po,
+                'ket' => 'Biaya lain-lain ' . $r->sub_no_po,
+                'admin' => Auth::User()->nama,
+                'id_lokasi' => $id_lokasi
+            ];
+            DB::table('tb_jurnal')->insert($data);
+        }
+        return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
+    }
     public function save_pembelian_po_pasar(Request $r)
     {
         for ($i = 0; $i < count($r->id_akun); $i++) {
@@ -178,6 +275,7 @@ class Pembelian_purchase extends Controller
                 DB::table('purchase_biaya')->insert($data);
             }
         }
+
         return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
     }
 
@@ -202,7 +300,7 @@ class Pembelian_purchase extends Controller
                 'qty' => $qty[$x],
                 'h_satuan' => $h_satuan[$x],
                 'ttl_rp' => $ttl_rp[$x],
-                'admin' => 'Aldi',
+                'admin' => Auth::User()->nama,
 
             ];
             DB::table('pembelian_purchase')->insert($data);

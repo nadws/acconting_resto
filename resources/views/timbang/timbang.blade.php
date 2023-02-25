@@ -45,6 +45,7 @@
                                         <th>Admin</th>
                                         <th>Total Rp</th>
                                         <th>Status</th>
+                                        <th>Pembayaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -65,6 +66,14 @@
                                                     {{$d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
 
 
+                                            </h6>
+                                        </td>
+                                        <td>
+                                            <h6>
+                                                <span class=" badge bg-{{$d->dimuka == 'T' ? 'warning' :  'success' }}">
+                                                    <i
+                                                        class="fas {{$d->dimuka == 'T' ? 'fas fa-map-marked' :  'fas fa-money-bill' }} "></i>
+                                                    {{$d->dimuka == 'T' ? 'Pasar' : 'Dimuka' }}</span>
                                             </h6>
                                         </td>
                                         <td>

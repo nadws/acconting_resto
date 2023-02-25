@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{ route('save_pembelian_po_dimuka') }}" method="post">
+        <form action="{{ route('save_pembelian_po_pasar') }}" method="post">
             @csrf
             <section class="section">
                 {{-- <div class="card">
@@ -49,9 +49,12 @@
 
                 </div> --}}
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-10">
 
                         <div class="card">
+                            <div class="card-header">
+                                <h5>Detail Pembelian</h5>
+                            </div>
                             <div class="card-body">
                                 <div class="">
                                     <table class="table table-bordered">
@@ -90,12 +93,6 @@
                                                 </td>
                                                 <td align="right">
                                                     <span class="rpSatuan">{{ number_format($p->ttl_rp, 0) }}</span>
-                                                    <input type="hidden" name="rp_satuan[]" value="{{$p->ttl_rp}}">
-                                                    <input type="hidden" name="id_bahan[]" value="{{$p->id_bahan}}">
-                                                    <input type="hidden" name="id_satuan[]" value="{{$p->id_satuan}}">
-                                                    <input type="hidden" name="qty[]" value="{{$p->qty}}">
-                                                    <input type="hidden" name="id_purchase[]"
-                                                        value="{{$p->id_purchase}}">
                                                 </td>
 
                                             </tr>
@@ -116,12 +113,25 @@
 
                                     </table>
                                     <div class="row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-4">
 
                                         </div>
-                                        <div class="col-lg-7">
+                                        <div class="col-lg-8">
                                             <hr style="border: 2px solid #435EBE;">
-                                            <h6>Biaya lain : </h6>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label for="">Sub Total</label>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    {{-- <input type="text" class="viewRpSatuan"
+                                                        value="{{number_format($totalRpSatuan,0)}}"> --}}
+                                                    <label for="" style="float:right">Rp
+                                                        {{ number_format($totalRpSatuan, 0) }}</label>
+                                                </div>
+
+                                            </div>
+                                            <br>
+                                            <h6>Biaya Tambahan : </h6>
                                             <br>
                                             <div class="row">
                                                 <div class="col-lg-6">
@@ -150,63 +160,25 @@
                                             <hr>
                                             <div class="row">
                                                 <div class="col-lg-6">
-                                                    <label for="">Total</label>
+                                                    <label for="" class="fw-bold">Total</label>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     {{-- <input type="text" class="viewRpSatuan"
                                                         value="{{number_format($totalRpSatuan,0)}}"> --}}
-                                                    <label for="" style="float:right" class="viewRpSatuan">Rp
+                                                    <label for="" style="float:right" class="viewRpSatuan fw-bold">Rp
                                                         {{ number_format($totalRpSatuan, 0) }}</label>
                                                 </div>
-                                                {{-- <input type="hidden" name="total_rp" value="{{$totalRpSatuan}}">
-                                                --}}
 
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-5">
-
-                                        </div>
-                                        <div class="col-lg-7">
-                                            <hr style="border: 2px solid #435EBE;">
-                                            <h6>Pembayaran : </h6>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <label for="">Pilih Akun</label>
-                                                    <select name="id_akun_pembayaran[]" id=""
-                                                        class="select form-control">
-                                                        <option value="">- Pilih Akun -</option>
-                                                        @foreach ($akun2 as $l)
-                                                        <option value="{{ $l->id_akun }}">{{ $l->nm_akun }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <label for="">Rupiah</label>
-                                                    <input name="rupiah_pembayaran[]" style="text-align: right"
-                                                        value="0" type="text" class="form-control">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <label for="">Aksi</label> <br>
-                                                    <button type="button" class="btn rounded-pill tbh_baris_pembayaran"
-                                                        style="background-color: #F4F7F9; color: #8FA8BD;">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                                <div id="tb_pembayaran"></div>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" name="action" value="pasar" id="simpan" style=" margin-left: 8px;"
-                                    class="btn float-end btn-primary">Simpan</button>
+                                <button type="submit" name="action" value="pasar" id="simpan"
+                                    style="float: right; margin-left: 8px;" class="btn btn-primary">Simpan</button>
 
-                                <a href="{{ route('tambah_beli',['no_po' => $no_po]) }}" style="float: right"
+                                <a href="{{ route('pembelian_po') }}" style="float: right"
                                     class="btn btn-outline-primary">Batal</a>
                             </div>
                         </div>
@@ -276,11 +248,6 @@
                 total = parseFloat(total) + parseFloat(rupiah)   
                 $('.viewRpSatuan').text('Rp. '+number(total))
             });
-            $(document).on('click', '.remove_baris_pembayaran', function(e) {
-                e.preventDefault()
-                var delete_row = $(this).attr('count');
-                $('#baris' + delete_row).remove();
-            });
 
             $(document).on('click', '.tbh_baris', function() {
                 count = count + 1;
@@ -289,17 +256,6 @@
                     type: "Get",
                     success: function(data) {
                         $('#tb_stok').append(data);
-                        $(".select").select2();
-                    }
-                });
-            });
-            $(document).on('click', '.tbh_baris_pembayaran', function() {
-                count = count + 1;
-                $.ajax({
-                    url: "{{ route('tambah_biaya_lain3') }}?count=" + count,
-                    type: "Get",
-                    success: function(data) {
-                        $('#tb_pembayaran').append(data);
                         $(".select").select2();
                     }
                 });

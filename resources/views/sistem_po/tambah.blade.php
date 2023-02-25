@@ -37,7 +37,7 @@
                             <div class="col-lg-3">
                                 <label for="">No Po</label>
                                 <input type="text" name="no_po" class="form-control form-control-lg" readonly
-                                    value="PO{{$no_po}}">
+                                    value="PO{{$kode}}{{$no_po}}">
                             </div>
                             <div class="col-lg-6">
                                 <label for="">Keterangan</label>

@@ -64,10 +64,12 @@
 
                                 <input type="hidden" name="id_pembelian[]" value="{{ $d->id_pembelian }}">
                                 <input type="hidden" name="timbang[]" value="{{ $d->timbang }}">
+                                <input type="hidden" name="dimuka[]" value="{{ $d->dimuka }}">
+                                <input type="hidden" name="id_bahan[]" value="{{ $d->id_bahan }}">
                                 <tr>
                                     <td>
-                                        <select disabled name="id_bahan[]" id=""
-                                            class="form-control  select_view id_bahan id_bahan1" detail='1'>
+                                        <select disabled id="" class="form-control  select_view id_bahan id_bahan1"
+                                            detail='1'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
                                             <option {{ $l->id_list_bahan == $d->id_bahan ? 'selected' : ''}}
@@ -77,33 +79,26 @@
                                     </td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" value="{{$d->qty}}"
+                                            class="form-control qty_beli qty_beli{{ $detail+1 }}" required
                                             detail='{{ $detail+1 }}'>
                                         <input type="hidden" name="qty_beli[]" style="text-align: right;"
-                                            class="form-control qty_beli" value="{{$d->qty}}">
+                                            class="form-control qty_beli" required>
                                     </td>
                                     <td>
-                                        @php
-                                        if (empty($d->id_satuan_timbang))
-                                        {
-                                        $id_satuan = $d->id_satuan_beli;
-                                        } else {
-                                        $id_satuan = $d->id_satuan_timbang;
-                                        }
 
-                                        @endphp
-                                        <select name="id_satuan[]" id="" class="form-control  select_view">
+                                        <select id="" class="form-control  select_view" disabled>
                                             <option value="">Pilih Satuan</option>
                                             @foreach ($satuan as $l)
-                                            <option {{$l->id_satuan == $id_satuan ? 'selected' : ''}}
-                                                value="{{$l->id_satuan}}">{{$l->nm_satuan}}</option>
+                                            <option {{$l->id_satuan == $d->id_satuan_bahan ? 'selected' : ''}}
+                                                value="{{$d->id_satuan_bahan}}">{{$l->nm_satuan}}</option>
                                             @endforeach
                                         </select>
+                                        <input type="hidden" name="id_satuan[]" value="{{$d->id_satuan_bahan}}}">
                                     </td>
                                     <td>
                                         <input type="number" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan{{ $detail+1 }}"
-                                            value="{{$d->h_satuan}}" readonly detail='{{ $detail+1 }}'>
+                                            class="form-control h_satuan h_satuan{{ $detail+1 }}" value="" readonly
+                                            detail='{{ $detail+1 }}'>
                                     </td>
                                     <td>
                                         <input type="number" name="ttl_rp[]" style="text-align: right;"

@@ -39,6 +39,7 @@
                                         <th>Admin</th>
                                         <th>Total Rp</th>
                                         <th>Status</th>
+                                        <th>Pembayaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -51,10 +52,19 @@
                                         <td>{{ $d->admin }}</td>
                                         <td>{{ number_format($d->ttl_rp, 0) }}</td>
                                         <td>
-                                            <h5><span class=" badge bg-{{ $d->selesai == 'T' ? 'danger' : 'success'}}">
-                                                    {{ $d->selesai == 'T' ? 'Prosess' : 'Selesai'}}
-                                                </span>
-                                            </h5>
+                                            <span class=" badge bg-{{ $d->selesai == 'T' ? 'danger' : 'success'}}">
+                                                <i class="{{ $d->selesai == 'T' ? 'fas fa-spinner' :
+                                                    'fas fa-check-circle'}}"></i> {{ $d->selesai == 'T' ? 'Prosess' :
+                                                'Selesai'}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <h6>
+                                                <span class=" badge bg-{{$d->dimuka == 'T' ? 'warning' :  'success' }}">
+                                                    <i
+                                                        class="fas {{$d->dimuka == 'T' ? 'fas fa-map-marked' :  'fas fa-money-bill' }} "></i>
+                                                    {{$d->dimuka == 'T' ? 'Pasar' : 'Dimuka' }}</span>
+                                            </h6>
                                         </td>
                                         <td>
                                             @if ($d->selesai == 'T')
@@ -63,9 +73,14 @@
                                                     class="fas fa-book"></i>
                                                 Bukukan</a>
                                             @else
+                                            @if ($d->dimuka == 'Y')
+
+                                            @else
                                             <a href="{{route('cancel_pembukuan',['no_po' => $d->no_po])}}"
                                                 class="btn btn-warning"><i class="fas fa-redo-alt"></i>
                                                 Cancel </a>
+                                            @endif
+
                                             @endif
 
                                         </td>

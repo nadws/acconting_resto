@@ -3,9 +3,13 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html">Takemori</a>
+
+                    <a href="{{route('dashboard')}}"><img
+                            src="{{Session::get('id_lokasi') == '1' ? '/img/Takemori.svg' : '/img/soondobu.jpg'}}"
+                            alt="" style="width: 80px; height: 80px;">
+                    </a>
                 </div>
-                <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
+                <div class=" theme-toggle d-flex gap-2 align-items-center mt-2">
 
                     <div class="form-check form-switch fs-6">
                         <input class="form-check-input  me-0" type="hidden" id="toggle-dark">
@@ -20,7 +24,7 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-title">Menu </li>
                 <li class="sidebar-item  ">
                     <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>

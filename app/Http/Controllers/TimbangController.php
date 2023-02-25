@@ -7,16 +7,19 @@ use App\Models\Listbahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class TimbangController extends Controller
 {
     public function index()
     {
+        $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Timbang',
-            'pembelian' => DB::select("SELECT a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(b.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
+            'pembelian' => DB::select("SELECT a.dimuka, a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(a.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
             LEFT JOIN purchase as b ON a.id_purchase = b.id_purchase
             left join ( SELECT sum(c.rupiah) as lain, c.sub_no_po FROM  purchase_biaya as c group by c.sub_no_po ) as c on c.sub_no_po = a.sub_no_po
+            where b.id_lokasi = '$id_lokasi'
             GROUP BY a.sub_no_po
             order by a.sub_no_po DESC;
             "),
@@ -28,7 +31,7 @@ class TimbangController extends Controller
     public function timbangView($no_po)
     {
         $detail = DB::select("SELECT  a.*, c.nm_bahan, d.nm_satuan, e.qty AS qty_timbang, e.h_satuan AS rp_satuan_timbang, 
-        e.ttl_rp AS ttl_rp_timbang, a.id_pembelian_purchase as id_pembelian, b.id_bahan, b.id_satuan_beli
+        e.ttl_rp AS ttl_rp_timbang, a.id_pembelian_purchase as id_pembelian, b.id_bahan, b.id_satuan_beli, c.id_satuan as id_satuan_bahan
         FROM pembelian_purchase AS a
         LEFT JOIN purchase AS b ON b.id_purchase = a.id_purchase
         LEFT JOIN tb_list_bahan AS c ON c.id_list_bahan = b.id_bahan
@@ -68,35 +71,65 @@ class TimbangController extends Controller
         $user = 'aldi';
         $id_lokasi = 1;
         if ($r->timbang[0] == 'T') {
-
             $qty_beli = $r->qty_beli;
             $qty = $r->qty;
-
             $total_qty = 0;
             $total_qty_beli = 0;
             for ($i = 0; $i < count($r->id_pembelian); $i++) {
-                DB::table('timbang_purchase')->insert([
-                    'tgl' => $r->tgl,
-                    'no_po' => $r->no_po,
-                    'qty' => $r->qty[$i],
-                    'h_satuan' => $r->h_satuan[$i],
-                    'admin' => $user,
-                    'id_pembelian' => $r->id_pembelian[$i],
-                    'qty' => $r->qty[$i],
-                    'ttl_rp' => $r->ttl_rp[$i],
-                    'ket' => $r->ket,
-                    'id_lokasi' => $id_lokasi,
-                    'id_satuan_timbang' => $r->id_satuan[$i]
-                ]);
-                DB::table('pembelian_purchase')->where('sub_no_po', $r->no_po)->update(['timbang' => 'Y']);
+
+                if ($r->dimuka[$i] == 'Y') {
+                    DB::table('timbang_purchase')->insert([
+                        'tgl' => $r->tgl,
+                        'no_po' => $r->no_po,
+                        'qty' => $r->qty[$i],
+                        'h_satuan' => $r->h_satuan[$i],
+                        'admin' => $user,
+                        'id_pembelian' => $r->id_pembelian[$i],
+                        'qty' => $r->qty[$i],
+                        'ttl_rp' => $r->ttl_rp[$i],
+                        'ket' => $r->ket,
+                        'id_lokasi' => $id_lokasi,
+                        'id_satuan_timbang' => $r->id_satuan[$i],
+                        'selesai' => 'Y'
+                    ]);
+                    DB::table('pembelian_purchase')->where('sub_no_po', $r->no_po)->update(['timbang' => 'Y']);
+                    $data = [
+                        'tgl' => $r->tgl,
+                        'id_bahan' => $r->id_bahan[$i],
+                        'debit' => $r->qty[$i],
+                        'no_nota' => $r->no_po,
+                        'admin' => 'Nanda',
+                        'id_satuan' => $r->id_satuan[$i],
+                        'id_satuan_beli' => $r->id_satuan[$i],
+                        'unit_prize' => $r->h_satuan[$i]
+                    ];
+                    DB::table('stok_ts')->insert($data);
+                } else {
+                    DB::table('timbang_purchase')->insert([
+                        'tgl' => $r->tgl,
+                        'no_po' => $r->no_po,
+                        'qty' => $r->qty[$i],
+                        'h_satuan' => $r->h_satuan[$i],
+                        'admin' => $user,
+                        'id_pembelian' => $r->id_pembelian[$i],
+                        'qty' => $r->qty[$i],
+                        'ttl_rp' => $r->ttl_rp[$i],
+                        'ket' => $r->ket,
+                        'id_lokasi' => $id_lokasi,
+                        'id_satuan_timbang' => $r->id_satuan[$i]
+                    ]);
+                    DB::table('pembelian_purchase')->where('sub_no_po', $r->no_po)->update(['timbang' => 'Y']);
+                }
+
+
 
                 $total_qty += $qty[$i];
                 $total_qty_beli += $qty_beli[$i];
             }
 
-            if ($total_qty_beli > $total_qty) {
-                Mail::to('nandw567@gmail.com')->send(new Timbangan('nandw567@gmail.com'));
-            }
+            // if ($total_qty_beli > $total_qty) {
+            //     Mail::to('nandw567@gmail.com')->send(new Timbangan('nandw567@gmail.com'));
+            // }
         } else {
             for ($i = 0; $i < count($r->id_pembelian); $i++) {
                 DB::table('timbang_purchase')->where('id_timbang', $r->id_pembelian[$i])->update([

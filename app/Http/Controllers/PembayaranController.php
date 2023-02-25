@@ -3,19 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PembayaranController extends Controller
 {
     public function pembayaran()
     {
-        $datas = DB::select("SELECT a.selesai, a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan FROM timbang_purchase as a
+        $id_lokasi = Session::get('id_lokasi');
+        $datas = DB::select("SELECT a.selesai, b.dimuka, a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan FROM timbang_purchase as a
         LEFT JOIN pembelian_purchase as b ON a.id_pembelian = b.id_pembelian_purchase
         LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
         LEFT JOIN tb_list_bahan as d ON c.id_bahan = d.id_list_bahan
         LEFT JOIN tb_satuan as e ON c.id_satuan_beli = e.id_satuan
-        WHERE b.timbang = 'Y' 
-        GROUP BY a.no_po;");
+        WHERE b.timbang = 'Y' and c.id_lokasi = '$id_lokasi'
+        GROUP BY a.no_po
+        ORDER BY a.id_timbang DESC
+        ");
         $data = [
             'title' => 'Pembayaran',
             'pembayaran' => $datas
@@ -79,6 +84,7 @@ class PembayaranController extends Controller
 
         $akun2 = $r->akun2;
         $pembayaran = $r->pembayaran;
+        $id_lokasi = Session::get('id_lokasi');
 
         for ($i = 0; $i < count($akun2); $i++) {
             $data = [
@@ -88,7 +94,8 @@ class PembayaranController extends Controller
                 'id_buku' => '3',
                 'no_nota' => $no_po,
                 'ket' => 'Pembayaran purchase ' . $no_po,
-                'admin' => 'Nanda'
+                'admin' => Auth::user()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
         }
@@ -104,7 +111,8 @@ class PembayaranController extends Controller
                 'ket' => 'Pembayaran purchase ' . $no_po,
                 'id_satuan' => $id_satuan[$x],
                 'qty' => $qty[$x],
-                'admin' => 'Nanda'
+                'admin' => Auth::user()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
         }
@@ -116,7 +124,8 @@ class PembayaranController extends Controller
                 'id_buku' => '3',
                 'no_nota' => $no_po,
                 'ket' => 'Biaya lain-lain ' . $no_po,
-                'admin' => 'Nanda'
+                'admin' => Auth::user()->nama,
+                'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
         }
@@ -124,12 +133,12 @@ class PembayaranController extends Controller
             $data = [
                 'tgl' => $tgl,
                 'id_bahan' => $id_bahan[$x],
-                'debit' => $qty[$x] * 1000,
+                'debit' => $qty[$x],
                 'no_nota' => $no_po,
-                'admin' => 'Nanda',
-                'id_satuan' => '12',
+                'admin' => Auth::user()->nama,
+                'id_satuan' => $id_satuan[$x],
                 'id_satuan_beli' => $id_satuan[$x],
-                'unit_prize' => $h_satuan[$x] / 1000
+                'unit_prize' => $h_satuan[$x]
             ];
             DB::table('stok_ts')->insert($data);
         }
