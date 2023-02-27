@@ -31,10 +31,10 @@
                     <tr>
                         <td width="15%">Nomor Po</td>
                         <td width="1%">:</td>
-                        <td>{{$detail2->no_po}}</td>
+                        <td>{{$detail2->sub_no_po}}</td>
                         <td width="20%">Departement</td>
                         <td width="1%">:</td>
-                        <td>Takemori</td>
+                        <td>{{Session::get('id_lokasi') == '1' ? 'Takemori' : 'Soondobu'}}</td>
                     </tr>
 
 
@@ -58,10 +58,10 @@
                             <td style="text-align: center">{{$p->nm_bahan}}</td>
                             <td style="text-align: right">{{$p->qty}}</td>
                             <td style="text-align: center">{{$p->nm_satuan}}</td>
-                            <td style="text-align: right">{{$p->qty_beli}}</td>
+                            <td style="text-align: right">{{$p->qty}}</td>
                             <td style="text-align: center">{{$p->nm_satuan}}</td>
-                            <td style="text-align: right">{{number_format($p->hrga_satuan_beli,0)}}</td>
-                            <td style="text-align: right">{{number_format($p->ttl_rp_pembelian,0)}}</td>
+                            <td style="text-align: right">{{number_format($p->h_satuan,0)}}</td>
+                            <td style="text-align: right">{{number_format($p->ttl_rp,0)}}</td>
                         </tr>
                         @endforeach
 

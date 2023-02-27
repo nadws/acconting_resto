@@ -70,20 +70,20 @@
                                                 name="cek[]" value="{{$p->id_purchase}}" type="checkbox"
                                                 id="check{{ $no + 1 }}" id_purchase='{{$p->id_purchase}}'>
                                         </td>
-                                        <td>
+                                        <td style="white-space: nowrap">
                                             <label for="check{{$no+1}}">{{$p->nm_bahan}}</label>
                                             <input type="hidden" name="id_purchase[]" value="{{$p->id_purchase}}">
                                         </td>
                                         <td>
-                                            <input type="text" name="qty[]" style="text-align: right;"
+                                            <input type="text" name="qty[]" style="text-align: right; width: 80px"
                                                 class="form-control input_purchase{{$p->id_purchase}} qty_beli qty_beli{{$p->id_purchase}}"
                                                 value="{{$p->qty}}" detail='{{$p->id_purchase}}' disabled>
                                         </td>
                                         <td>{{$p->nm_satuan}}</td>
-                                        <td><input type="text" name="h_satuan[]" style="text-align: right;"
+                                        <td><input type="text" name="h_satuan[]" style="text-align: right; width: 120px"
                                                 class="form-control h_satuan input_purchase{{$p->id_purchase}} h_satuan{{$p->id_purchase}}"
                                                 value="0" detail='{{$p->id_purchase}}' disabled></td>
-                                        <td><input type="text" name="ttl_rp[]" style="text-align: right;"
+                                        <td><input type="text" name="ttl_rp[]" style="text-align: right; width: 120px"
                                                 class="form-control input_purchase{{$p->id_purchase}} total{{$p->id_purchase}}"
                                                 value="0" readonly disabled></td>
                                     </tr>

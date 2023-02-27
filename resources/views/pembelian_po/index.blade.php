@@ -28,57 +28,64 @@
                 <div class="card-header">
                 </div>
                 <div class="card-body">
-                    <table class="table" id="table1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>No Po</th>
-                                <th>Total Rp Po</th>
-                                <th>Total Rp Beli</th>
-                                <th>Admin Po</th>
-                                <th>Admin Beli</th>
-                                <th>Status</th>
-                                <th>Aksi </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($purchase as $i => $p)
-                            <tr>
-                                <td>{{$i+1}}</td>
-                                <td>{{date('d-m-Y',strtotime($p->tgl))}}</td>
-                                <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
-                                        no_po="{{$p->no_po}}">{{$p->no_po}}</a>
-                                </td>
+                    <div class="table-responsive">
 
-                                <td>Rp. {{number_format($p->total,0)}}</td>
-                                <td>Rp. {{number_format($p->total_beli,0)}}</td>
-                                <td>{{$p->admin}}</td>
-                                <td>{{$p->admin_beli}}</td>
-                                <td>
-                                    <span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
-                                            class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
-                                        {{$p->po != $p->beli
-                                        ? 'Diproses' : 'Selesai'}}</span>
-                                </td>
-                                <td>
-                                    @if ($p->po != $p->beli)
-                                    <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-primary"><i class="fas fa-shopping-cart"></i>
-                                    </a>
-                                    @else
-                                    <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
-                                        class="btn btn-sm btn-primary disabled"><i class="fas fa-shopping-cart"></i>
-                                    </a>
-                                    @endif
 
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+                        <table class="table" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>No Po</th>
+                                    <th>Total Rp Po</th>
+                                    <th>Total Rp Beli</th>
+                                    <th>Admin Po</th>
+                                    <th>Admin Beli</th>
+                                    <th>Status</th>
+                                    <th>Aksi </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($purchase as $i => $p)
+                                <tr>
+                                    <td>{{$i+1}}</td>
+                                    <td>{{date('d-m-Y',strtotime($p->tgl))}}</td>
+                                    <td>
+                                        {{$p->no_po}}
+                                    </td>
 
-                    </table>
+                                    <td>Rp. {{number_format($p->total,0)}}</td>
+                                    <td>Rp. {{number_format($p->total_beli,0)}}</td>
+                                    <td>{{$p->admin}}</td>
+                                    <td>{{$p->admin_beli}}</td>
+                                    <td>
+                                        <span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
+                                                class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
+                                            {{$p->po != $p->beli
+                                            ? 'Diproses' : 'Selesai'}}</span>
+                                    </td>
+                                    <td>
+                                        @if ($p->po != $p->beli)
+                                        <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Pembelian"
+                                            class="btn btn-sm btn-primary"><i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                        @else
+                                        <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                            class="btn btn-sm btn-primary disabled"><i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                        @endif
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#detail"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Nota Pembelian"
+                                            no_po="{{$p->no_po}}" class="btn btn-warning btn-sm detail"><i
+                                                class="far fa-clipboard"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>
@@ -90,10 +97,10 @@
     </style>
 
     <div id="detail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg-max2" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">
+                    <h4 class="modal-title" id="detail">
                         Daftar {{$title}}
                     </h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -102,6 +109,30 @@
                 </div>
                 <div class="modal-body">
                     <div id=detail_po></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Close</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="detail_sub" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg-max2" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="detail_sub">
+                        Daftar {{$title}}
+                    </h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id=detail_sub_po></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -177,6 +208,30 @@
                 success: function(data) {
                  
                     $('#nota').html(data);
+                }
+            });
+        });
+        $(document).on('click', '.detail_sub', function() {
+            var sub_po = $(this).attr('sub_po');
+            $("#detail_sub").modal('show')
+            $.ajax({
+                url: "{{ route('detail_sub') }}?sub_po=" + sub_po,
+                type: "Get",
+                success: function(data) {
+                    $('#detail_sub_po').html(data);
+                    $('#tb_bkin').DataTable({
+                "paging": false,
+                "pageLength": 100,
+                "scrollY": "100%",
+                "lengthChange": false,
+                // "ordering": false,
+                "info": false,
+                "stateSave": true,
+                "autoWidth": true,
+                // "order": [ 5, 'DESC' ],
+                "searching": true,
+            });
+
                 }
             });
         });

@@ -39,8 +39,8 @@
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
-                            <a href="{{ route('sistem_po') }}">Pengajuan Pembelian</a>
-                            <a href="{{ route('pembelian_po') }}">Pembelian Bahan</a>
+                            <a href="{{ route('sistem_po') }}">Pengajuan</a>
+                            <a href="{{ route('pembelian_po') }}">Pembelian</a>
                         </li>
                         <li class="submenu-item ">
                             <a href="{{ route('timbang') }}">Timbang</a>

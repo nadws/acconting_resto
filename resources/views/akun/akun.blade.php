@@ -95,7 +95,7 @@ background-position: 0;
 
             <div class="modal-content">
                 <div class="modal-header ">
-                    <h5 class="modal-title" id="exampleModalLabel">Post Center</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Post Center swdas</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -152,10 +152,10 @@ background-position: 0;
                     <div class="row">
                         <label for="">List Bahan</label>
                         <select name="id_list_bahan[]" id="" class="choices form-select multiple-remove"
-                        multiple="multiple">
-                        @foreach ($bahan as $b)
+                            multiple="multiple">
+                            @foreach ($bahan as $b)
                             <option value="{{ $b->id_list_bahan }}">{{ $b->nm_bahan }}</option>
-                        @endforeach
+                            @endforeach
                         </select>
                         <input type="hidden" class="form-control" id="id_akun_bahan" name="id_akun">
                     </div>

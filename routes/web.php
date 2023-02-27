@@ -148,6 +148,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tambah_biaya_lain2', [Pembelian_purchase::class, 'tambah_biaya_lain2'])->name('tambah_biaya_lain2');
     Route::get('/tambah_biaya_lain3', [Pembelian_purchase::class, 'tambah_biaya_lain3'])->name('tambah_biaya_lain3');
     Route::get('/print_detail', [Pembelian_purchase::class, 'print_detail'])->name('print_detail');
+    Route::get('/cancel_pembelian', [Pembelian_purchase::class, 'cancel_pembelian'])->name('cancel_pembelian');
+    Route::get('/detail_sub', [Pembelian_purchase::class, 'detail_sub'])->name('detail_sub');
 
     // opname peralatan
     Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');

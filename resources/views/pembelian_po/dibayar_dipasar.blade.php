@@ -57,61 +57,66 @@
                             </div>
                             <div class="card-body">
                                 <div class="">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Bahan</th>
-                                                <th>Qty</th>
-                                                <th>Satuan Beli</th>
-                                                <th style="text-align: right">Rp Satuan</th>
-                                                <th style="text-align: right">Total Rp</th>
-                                            </tr>
-                                        </thead>
-                                        @php
-                                        $totalRpSatuan = 0;
-                                        @endphp
-                                        <tbody>
-                                            @foreach ($purchase as $no => $p)
+                                    <div class="table-responsive">
+
+
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Bahan</th>
+                                                    <th>Qty</th>
+                                                    <th>Satuan Beli</th>
+                                                    <th style="text-align: right">Rp Satuan</th>
+                                                    <th style="text-align: right">Total Rp</th>
+                                                </tr>
+                                            </thead>
                                             @php
-                                            $totalRpSatuan += $p->ttl_rp;
+                                            $totalRpSatuan = 0;
                                             @endphp
-                                            <input type="hidden" name="sub_no_po" value="{{ $p->sub_no_po }}">
-                                            <tr>
-                                                <td>
-                                                    <label for="check{{ $no + 1 }}">{{ $p->nm_bahan }} </label>
-                                                    <input type="hidden" name="id_purchase[]"
-                                                        value="{{ $p->id_purchase }}">
-                                                </td>
-                                                <td>
-                                                    {{ $p->qty }}
-                                                </td>
-                                                <td>
-                                                    {{ $p->nm_satuan }}
-                                                </td>
-                                                <td align="right">
-                                                    <span class="rpSatuan">{{ number_format($p->rp_satuan, 0) }}</span>
-                                                </td>
-                                                <td align="right">
-                                                    <span class="rpSatuan">{{ number_format($p->ttl_rp, 0) }}</span>
-                                                </td>
+                                            <tbody>
+                                                @foreach ($purchase as $no => $p)
+                                                @php
+                                                $totalRpSatuan += $p->ttl_rp;
+                                                @endphp
+                                                <input type="hidden" name="sub_no_po" value="{{ $p->sub_no_po }}">
+                                                <tr>
+                                                    <td>
+                                                        <label for="check{{ $no + 1 }}">{{ $p->nm_bahan }} </label>
+                                                        <input type="hidden" name="id_purchase[]"
+                                                            value="{{ $p->id_purchase }}">
+                                                    </td>
+                                                    <td>
+                                                        {{ $p->qty }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $p->nm_satuan }}
+                                                    </td>
+                                                    <td align="right">
+                                                        <span class="rpSatuan">{{ number_format($p->rp_satuan, 0)
+                                                            }}</span>
+                                                    </td>
+                                                    <td align="right">
+                                                        <span class="rpSatuan">{{ number_format($p->ttl_rp, 0) }}</span>
+                                                    </td>
 
-                                            </tr>
-                                            @endforeach
+                                                </tr>
+                                                @endforeach
 
-                                        </tbody>
-                                        {{-- <tfoot>
-                                            <tr>
-                                                <th colspan="7">
-                                                    <button type="button" class="btn btn-block btn-lg tbh_baris"
-                                                        style="background-color: #F4F7F9; color: #8FA8BD; font-size: 14px; padding: 13px;">
-                                                        <i class="fas fa-plus"></i> Tambah Biaya Lain - lain
+                                            </tbody>
+                                            {{-- <tfoot>
+                                                <tr>
+                                                    <th colspan="7">
+                                                        <button type="button" class="btn btn-block btn-lg tbh_baris"
+                                                            style="background-color: #F4F7F9; color: #8FA8BD; font-size: 14px; padding: 13px;">
+                                                            <i class="fas fa-plus"></i> Tambah Biaya Lain - lain
 
-                                                    </button>
-                                                </th>
-                                            </tr>
-                                        </tfoot> --}}
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                            </tfoot> --}}
 
-                                    </table>
+                                        </table>
+                                    </div>
                                     <div class="row">
                                         <div class="col-lg-4">
 
@@ -119,10 +124,10 @@
                                         <div class="col-lg-8">
                                             <hr style="border: 2px solid #435EBE;">
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6 col-6">
                                                     <label for="">Sub Total</label>
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6 col-6">
                                                     {{-- <input type="text" class="viewRpSatuan"
                                                         value="{{number_format($totalRpSatuan,0)}}"> --}}
                                                     <label for="" style="float:right">Rp
@@ -134,7 +139,7 @@
                                             <h6>Biaya Tambahan : </h6>
                                             <br>
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-6 col-6">
                                                     <label for="">Pilih Akun</label>
                                                     <select name="id_akun[]" id="" class="select form-control">
                                                         <option value="">- Pilih Akun -</option>
@@ -143,12 +148,12 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-lg-4">
+                                                <div class="col-lg-4 col-4">
                                                     <label for="">Rupiah</label>
                                                     <input name="rupiah[]" style="text-align: right" value="0"
                                                         type="text" class="form-control rpBiaya rpBiaya1">
                                                 </div>
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-2 col-2">
                                                     <label for="">Aksi</label> <br>
                                                     <button type="button" class="btn rounded-pill tbh_baris"
                                                         style="background-color: #F4F7F9; color: #8FA8BD;">
@@ -178,8 +183,8 @@
                                 <button type="submit" name="action" value="pasar" id="simpan"
                                     style="float: right; margin-left: 8px;" class="btn btn-primary">Simpan</button>
 
-                                <a href="{{ route('pembelian_po') }}" style="float: right"
-                                    class="btn btn-outline-primary">Batal</a>
+                                <a href="{{ route('cancel_pembelian',['sub_no_po' => $sub_no_po, 'no_po' => $no_po]) }}"
+                                    style="float: right" class="btn btn-outline-primary">Batal</a>
                             </div>
                         </div>
                     </div>

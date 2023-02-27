@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-lg-12">
-        <a href="#" id_akun="{{ $id_akun }}"
-            class="btn btn-primary btn-sm tbh_post" style="float: right"><i class="fas fa-plus"></i>Post Center</a>
+        <a href="#" id_akun="{{ $id_akun }}" class="btn btn-primary btn-sm tbh_post" style="float: right"><i
+                class="fas fa-plus"></i>Post Center</a>
         <br>
         <br>
         <table class="table" id="tb-history">
