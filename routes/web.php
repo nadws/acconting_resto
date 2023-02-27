@@ -21,10 +21,8 @@ Route::get('/', function () {
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->name('dashboard');
-Route::middleware(['auth'])->group(function () {
-
+Route::middleware(['auth'])->group(function () { 
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
-
 
     Route::get('/jurnal_pemasukan', [Jurnal_pemasukan::class, 'index'])->name('jurnal_pemasukan');
     Route::get('/data_pemasukan', [Jurnal_pemasukan::class, 'data_pemasukan'])->name('data_pemasukan');
