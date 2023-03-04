@@ -32,16 +32,22 @@
                             <div class="col-lg-3">
                                 <label for="">Tanggal</label>
                                 <input type="date" name="tgl" class="form-control form-control-lg"
-                                    value="{{date('Y-m-d')}}">
+                                    value="{{$beli->tgl}}" readonly>
                             </div>
                             <div class="col-lg-3">
                                 <label for="">No Po</label>
                                 <input type="text" name="no_po" class="form-control form-control-lg" readonly
                                     value="{{$no_po}}">
                             </div>
-                            <div class="col-lg-6">
-                                <label for="">Keterangan</label>
-                                <input type="text" name="ket" class="form-control form-control-lg">
+                            <div class="col-lg-3">
+                                <label for="">Pembeli</label>
+                                <input type="text" name="pembeli" class="form-control form-control-lg"
+                                    value="{{$beli->pembeli}}" readonly>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="">Tempat beli</label>
+                                <input type="text" name="tempat_beli" class="form-control form-control-lg" readonly
+                                    value="{{$beli->tempat_beli}}">
                             </div>
                         </div>
                     </div>

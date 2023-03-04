@@ -28,7 +28,7 @@ class Gudang extends Controller
             where b.opname ='Y'
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
-        where a.id_lokasi = '$id_lokasi' 
+        where a.id_lokasi = '$id_lokasi' and a.monitoring = 'Y' 
         order by (b.debit - b.kredit) DESC");
         $data = [
             'title' => 'Opname Bahan',

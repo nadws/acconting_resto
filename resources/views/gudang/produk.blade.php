@@ -43,12 +43,12 @@ background-position: 0;
                     <div class="card-header">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link {{Request::is('produk/1') ? 'active' : ''}}"
-                                    aria-current="page" href="{{ route('produk', 1) }}">Bahan</a>
+                                <a class="nav-link {{Request::is('produk/1') ? 'active' : ''}}" aria-current="page"
+                                    href="{{ route('produk', 1) }}">Bahan</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{Request::is('produk/2') ? 'active' : ''}}"
-                                    aria-current="page" href="{{ route('produk', 2) }}">Barang</a>
+                                <a class="nav-link {{Request::is('produk/2') ? 'active' : ''}}" aria-current="page"
+                                    href="{{ route('produk', 2) }}">Barang</a>
                             </li>
                         </ul>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
@@ -61,7 +61,7 @@ background-position: 0;
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Bahan</th>
+                                    <th>Nama Bahan </th>
                                     <th>Kategori </th>
                                     <th>Stok</th>
                                     <th>Satuan </th>
@@ -101,12 +101,15 @@ background-position: 0;
 
                                     <td align="center">{{ $tKerja == '0' ? ' - ' : $tKerja->d }} </td>
                                     <td style="white-space: nowrap">
-                                        <a href="#" class="btn btn-sm btn-warning editBahan" idListBahan="{{$j->id_list_bahan}}"><i class="fas fa-pen"></i></a>
+                                        <a href="#" class="btn btn-sm btn-warning editBahan"
+                                            idListBahan="{{$j->id_list_bahan}}"><i class="fas fa-pen"></i></a>
                                         @php
-                                            $adaStok = DB::table('stok_ts')->where('id_bahan', $j->id_list_bahan)->first();
+                                        $adaStok = DB::table('stok_ts')->where('id_bahan', $j->id_list_bahan)->first();
                                         @endphp
                                         @if (empty($adaStok))
-                                            <a href="{{ route('hapusBahan',[$j->id_list_bahan, $id_jenis]) }}" onclick="return confirm('Yakin ingin dihapus ?')" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                        <a href="{{ route('hapusBahan',[$j->id_list_bahan, $id_jenis]) }}"
+                                            onclick="return confirm('Yakin ingin dihapus ?')"
+                                            class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                                         @endif
                                     </td>
                                 </tr>

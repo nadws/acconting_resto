@@ -44,8 +44,9 @@
                                         <th>No Po</th>
                                         <th>Admin</th>
                                         <th>Total Rp</th>
+                                        <th>Pembeli</th>
+                                        <th>Tempat</th>
                                         <th>Status</th>
-                                        <th>Pembayaran</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -58,6 +59,13 @@
                                                 }}</a></td>
                                         <td>{{ $d->admin }}</td>
                                         <td>Rp. {{ number_format($d->ttl_rp + $d->lain,0) }}</td>
+
+                                        <td>
+                                            {{$d->pembeli}}
+                                        </td>
+                                        <td>
+                                            {{$d->tempat_beli}}
+                                        </td>
                                         <td>
                                             <h6>
                                                 <span class=" badge bg-{{$d->timbang == 'T' ? 'danger' :  'success' }}">
@@ -66,14 +74,6 @@
                                                     {{$d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
 
 
-                                            </h6>
-                                        </td>
-                                        <td>
-                                            <h6>
-                                                <span class=" badge bg-{{$d->dimuka == 'T' ? 'warning' :  'success' }}">
-                                                    <i
-                                                        class="fas {{$d->dimuka == 'T' ? 'fas fa-map-marked' :  'fas fa-money-bill' }} "></i>
-                                                    {{$d->dimuka == 'T' ? 'Pasar' : 'Dimuka' }}</span>
                                             </h6>
                                         </td>
                                         <td>

@@ -16,7 +16,7 @@ class TimbangController extends Controller
         $id_lokasi = Session::get('id_lokasi');
         $data = [
             'title' => 'Timbang',
-            'pembelian' => DB::select("SELECT a.dimuka, a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(a.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
+            'pembelian' => DB::select("SELECT a.pembeli, a.tempat_beli, a.dimuka, a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(a.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
             LEFT JOIN purchase as b ON a.id_purchase = b.id_purchase
             left join ( SELECT sum(c.rupiah) as lain, c.sub_no_po FROM  purchase_biaya as c group by c.sub_no_po ) as c on c.sub_no_po = a.sub_no_po
             where b.id_lokasi = '$id_lokasi'
@@ -38,9 +38,11 @@ class TimbangController extends Controller
         LEFT JOIN tb_satuan AS d ON d.id_satuan= b.id_satuan_beli
         LEFT JOIN timbang_purchase AS e ON e.id_pembelian = a.id_pembelian_purchase
         WHERE  a.sub_no_po = '$no_po'");
+        $pembelian = DB::table('pembelian_purchase')->where('sub_no_po',$no_po)->first();
         $data = [
             'title' => 'Detail Timbang',
             'pembelian' => $detail,
+            'beli' => $pembelian,
             'list_bahan' => Listbahan::all(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
@@ -119,6 +121,18 @@ class TimbangController extends Controller
                         'id_satuan_timbang' => $r->id_satuan[$i]
                     ]);
                     DB::table('pembelian_purchase')->where('sub_no_po', $r->no_po)->update(['timbang' => 'Y']);
+
+                    $data = [
+                        'tgl' => $r->tgl,
+                        'id_bahan' => $r->id_bahan[$i],
+                        'debit' => $r->qty[$i],
+                        'no_nota' => $r->no_po,
+                        'admin' => $user,
+                        'id_satuan' => $r->id_satuan[$i],
+                        'id_satuan_beli' => $r->id_satuan[$i],
+                        'unit_prize' => $r->h_satuan[$i]
+                    ];
+                    DB::table('stok_ts')->insert($data);
                 }
 
 
