@@ -68,17 +68,16 @@
                                         @if ($p->po != $p->beli)
                                         <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Pembelian"
-                                            class="btn btn-sm btn-primary"><i class="fas fa-shopping-cart"></i>
+                                            class="btn btn-sm btn-primary">Belanja
                                         </a>
                                         @else
                                         <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
-                                            class="btn btn-sm btn-primary disabled"><i class="fas fa-shopping-cart"></i>
+                                            class="btn btn-sm btn-primary disabled">Belanja
                                         </a>
                                         @endif
                                         <a href="" data-bs-toggle="modal" data-bs-target="#detail"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Nota Pembelian"
-                                            no_po="{{$p->no_po}}" class="btn btn-warning btn-sm detail"><i
-                                                class="far fa-clipboard"></i></a>
+                                            no_po="{{$p->no_po}}" class="btn btn-warning btn-sm detail">History</a>
                                     </td>
                                 </tr>
                                 @endforeach

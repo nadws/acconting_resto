@@ -83,7 +83,7 @@
                                                     class="fas fa-pen"></i></a>
                                             @else
                                             <a href="{{ route('timbangView', $d->sub_no_po) }}"
-                                                class="btn btn-sm btn-primary"><i class="fas fa-balance-scale"></i></a>
+                                                class="btn btn-sm btn-primary">Timbang</a>
                                             @endif
                                             <a href="{{ route('print_timbang',['sub_no_po' => $d->sub_no_po]) }}"
                                                 target="_blank" class="btn btn-sm btn-primary"><i

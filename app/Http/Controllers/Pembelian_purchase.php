@@ -249,6 +249,9 @@ class Pembelian_purchase extends Controller
                 'id_lokasi' => $id_lokasi
             ];
             DB::table('tb_jurnal')->insert($data);
+
+
+
             DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update(['beli' => 'Y']);
         }
         $id_akun = $r->id_akun;
@@ -266,6 +269,13 @@ class Pembelian_purchase extends Controller
             ];
             DB::table('tb_jurnal')->insert($data);
         }
+        $data = [
+            'tgl' => $r->tgl,
+            'pembeli' => $r->pembeli,
+            'tempat_beli' => $r->tempat_beli,
+        ];
+        DB::table('pembelian_purchase')->where('sub_po', $r->sub_po)->update($data);
+
         return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
     }
     public function save_pembelian_po_pasar(Request $r)
@@ -286,8 +296,17 @@ class Pembelian_purchase extends Controller
         $id_purchase = $r->id_purchase;
 
         for ($x = 0; $x < count($id_purchase); $x++) {
-            DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update(['beli' => 'Y']);
+            $data = [
+                'beli' => 'Y'
+            ];
+            DB::table('purchase')->where('id_purchase', $id_purchase[$x])->update($data);
         }
+        $data = [
+            'tgl' => $r->tgl,
+            'pembeli' => $r->pembeli,
+            'tempat_beli' => $r->tempat_beli,
+        ];
+        DB::table('pembelian_purchase')->where('sub_no_po', $r->sub_po)->update($data);
 
         return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
     }

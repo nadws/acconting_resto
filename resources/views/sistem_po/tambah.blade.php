@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label for="">Keterangan</label>
-                                <input type="text" name="ket" class="form-control form-control-lg" required>
+                                <input type="text" name="ket" class="form-control form-control-lg">
                             </div>
                         </div>
                     </div>

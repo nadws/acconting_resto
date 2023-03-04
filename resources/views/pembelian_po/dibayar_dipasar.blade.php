@@ -26,30 +26,33 @@
         <form action="{{ route('save_pembelian_po_pasar') }}" method="post">
             @csrf
             <section class="section">
-                {{-- <div class="card">
+                <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-3">
-                                <label for="">Tanggal Beli {{$sub_no_po}}</label>
+                                <label for="">Tanggal Beli</label>
                                 <input type="date" name="tgl" class="form-control form-control-lg"
-                                    value="{{ date('Y-m-d') }}" readonly>
+                                    value="{{ date('Y-m-d') }}" required>
                             </div>
                             <div class="col-lg-3">
-                                <label for="">No Po</label>
-                                <input type="text" name="no_po" class="form-control form-control-lg" readonly
-                                    value="{{ $no_po }}">
+                                <label for="">Sub Po</label>
+                                <input type="text" name="sub_po" class="form-control form-control-lg" readonly
+                                    value="{{ $sub_no_po }}">
                             </div>
-                            <div class="col-lg-6">
-                                <label for="">Keterangan</label>
-                                <input type="text" name="ket" value="{{ $detail2->ket }}"
-                                    class="form-control form-control-lg" readonly>
+                            <div class="col-lg-3">
+                                <label for="">Pembeli</label>
+                                <input type="text" name="pembeli" class="form-control form-control-lg" required>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="">Tempat Beli</label>
+                                <input type="text" name="tempat_beli" class="form-control form-control-lg" required>
                             </div>
                         </div>
                     </div>
 
-                </div> --}}
+                </div>
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
 
                         <div class="card">
                             <div class="card-header">
