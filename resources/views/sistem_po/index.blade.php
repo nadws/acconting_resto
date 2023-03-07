@@ -39,11 +39,11 @@
                                 <a class="nav-link" href="{{ route('timbang') }}">Timbang</a>
                             </li>
                         </ul>
-                 
+
                         @if (in_array(auth()->user()->id, $idBolehSet))
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#akses"
-                            class="btn btn-primary  float-end"><i class="fas fa-user-cog"></i>&nbsp; Akses
-                            Halaman</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#akses"
+                                class="btn btn-primary  float-end"><i class="fas fa-user-cog"></i>&nbsp; Akses
+                                Halaman</a>
                         @endif
 
 
