@@ -231,7 +231,7 @@
                                         <input type="hidden" name="id_permission_gudang" value="1">
 
                                         @foreach ($create as $c)
-                                        <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                        <label><input type="checkbox" name="id_permission[]{{$u->id}}"
                                                 value="{{$c->id_permission_button }}" {{empty($c->id_permission_page) ?
                                             '' : 'Checked'}} class="open_check{{$u->id}}"
                                             {{empty($akses->id_permission_page) ?
@@ -242,7 +242,7 @@
                                     <td>
 
                                         @foreach ($read as $r)
-                                        <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                        <label><input type="checkbox" name="id_permission[]{{$u->id}}"
                                                 value="{{$r->id_permission_button }}" {{empty($r->id_permission_page) ?
                                             '' : 'Checked'}} class="open_check{{$u->id}}"
                                             {{empty($akses->id_permission_page) ?
@@ -252,7 +252,7 @@
                                     </td>
                                     <td>
                                         @foreach ($update as $up)
-                                        <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                        <label><input type="checkbox" name="id_permission[]{{$u->id}}"
                                                 value="{{$up->id_permission_button }}" {{empty($up->id_permission_page)
                                             ?
                                             '' : 'Checked'}} class="open_check{{$u->id}}"
@@ -263,7 +263,7 @@
                                     </td>
                                     <td>
                                         @foreach ($delete as $d)
-                                        <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                        <label><input type="checkbox" name="id_permission[]{{$u->id}}"
                                                 value="{{$d->id_permission_button }}" {{empty($d->id_permission_page) ?
                                             '' : 'Checked'}} class="open_check{{$u->id}}"
                                             {{empty($akses->id_permission_page) ?

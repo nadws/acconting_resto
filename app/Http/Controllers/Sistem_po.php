@@ -65,10 +65,9 @@ class Sistem_po extends Controller
         // }
 
         foreach ($id_user as $u) {
-            $tes = $r->id_permission . $u;
             foreach ($id_permission as $p) {
                 $data = [
-                    'id_permission_button' => $p . $u,
+                    'id_permission_button' => $p,
                     'id_user' => $u,
                     'id_permission_gudang' => $id_permission_gudang
                 ];
