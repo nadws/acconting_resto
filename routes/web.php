@@ -67,6 +67,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/save_kategori_makanan', [Gudang::class, 'save_kategori_makanan'])->name('save_kategori_makanan');
     Route::post('/edit_kategori_makanan', [Gudang::class, 'edit_kategori_makanan'])->name('edit_kategori_makanan');
     Route::get('/hapus_kategori_makanan/{id}/{id_jenis}', [Gudang::class, 'hapus_kategori_makanan'])->name('hapus_kategori_makanan');
+    Route::get('/get_merk', [Gudang::class, 'get_merk'])->name('get_merk');
+    Route::get('/tambah_bahan', [Gudang::class, 'tambah_bahan'])->name('tambah_bahan');
+    Route::get('/delete_bahan', [Gudang::class, 'delete_bahan'])->name('delete_bahan');
 
     Route::get('/buku_besar', [Buku_besar::class, 'index'])->name('buku_besar');
     Route::get('/detail_buku', [Buku_besar::class, 'detail_buku'])->name('detail_buku');
@@ -152,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     // opname peralatan
     Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');
     Route::post('/save_permission', [Sistem_po::class, 'save_permission'])->name('save_permission');
+    Route::get('/load_pesanan', [Sistem_po::class, 'load_pesanan'])->name('load_pesanan');
 });
 
 

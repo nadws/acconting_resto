@@ -274,7 +274,7 @@ class Pembelian_purchase extends Controller
             'pembeli' => $r->pembeli,
             'tempat_beli' => $r->tempat_beli,
         ];
-        DB::table('pembelian_purchase')->where('sub_po', $r->sub_po)->update($data);
+        DB::table('pembelian_purchase')->where('sub_no_po', $r->sub_po)->update($data);
 
         return redirect()->route('pembelian_po')->with('sukses', 'Sukses tambah pembelian');
     }

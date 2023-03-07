@@ -62,7 +62,7 @@ class Gudang extends Controller
             group by b.id_bahan
         ) as f on f.id_bahan = a.id_list_bahan
         where a.id_lokasi = '$id_lokasi' AND a.jenis = '$id'
-        order by a.id_list_bahan DESC
+        order by (b.debit - b.kredit) DESC
         ");
         $data = [
             'title' => 'Bahan & Barang',
@@ -354,5 +354,29 @@ class Gudang extends Controller
             'id_lokasi' => 1
         ]);
         return redirect()->route('kategoriMakanan', $r->id_jenis)->with('sukses', 'Berhasil edit kategori makanan');
+    }
+
+    public function get_merk(Request $r)
+    {
+        $id_list_bahan =  $r->id_list_bahan;
+        $data = [
+            'merk' => DB::table('tb_merk_bahan')->where('id_list_bahan', $id_list_bahan)->get(),
+            'id_list_bahan' => $id_list_bahan
+        ];
+        return view('gudang.merk', $data);
+    }
+
+    public function tambah_bahan(Request $r)
+    {
+        $data = [
+            'nm_merk' => $r->nm_merk,
+            'id_list_bahan' => $r->id_list_bahan
+        ];
+        DB::table('tb_merk_bahan')->insert($data);
+    }
+
+    public function delete_bahan(Request $r)
+    {
+        DB::table('tb_merk_bahan')->where('id_merk_bahan', $r->id_merk_bahan)->delete();
     }
 }

@@ -41,7 +41,8 @@
                             </div>
                             <div class="col-lg-4">
                                 <label for="">Kategori</label>
-                                <select name="" id="" class="select_view form-control">
+                                <select name="" id="" class="select_view form-control kategori">
+                                    <option value="">Pilih Kategori</option>
                                     @foreach ($kategori as $k)
                                     <option value="{{$k->id_kategori_makanan}}">{{$k->nm_kategori}}</option>
                                     @endforeach
@@ -53,66 +54,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th width="30%">Bahan</th>
-                                    <th width="10%" style="text-align: right;">Qty</th>
-                                    <th width="15%">Satuan Beli</th>
-                                    <th width="15%" style="text-align: right;">Rp Satuan</th>
-                                    <th width="20%" style="text-align: right;">Total Rp</th>
-                                    <th width="5%">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <select name="id_bahan[]" id=""
-                                            class="form-control  select_view id_bahan id_bahan1" detail='1' required>
-                                            <option value="">Pilih Bahan</option>
-                                            @foreach ($list_bahan as $l)
-                                            <option value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="qty[]" style="text-align: right;"
-                                            class="form-control qty_beli qty_beli1" value="0" detail='1' required>
-                                    </td>
-                                    <td>
-                                        <select name="id_satuan[]" id="" class="form-control  satuan1 select_view"
-                                            required>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan1" value="0" detail='1' required>
-                                    </td>
-                                    <td>
-                                        <input type="text" name="ttl_rp[]" style="text-align: right;"
-                                            class="form-control total1" value="0" readonly>
-                                    </td>
-                                    <td></td>
-                                </tr>
-
-                            </tbody>
-                            <tbody id="tb_stok">
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="7">
-                                        <button type="button" class="btn btn-block btn-lg tbh_baris"
-                                            style="background-color: #F4F7F9; color: #8FA8BD; font-size: 14px; padding: 13px;">
-                                            <i class="fas fa-plus"></i> Tambah Baris Baru
-
-                                        </button>
-                                    </th>
-                                </tr>
-                            </tfoot>
-
-
-                        </table>
+                        <div id="load_menu"></div>
                     </div>
                     <div class="card-footer">
                         <button type="submit" style="float: right; margin-left: 8px;"
@@ -204,6 +146,18 @@
             
             var total = parseFloat(qty_beli) * parseFloat(h_satuan);
             $('.total' + detail).val(total);
+                
+        });
+        $(document).on('change', '.kategori', function() {
+         var id_kategori = $(this).val()
+            $.ajax({
+                url: "{{ route('load_pesanan') }}?id_kategori=" + id_kategori,
+                type: "Get",
+                success: function(data) {
+                    $('#load_menu').html(data);
+                    $(".select").select2();
+                }
+            });
                 
         });
     });

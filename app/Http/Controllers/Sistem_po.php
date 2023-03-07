@@ -79,7 +79,7 @@ class Sistem_po extends Controller
             $kode = 'S';
         }
         $data = [
-            'title' => 'Tambah Pengajuan Pembelian',
+            'title' => 'Tambah Pengajuan Pembelian PO',
             'list_bahan' => Listbahan::whereMonitoringAndId_lokasi('Y', $id_lokasi)->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
@@ -296,5 +296,32 @@ class Sistem_po extends Controller
     {
         DB::table('purchase')->where('no_po', $r->no_po)->delete();
         return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di hapus');
+    }
+
+    public function load_pesanan(Request $r)
+    {
+        $id_lokasi = Session::get('id_lokasi');
+        $max = DB::selectOne("SELECT max(a.urutan) as max_urutan FROM purchase as a where a.id_lokasi = '$id_lokasi'");
+
+        if (empty($max->max_urutan)) {
+            $no_po = '1001';
+        } else {
+            $no_po = $max->max_urutan + 1;
+        }
+        if ($id_lokasi == '1') {
+            $kode = 'T';
+        } else {
+            $kode = 'S';
+        }
+        $id_kategori = $r->id_kategori;
+        $data = [
+            'title' => 'Tambah Pengajuan Pembelian PO',
+            'list_bahan' => Listbahan::where(['monitoring' => 'Y', 'id_lokasi' => $id_lokasi, 'id_kategori_makanan' => $id_kategori])->get(),
+            'satuan' => DB::table('tb_satuan')->get(),
+            'no_po' => $no_po,
+            'kode' => $kode,
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', $id_lokasi)->get()
+        ];
+        return view('sistem_po.load_pesanan', $data);
     }
 }

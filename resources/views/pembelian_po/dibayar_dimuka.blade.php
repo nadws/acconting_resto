@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-lg-3">
                                 <label for="">Sub Po</label>
-                                <input type="text" name="no_po" class="form-control form-control-lg" readonly
+                                <input type="text" name="sub_po" class="form-control form-control-lg" readonly
                                     value="{{ $sub_no_po }}">
                             </div>
                             <div class="col-lg-3">

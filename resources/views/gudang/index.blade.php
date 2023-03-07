@@ -42,6 +42,15 @@ background-position: 0;
                 @csrf
                 <div class="card">
                     <div class="card-header">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link " aria-current="page" href="{{ route('produk',1) }}">Bahan &
+                                    barang</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ route('gudang') }}">Opname</a>
+                            </li>
+                        </ul>
                         <button type="submit" class="btn icon icon-left btn-primary "
                             style="float: right; margin-left: 2px"><i class="far fa-save"></i>
                             Opname</button>

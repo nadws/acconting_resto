@@ -55,14 +55,16 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <table class="table">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th width="30%">Bahan</th>
+                                    <th>Bahan</th>
+                                    <th style="text-align: right;">Qty Beli</th>
+                                    <th>Satuan Beli</th>
                                     <th width="10%" style="text-align: right;">Qty</th>
-                                    <th width="15%">Satuan Beli</th>
+                                    <th>Satuan Resep</th>
                                     <th width="15%" style="text-align: right;">Rp Satuan</th>
-                                    <th width="20%" style="text-align: right;">Total Rp</th>
+                                    <th width="15%" style="text-align: right;">Total Rp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,15 +76,18 @@
                                 <input type="hidden" name="id_bahan[]" value="{{ $d->id_bahan }}">
                                 <tr>
                                     <td>
-                                        <select disabled id="" class="form-control  select_view id_bahan id_bahan1"
+                                        {{$d->nm_bahan}}
+                                        {{-- <select disabled id="" class="form-control  select_view id_bahan id_bahan1"
                                             detail='1'>
                                             <option value="">Pilih Bahan</option>
                                             @foreach ($list_bahan as $l)
                                             <option {{ $l->id_list_bahan == $d->id_bahan ? 'selected' : ''}}
                                                 value="{{$l->id_list_bahan}}">{{$l->nm_bahan}}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </td>
+                                    <td align="right">{{$d->qty}}</td>
+                                    <td>{{$d->nm_satuan}}</td>
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
                                             class="form-control qty_beli qty_beli{{ $detail+1 }}" required
