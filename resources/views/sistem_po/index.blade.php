@@ -22,6 +22,87 @@
                     </nav>
                 </div>
             </div>
+            <section class="section">
+
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ route('sistem_po') }}">Purchase
+                                    Order (PO)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pembelian_po') }}">Pembelian</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('timbang') }}">Timbang</a>
+                            </li>
+                        </ul>
+
+                        @if (in_array(auth()->user()->id, $idBolehSet))
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#akses" class="btn btn-primary  float-end"><i
+                                class="fas fa-user-cog"></i>&nbsp; Akses
+                            Halaman</a>
+                        @endif
+
+
+                        @if (!empty($tambah))
+                        <a href="{{ route('tambah_po') }}" style="{{ empty($tambah) ? 'display: none' : '' }}"
+                            class="btn icon icon-left btn-primary float-end me-2">
+                            {!! $tambah->nm_permission_button !!}
+                        </a>
+                        @endif
+
+
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>No Po</th>
+                                    <th>Admin</th>
+                                    <th>Total Rp</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($purchase as $i => $p)
+                                <tr>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($p->tgl)) }}</td>
+                                    <td><a href="#" data-bs-toggle="modal" data-bs-target="#detail" class="detail"
+                                            no_po="{{ $p->no_po }}">{{ $p->no_po }}</a></td>
+                                    <td>{{ $p->admin }}</td>
+                                    <td>Rp. {{ number_format($p->total, 0) }}</td>
+                                    <td>
+                                        @if (!empty($print))
+                                        <a href="{{ route('print_po', ['no_po' => $p->no_po]) }}" target="_blank"
+                                            class="btn btn-sm btn-primary">{!! $print->nm_permission_button !!}</a>
+                                        @endif
+
+                                        @if (!empty($edit))
+                                        <a href="{{ route('edit_po', ['no_po' => $p->no_po]) }}"
+                                            class="btn btn-sm btn-primary {{ $p->beli == 'Y' ? 'disabled' : '' }}">{!!
+                                            $edit->nm_permission_button !!}</a>
+                                        @endif
+
+                                        @if (!empty($hapus))
+                                        <a href="{{ route('hapus_po', ['no_po' => $p->no_po]) }}"
+                                            class="btn btn-sm btn-danger">{!! $hapus->nm_permission_button !!}</a>
+                                        @endif
+
+
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </section>
         </div>
         <section class="section">
 

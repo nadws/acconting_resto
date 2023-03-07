@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{$title}}</title>
+    <title>{{ $title }}</title>
 
 
 
@@ -29,10 +29,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 
-
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
+
+
+        }
+
+        .form-switch2 .form-check-input2 {
+            background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
+background-position: 0;
+            border-radius: 2em;
+            margin-left: -2.5em;
+            transition: background-position .15s ease-in-out;
+            width: 40px;
+            transform: scale(1.5);
+            margin-top: 8px;
+            margin-left: -22px;
         }
 
         .modal-lg-max {
@@ -89,10 +104,9 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-
     <script>
-        $(document).ready(function () {
-            
+        $(document).ready(function() {
+
 
 
             // $(document).on('click', '.remove_baris', function(e) {
@@ -102,54 +116,78 @@
             // });
 
             $('.select_view').select2();
-             });
-            $('.select2').select2({
-                    dropdownParent: $('#tambah .modal-content')
-            });
-             $('#tb_bkin').DataTable({
-                "paging": false,
-                "pageLength": 100,
-                "scrollY": "100%",
-                "lengthChange": false,
-                // "ordering": false,
-                "info": false,
-                "stateSave": true,
-                "autoWidth": true,
-                // "order": [ 5, 'DESC' ],
-                "searching": true,
-            });
+        });
+        $('.select2').select2({
+            dropdownParent: $('#tambah .modal-content')
+        });
+        $('#tb_bkin').DataTable({
+            "paging": false,
+            "pageLength": 100,
+            "scrollY": "100%",
+            "lengthChange": false,
+            // "ordering": false,
+            "info": false,
+            "stateSave": true,
+            "autoWidth": true,
+            // "order": [ 5, 'DESC' ],
+            "searching": true,
+        });
+        $('#table').DataTable({
+            "paging": false,
+            "pageLength": 100,
+            "scrollY": "100%",
+            "lengthChange": false,
+            // "ordering": false,
+            "info": false,
+            "stateSave": true,
+            "autoWidth": true,
+            // "order": [ 5, 'DESC' ],
+            "searching": true,
+        });
+        $('#table2').DataTable({
+            "paging": false,
+            "pageLength": 100,
+            "scrollY": "100%",
+            "lengthChange": false,
+            // "ordering": false,
+            "info": false,
+            "stateSave": true,
+            "autoWidth": true,
+            // "order": [ 5, 'DESC' ],
+            "searching": true,
+        });
     </script>
     @if (session()->has('sukses'))
     <script>
         $(document).ready(function() {
-            Toastify({
-                text: "{{ session()->get('sukses') }}",
-                duration: 3000,
-                style: {
-                    background: "#EAF7EE",
-                    color: "#7F8B8B"
-                },
-                close:true,
-                avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
-            }).showToast();
+                Toastify({
+                    text: "{{ session()->get('sukses') }}",
+                    duration: 3000,
+                    style: {
+                        background: "#EAF7EE",
+                        color: "#7F8B8B"
+                    },
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+                }).showToast();
             });
     </script>
     @endif
     @if (session()->has('error'))
     <script>
         $(document).ready(function() {
-            Toastify({
-                text: "{{ session()->get('error') }}",
-                duration: 3000,
-                style: {
-                    background: "#FCEDE9",
-                    color: "#7F8B8B"
-                },
-                close:true,
-                avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
-            }).showToast();
+                Toastify({
+                    text: "{{ session()->get('error') }}",
+                    duration: 3000,
+                    style: {
+                        background: "#FCEDE9",
+                        color: "#7F8B8B"
+                    },
+                    close: true,
+                    avatar: "https://cdn-icons-png.flaticon.com/512/564/564619.png"
+                }).showToast();
 
-            
+
             });
     </script>
     @endif

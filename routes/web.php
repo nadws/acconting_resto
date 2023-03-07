@@ -10,6 +10,7 @@ use App\Http\Controllers\Jurnal_pengeluaran;
 use App\Http\Controllers\OpnamePeralatanController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\Pembelian_purchase;
+use App\Http\Controllers\PermissionHalamanController;
 use App\Http\Controllers\Sistem_po;
 use App\Http\Controllers\TimbangController;
 use App\Http\Controllers\User;
@@ -156,6 +157,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');
     Route::post('/save_permission', [Sistem_po::class, 'save_permission'])->name('save_permission');
     Route::get('/load_pesanan', [Sistem_po::class, 'load_pesanan'])->name('load_pesanan');
+    Route::get('/permission_gudang', [PermissionHalamanController::class, 'index'])->name('permission_gudang');
+    Route::post('/permission_gudang', [PermissionHalamanController::class, 'create'])->name('permission_gudang.create');
+    Route::get('/detail_permission/{id}', [PermissionHalamanController::class, 'detail_permission'])->name('detail_permission');
 });
 
 
