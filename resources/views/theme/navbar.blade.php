@@ -32,7 +32,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item  has-sub">
+                {{-- <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-receipt-cutoff"></i>
                         <span>Pembelian</span>
@@ -49,7 +49,7 @@
                             <a href="{{ route('pembayaran') }}">Di bukukan</a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-warehouse"></i>
@@ -57,17 +57,10 @@
                     </a>
                     <ul class="submenu ">
                         <li class="submenu-item ">
+                            <a href="{{ route('sistem_po') }}">Pengajuan (PO)</a>
                             <a href="{{route('produk',1)}}">Bahan & Barang</a>
                         </li>
-                        <li class="submenu-item ">
-                            <a href="{{route('gudang')}}">Opname Bahan & Barang</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="{{route('merk_bahan')}}">Merk Bahan</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="{{route('kategoriMakanan',1)}}">Kategori Makanan</a>
-                        </li>
+
                     </ul>
                 </li>
 

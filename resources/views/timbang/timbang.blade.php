@@ -28,6 +28,18 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link" aria-current="page" href="{{ route('sistem_po') }}">Purchase
+                                        Order (PO)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('pembelian_po') }}">Pembelian</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('timbang') }}">Timbang</a>
+                                </li>
+                            </ul>
 
                             {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
                                 class="btn icon icon-left btn-primary" style="float: right"><i

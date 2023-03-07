@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listbahan;
 use App\Models\Satuan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +15,67 @@ class Sistem_po extends Controller
     public function index(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = Auth::user()->id;
         $data = [
-            'title' => 'Pengajuan Pembelian',
+            'title' => 'Purchase Order (PO)',
             'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli FROM purchase as a 
             where a.id_lokasi = '$id_lokasi'
             group by a.no_po order by a.id_purchase DESC"),
+            'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
+
+            // button
+
+            'tambah' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '1' and a.id_user = '$id_user'"),
+
+            'print' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '2' and a.id_user = '$id_user'"),
+
+            'edit' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '3' and a.id_user = '$id_user'"),
+
+            'hapus' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '4' and a.id_user = '$id_user'"),
+
         ];
         return view('sistem_po.index', $data);
+    }
+
+    public function save_permission(Request $r)
+    {
+        $id_user = $r->id_user;
+        $id_permission = $r->id_permission;
+        $id_permission_gudang = $r->id_permission_gudang;
+
+        DB::table('permission_perpage')->where('id_permission_gudang', $id_permission_gudang)->delete();
+
+        // for ($x = 0; $x < count($id_user); $x++) {
+        //     if (empty($id_user[$x])) {
+        //         # code...
+        //     } else {
+        //         for ($c = 0; $c < count($id_permission); $c++) {
+        //             if (empty($id_permission[$c])) {
+        //                 # code...
+        //             } else {
+        //                 $data = [
+        //                     'id_permission_button' => $id_permission[$c] . $id_user[$x],
+        //                     'id_user' => $id_user[$x],
+        //                     'id_permission_gudang' => $id_permission_gudang
+        //                 ];
+        //                 DB::table('permission_perpage')->insert($data);
+        //             }
+        //         }
+        //     }
+        // }
+
+        foreach ($id_user as $u) {
+            $tes = $r->id_permission . $u;
+            foreach ($id_permission as $p) {
+                $data = [
+                    'id_permission_button' => $p . $u,
+                    'id_user' => $u,
+                    'id_permission_gudang' => $id_permission_gudang
+                ];
+                DB::table('permission_perpage')->insert($data);
+            }
+        }
+        return redirect()->route("sistem_po")->with('sukses', 'Data berhasil di input');
     }
 
     public function tambah_po(Request $r)
@@ -43,7 +98,8 @@ class Sistem_po extends Controller
             'list_bahan' => Listbahan::whereMonitoringAndId_lokasi('Y', $id_lokasi)->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'no_po' => $no_po,
-            'kode' => $kode
+            'kode' => $kode,
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', $id_lokasi)->get()
         ];
         return view('sistem_po.tambah', $data);
     }

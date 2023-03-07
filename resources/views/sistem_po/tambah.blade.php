@@ -29,19 +29,23 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-lg-3">
-                                <label for="">Tanggal</label>
+                            <div class="col-lg-4">
+                                <label for="">Tanggal Order</label>
                                 <input type="date" name="tgl" class="form-control form-control-lg"
                                     value="{{date('Y-m-d')}}">
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <label for="">No Po</label>
                                 <input type="text" name="no_po" class="form-control form-control-lg" readonly
                                     value="PO{{$kode}}{{$no_po}}">
                             </div>
-                            <div class="col-lg-6">
-                                <label for="">Keterangan</label>
-                                <input type="text" name="ket" class="form-control form-control-lg">
+                            <div class="col-lg-4">
+                                <label for="">Kategori</label>
+                                <select name="" id="" class="select_view form-control">
+                                    @foreach ($kategori as $k)
+                                    <option value="{{$k->id_kategori_makanan}}">{{$k->nm_kategori}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
