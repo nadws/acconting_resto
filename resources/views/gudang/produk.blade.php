@@ -41,12 +41,16 @@ background-position: 0;
             <div class="card">
                 <div class="card-header">
                     <ul class="nav nav-pills">
+
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{{ route('produk',1) }}">Bahan &
                                 barang</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gudang') }}">Opname</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('kategori_bahan') }}">Kategori Bahan</a>
                         </li>
                     </ul>
                     <a href="#" data-bs-toggle="modal" data-bs-target="#tambah" class="btn icon icon-left btn-primary"

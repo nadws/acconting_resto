@@ -333,18 +333,19 @@ class Gudang extends Controller
 
     public function save_kategori_makanan(Request $r)
     {
+        $id_lokasi = Session::get('id_lokasi');
         DB::table('tb_kategori_makanan')->insert([
             'nm_kategori' => $r->nm_kategori,
-            'id_lokasi' => 1,
-            'jenis' => $r->id_jenis,
+            'id_lokasi' => $id_lokasi,
+            'jenis' => '1',
         ]);
-        return redirect()->route('kategoriMakanan', $r->id_jenis)->with('sukses', 'Berhasil tambah kategori makanan');
+        return redirect()->route('kategori_bahan')->with('sukses', 'Berhasil tambah kategori makanan');
     }
 
     public function hapus_kategori_makanan($id, $id_jenis)
     {
         DB::table('tb_kategori_makanan')->where('id_kategori_makanan', $id)->delete();
-        return redirect()->route('kategoriMakanan', $id_jenis)->with('sukses', 'Berhasil hapus kategori makanan');
+        return redirect()->route('kategori_bahan')->with('sukses', 'Berhasil tambah kategori makanan');
     }
 
     public function edit_kategori_makanan(Request $r)

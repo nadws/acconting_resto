@@ -23,7 +23,8 @@
     .td1 {
         border: 1px solid #999;
         padding: 1px 20px;
-        font-size: 11px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 </style>
 
@@ -31,48 +32,54 @@
     <div class="container-fluid mt-4">
         <div class="row justify-content-center ">
             <div class="col-lg-12 col-sm-12">
-                <h4 class="card-title " style="color: #435EBE">PENIMBANGAN BAHAN</h4>
+                <h4 class="card-title " style="color: #435EBE">PENIMBANGAN BAHAN {{$detail2->id_lokasi == '1' ?
+                    'TAKEMORI' : 'SOONDOBU'}}</h4>
                 <hr style="border: 2px solid #435EBE">
-                <table width="100%" cellpadding="10">
+                <table width="100%" cellpadding="3" style="font-size: 12px">
                     <tr>
-                        <td width="15%">Admin</td>
+                        <td width="20%">Nomor PO</td>
                         <td width="1%">:</td>
-                        <td width="40%">{{$detail2->admin}}</td>
+                        <td width="40%">{{$detail2->sub_no_po}}</td>
+                        <td width="20%">Pembeli</td>
+                        <td width="1%">:</td>
+                        <td width="30%">{{$detail2->pembeli}}</td>
+
+                    </tr>
+                    <tr>
                         <td width="20%">Tanggal Request</td>
                         <td width="1%">:</td>
                         <td>{{date('d-m-Y',strtotime($detail2->tgl))}}</td>
-                    </tr>
-                    <tr>
-                        <td width="15%">Nomor Pembelian</td>
+                        <td width="15%">Tempat Beli</td>
                         <td width="1%">:</td>
-                        <td>{{$detail2->sub_no_po}}</td>
-                        <td width="20%">Departement</td>
-                        <td width="1%">:</td>
-                        <td>{{Session::get('id_lokasi' == '1' ? 'Takemori' : 'Soonodbu')}}</td>
+                        <td>{{$detail2->tempat_beli}}</td>
                     </tr>
-
-
                 </table>
-
+                <div class="row">
+                    <div class="col-lg-12">
+                        <hr style="border: 1px solid black">
+                    </div>
+                </div>
                 <table class="table1" width="100%">
                     <thead>
                         <tr style="background-color: #3950A3; color: white">
-                            <th class="th1">Tanggal</th>
+                            <th class="th1">No</th>
                             <th class="th1">Bahan</th>
+                            <th class="th1" style="text-align: right">Qty Beli</th>
+                            <th class="th1">Satuan Beli</th>
                             <th class="th1" style="text-align: right">Qty Timbang</th>
-                            <th class="th1">Satuan</th>
-                            <th class="th1" style="text-align: right">Rp Satuan Timbang</th>
-                            <th class="th1" style="text-align: right">Total Rp Timbang</th>
+                            <th class="th1">Satuan Timbang</th>
+                            <th class="th1" style="text-align: right">Rp Satuan </th>
+                            <th class="th1" style="text-align: right">Total Rp </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($purchase as $p)
+                        @foreach ($purchase as $no => $p)
                         <tr>
-                            <td class="td1">{{date('d-m-Y', strtotime($p->tgl))}}</td>
+                            <td class="td1">{{$no+1}}</td>
                             <td class="td1">{{$p->nm_bahan}}</td>
-                            <td class="td1" style="text-align: right"><span
-                                    class="{{$p->qty == $p->qty_timbang ? '' : 'text-danger'}}">{{$p->qty_timbang}}</span>
-                            </td>
+                            <td class="td1" style="text-align: right">{{number_format($p->qty,0)}}</td>
+                            <td class="td1">{{$p->nm_satuan}}</td>
+                            <td class="td1" style="text-align: right">{{number_format($p->qty_timbang,0)}}</td>
                             <td class="td1">{{$p->satuan_timbang}}</td>
                             <td class="td1" style="text-align: right">{{number_format($p->rp_satuan_timbang,0)}}</td>
                             <td class="td1" style="text-align: right">{{number_format($p->ttl_rp_timbang,0)}}</td>
