@@ -5,7 +5,8 @@
         namaPermission: '',
         showDetail: function(id, namaPermission) {
             this.namaPermission = namaPermission
-            axios.get(`/detail_permission/${id}`)
+
+            axios.get(`/permission_gudang/${id}`)
                 .then(response => {
                     this.permissionButton = response.data
                     console.log(response.data)
@@ -61,8 +62,8 @@
                                                 <td>{{ $no + 1 }}</td>
                                                 <td>{{ $d->nm_permission }}</td>
                                                 <td>
-                                                    <a @click="showDetail({{ $d->id_permission }}, '{{$d->nm_permission}}')" href="#"
-                                                        id_halaman="{{ $d->id_permission }}"
+                                                    <a @click="showDetail({{ $d->id_permission }}, '{{ $d->nm_permission }}')"
+                                                        href="#" id_halaman="{{ $d->id_permission }}"
                                                         class="btn btn-sm btn-primary detail"><i class="fas fa-eye"></i></a>
                                                 </td>
                                             </tr>
@@ -79,83 +80,63 @@
 
         <form action="{{ route('permission_gudang.create') }}" method="post">
             @csrf
-            <div id="tambah" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel33">
-                                Tambah {{ $title }}
-                            </h4>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <i data-feather="x"></i>
-                            </button>
+            <x-modal :title="$title" id="tambah" btnSave="Y" size="modal-lg">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Nama Permission</label>
+                            <input required type="text" name="nm_permission" class="form-control">
                         </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="">Nama Permission</label>
-                                        <input type="text" name="nm_permission" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="">Url</label>
-                                        <input type="text" name="url" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <x-multiple-input>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="">Nama Butoon</label>
-                                        <input type="text" name="nm_button[]" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label for="">Jenis</label>
-                                        <select name="jenis[]" id="" class="form-control">
-                                            <option value="">- Pilih Jenis -</option>
-                                            <option value="create">Create</option>
-                                            <option value="read">Read</option>
-                                            <option value="update">Update</option>
-                                            <option value="delete">Delete</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </x-multiple-input>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Url</label>
+                            <input required type="text" name="url" class="form-control">
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                <i class="bx bx-x d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Close</span>
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bx bx-x d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Save</span>
-                            </button>
-                        </div>
-
                     </div>
                 </div>
-            </div>
+
+                <x-multiple-input>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="">Nama Butoon & Icon</label>
+                            <input type="text" name="nm_button[]" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="">Jenis</label>
+                            <select name="jenis[]" id="" class="form-control">
+                                <option value="">- Pilih Jenis -</option>
+                                <option value="create">Create</option>
+                                <option value="read">Read</option>
+                                <option value="update">Update</option>
+                                <option value="delete">Delete</option>
+                            </select>
+                        </div>
+                    </div>
+                </x-multiple-input>
+            </x-modal>
         </form>
 
-        <x-modal :title="$title" id="detail" btnSave="true">
-            <h5 x-text="namaPermission"></h5>
+        <x-modal title="Detail {{$title}}" id="detail" size="">
+            <h5 x-text="namaPermission" class="text-center"></h5>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nama Button</th>
+                        <th>#</th>
+                        <th>List Button</th>
                         <th>Jenis</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template x-for="d in permissionButton">
+                    <template x-for="(d, i) in permissionButton">
                         <tr>
-                            <td x-text="d.nm_permission_button"></td>
+                            <td x-text="i+1"></td>
+                            <td>
+                                <a href="#"
+                                    class="btn btn-sm btn-primary"><span x-html="d.nm_permission_button"></span></a>
+                            </td>
                             <td x-text="d.jenis"></td>
                         </tr>
                     </template>
@@ -163,4 +144,6 @@
             </table>
         </x-modal>
     </div>
+
 @endsection
+

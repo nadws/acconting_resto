@@ -4,6 +4,7 @@
     }">
         <template x-for="(row, index) in rows" :key="index">
             <div class="row">
+                
                 {{ $slot }}
 
                 <div class="col-lg-3">

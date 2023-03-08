@@ -36,7 +36,7 @@ class PermissionHalamanController extends Controller
             ]);
         }
 
-        return redirect()->route('permission_gudang')->with('sukses', 'Berhasil tambah data');
+        return redirect()->route('permission_gudang.index')->with('sukses', 'Berhasil tambah data');
     }
 
     public function detail_permission($id)

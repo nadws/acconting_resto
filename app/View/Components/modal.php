@@ -6,12 +6,13 @@ use Illuminate\View\Component;
 
 class modal extends Component
 {
-    public $title, $idModal, $btnSave;
-    public function __construct($title,$idModal = null, $btnSave = false)
+    public $title, $idModal, $btnSave, $size;
+    public function __construct($title,$idModal = null, $btnSave = '', $size = '')
     {
         $this->title = $title;
         $this->idModal = $idModal;
         $this->btnSave = $btnSave;
+        $this->size = $size;
     }
 
     /**
