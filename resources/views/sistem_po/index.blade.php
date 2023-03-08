@@ -41,8 +41,7 @@
 
                         @if (in_array(auth()->user()->id, $idBolehSet))
                         <a href="#" data-bs-toggle="modal" data-bs-target="#akses" class="btn btn-primary  float-end"><i
-                                class="fas fa-user-cog"></i>&nbsp; Akses
-                            Halaman</a>
+                                class="fas fa-cog"></i>&nbsp; setting</a>
                         @endif
 
 

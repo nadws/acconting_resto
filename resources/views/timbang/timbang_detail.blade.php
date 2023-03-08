@@ -48,6 +48,7 @@
                                 <label for="">Tempat beli</label>
                                 <input type="text" name="tempat_beli" class="form-control form-control-lg" readonly
                                     value="{{$beli->tempat_beli}}">
+                                <input type="text" name="timbang" value="{{ $beli->timbang }}">
                             </div>
                         </div>
                     </div>
@@ -71,7 +72,7 @@
                                 @foreach ($pembelian as $detail => $d)
 
                                 <input type="hidden" name="id_pembelian[]" value="{{ $d->id_pembelian }}">
-                                <input type="hidden" name="timbang[]" value="{{ $d->timbang }}">
+
                                 <input type="hidden" name="dimuka[]" value="{{ $d->dimuka }}">
                                 <input type="hidden" name="id_bahan[]" value="{{ $d->id_bahan }}">
                                 <tr>
@@ -91,7 +92,8 @@
                                     <td>
                                         <input type="text" name="qty[]" style="text-align: right;"
                                             class="form-control qty_beli qty_beli{{ $detail+1 }}" required
-                                            detail='{{ $detail+1 }}'>
+                                            detail='{{ $detail+1 }}'
+                                            value="{{empty($d->qty_timbang) ? '' : $d->qty_timbang}}">
                                         <input type="hidden" name="qty_beli[]" style="text-align: right;"
                                             class="form-control qty_beli" required>
                                     </td>
@@ -108,8 +110,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="h_satuan[]" style="text-align: right;"
-                                            class="form-control h_satuan h_satuan{{ $detail+1 }}" value="" readonly
-                                            detail='{{ $detail+1 }}'>
+                                            class="form-control h_satuan h_satuan{{ $detail+1 }}"
+                                            value="{{empty($d->rp_satuan_timbang) ? '' : $d->rp_satuan_timbang}}"
+                                            readonly detail='{{ $detail+1 }}'>
                                     </td>
                                     <td>
                                         <input type="number" name="ttl_rp[]" style="text-align: right;"

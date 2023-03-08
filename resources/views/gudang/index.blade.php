@@ -50,6 +50,9 @@ background-position: 0;
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ route('gudang') }}">Opname</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('kategori_bahan') }}">Kategori Bahan</a>
+                            </li>
                         </ul>
                         <button type="submit" class="btn icon icon-left btn-primary "
                             style="float: right; margin-left: 2px"><i class="far fa-save"></i>

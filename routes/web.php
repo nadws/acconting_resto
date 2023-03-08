@@ -13,6 +13,7 @@ use App\Http\Controllers\Pembelian_purchase;
 use App\Http\Controllers\PermissionHalamanController;
 use App\Http\Controllers\Sistem_po;
 use App\Http\Controllers\TimbangController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get_merk', [Gudang::class, 'get_merk'])->name('get_merk');
     Route::get('/tambah_bahan', [Gudang::class, 'tambah_bahan'])->name('tambah_bahan');
     Route::get('/delete_bahan', [Gudang::class, 'delete_bahan'])->name('delete_bahan');
+
+    Route::get('/kategori_bahan', [KategoriController::class, 'index'])->name('kategori_bahan');
+    Route::post('/save_kategori', [KategoriController::class, 'save_kategori'])->name('save_kategori');
 
     Route::get('/buku_besar', [Buku_besar::class, 'index'])->name('buku_besar');
     Route::get('/detail_buku', [Buku_besar::class, 'detail_buku'])->name('detail_buku');
