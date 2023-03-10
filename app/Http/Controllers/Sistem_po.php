@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 
 class Sistem_po extends Controller
 {
+
     public function index(Request $r)
     {
         $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
@@ -23,13 +24,21 @@ class Sistem_po extends Controller
 
         $id_lokasi = Session::get('id_lokasi');
         $id_user = Auth::user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(404);
+        }
         $data = [
             'title' => 'Purchase Order (PO)',
+            'halaman' => '1',
             'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, a.beli FROM purchase as a 
             where a.id_lokasi = '$id_lokasi'
             group by a.no_po order by a.id_purchase DESC"),
             'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
             'idBolehSet' => config('idBolehSet'),
+
             // button
 
             'tambah' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '1' and a.id_user = '$id_user'"),
