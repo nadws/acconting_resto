@@ -14,6 +14,13 @@ class Sistem_po extends Controller
 {
     public function index(Request $r)
     {
+        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', auth()->user()->id], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if(empty($cek)) {
+            return abort(403);
+        }
+   
+
         $id_lokasi = Session::get('id_lokasi');
         $id_user = Auth::user()->id;
         $data = [
