@@ -48,7 +48,7 @@
                                 <label for="">Tempat beli</label>
                                 <input type="text" name="tempat_beli" class="form-control form-control-lg" readonly
                                     value="{{$beli->tempat_beli}}">
-                                <input type="text" name="timbang" value="{{ $beli->timbang }}">
+                                <input type="hidden" name="timbang" value="{{ $beli->timbang }}">
                             </div>
                         </div>
                     </div>

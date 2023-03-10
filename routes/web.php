@@ -162,7 +162,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/save_permission', [Sistem_po::class, 'save_permission'])->name('save_permission');
     Route::get('/load_pesanan', [Sistem_po::class, 'load_pesanan'])->name('load_pesanan');
 
-    Route::prefix('permission_gudang')->middleware('rolePresiden')->name('permission_gudang.')->group(function(){
+    Route::prefix('permission_gudang')->middleware('rolePresiden')->name('permission_gudang.')->group(function () {
         Route::get('/', [PermissionHalamanController::class, 'index'])->name('index');
         Route::get('/{id}', [PermissionHalamanController::class, 'detail_permission'])->name('detail');
         Route::post('/create', [PermissionHalamanController::class, 'create'])->name('create');

@@ -39,7 +39,7 @@
                             </li>
                         </ul>
 
-                        @if (in_array(auth()->user()->id, $idBolehSet))
+                        @if (Auth::user()->id_posisi == '1')
                         <a href="#" data-bs-toggle="modal" data-bs-target="#akses" class="btn btn-primary  float-end"><i
                                 class="fas fa-cog"></i>&nbsp; setting</a>
                         @endif
@@ -89,7 +89,8 @@
 
                                         @if (!empty($hapus))
                                         <a href="{{ route('hapus_po', ['no_po' => $p->no_po]) }}"
-                                            class="btn btn-sm btn-danger">{!! $hapus->nm_permission_button !!}</a>
+                                            class="btn btn-sm btn-danger {{ $p->beli == 'Y' ? 'disabled' : '' }}">{!!
+                                            $hapus->nm_permission_button !!}</a>
                                         @endif
 
 
