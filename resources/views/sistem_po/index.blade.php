@@ -39,10 +39,7 @@
                             </li>
                         </ul>
 
-                        @if (Auth::user()->id_posisi == '1')
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#akses" class="btn btn-primary  float-end"><i
-                                class="fas fa-cog"></i>&nbsp; setting</a>
-                        @endif
+                        <x-btn-setting  />
 
 
                         @if (!empty($tambah))
@@ -106,15 +103,7 @@
         </div>
 
     </div>
-    <style>
-        .modal-lg-max2 {
-            max-width: 1350px;
-        }
 
-        .modal-lg-max3 {
-            max-width: 1200px;
-        }
-    </style>
     <div id="detail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg-max2" role="document">
             <div class="modal-content">
@@ -143,7 +132,7 @@
     <form action="{{route('save_permission')}}" method="post">
         @csrf
         <div id="akses" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg-max3" role="document">
+            <div class="modal-dialog  modal-lg-max" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel33">
@@ -153,6 +142,7 @@
                             <i data-feather="x"></i>
                         </button>
                     </div>
+                    <input type="hidden" name="route" value="sistem_po">
                     <div class="modal-body">
 
                         <table class="table table-bordered">
@@ -174,40 +164,16 @@
                                 a
                                 LEFT JOIN (
                                 SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                                WHERE b.id_user ='$u->id'
+                                WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
                                 ) AS b ON b.id_permission_button = a.id_permission_button");
 
-                                $create = DB::select("SELECT a.*, b.id_permission_page FROM permission_button_gudang AS
-                                a
-                                LEFT JOIN (
-                                SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                                WHERE b.id_user ='$u->id'
-                                ) AS b ON b.id_permission_button = a.id_permission_button
-                                WHERE a.jenis = 'create'");
+                                $create = btnSetHal($halaman, $u->id, 'create');
 
-                                $read = DB::select("SELECT a.*, b.id_permission_page FROM permission_button_gudang AS
-                                a
-                                LEFT JOIN (
-                                SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                                WHERE b.id_user ='$u->id'
-                                ) AS b ON b.id_permission_button = a.id_permission_button
-                                WHERE a.jenis = 'read'");
+                                $read = btnSetHal($halaman, $u->id, 'read');
 
-                                $update = DB::select("SELECT a.*, b.id_permission_page FROM permission_button_gudang AS
-                                a
-                                LEFT JOIN (
-                                SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                                WHERE b.id_user ='$u->id'
-                                ) AS b ON b.id_permission_button = a.id_permission_button
-                                WHERE a.jenis = 'update'");
+                                $update = btnSetHal($halaman, $u->id, 'update');
 
-                                $delete = DB::select("SELECT a.*, b.id_permission_page FROM permission_button_gudang AS
-                                a
-                                LEFT JOIN (
-                                SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                                WHERE b.id_user ='$u->id'
-                                ) AS b ON b.id_permission_button = a.id_permission_button
-                                WHERE a.jenis = 'delete'");
+                                $delete = btnSetHal($halaman, $u->id, 'delete');
 
 
                                 @endphp
@@ -225,7 +191,7 @@
                                         value="{{$u->id}}">
                                     </td>
                                     <td>
-                                        <input type="hidden" name="id_permission_gudang" value="1">
+                                        <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
 
                                         @foreach ($create as $c)
                                         <label><input type="checkbox" name="id_permission{{$u->id}}[]"

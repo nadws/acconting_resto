@@ -31,25 +31,15 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-
-                {{-- <li class="sidebar-item  has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-receipt-cutoff"></i>
-                        <span>Pembelian</span>
+                @if (in_array(auth()->user()->id, [1,2]))
+                <li class="sidebar-item">
+                    <a href="{{route('permission_gudang.index')}}" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
+                        <span>Permission Gudang</span>
                     </a>
-                    <ul class="submenu ">
-                        <li class="submenu-item ">
-                            <a href="{{ route('sistem_po') }}">Pengajuan</a>
-                            <a href="{{ route('pembelian_po') }}">Pembelian</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="{{ route('timbang') }}">Timbang</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="{{ route('pembayaran') }}">Di bukukan</a>
-                        </li>
-                    </ul>
-                </li> --}}
+                </li>
+                @endif
+
                 <li class="sidebar-item  has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="fas fa-warehouse"></i>

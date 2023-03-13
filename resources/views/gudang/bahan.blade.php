@@ -1,34 +1,6 @@
 @extends('theme.app')
 @section('content')
-<style>
-    .form-switch2 .form-check-input2 {
-        background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-background-position: 0;
-        border-radius: 2em;
-        margin-left: -2.5em;
-        transition: background-position .15s ease-in-out;
-        width: 40px;
-        transform: scale(2);
-        margin-top: 8px;
-        margin-left: -22px;
-    }
 
-    .choices__list--multiple .choices__item {
-        display: inline-block;
-        vertical-align: middle;
-        border-radius: 20px;
-        padding: 4px 10px;
-        font-size: 12px;
-        font-weight: 500;
-        margin-right: 3.75px;
-        margin-bottom: 3.75px;
-        background-color: #3D56AD;
-        border: 1px solid #3D56AD;
-        color: #fff;
-        word-break: break-all;
-        box-sizing: border-box;
-    }
-</style>
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -57,6 +29,7 @@ background-position: 0;
                 @csrf
                 <div class="card">
                     <div class="card-header">
+                        
                         <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
                             class="btn icon icon-left btn-primary" style="float: right"><i
                                 class="bi bi-plus-circle"></i> Tambah</a>

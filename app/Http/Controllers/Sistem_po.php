@@ -15,12 +15,6 @@ class Sistem_po extends Controller
 
     public function index(Request $r)
     {
-        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
-        $cek = DB::table('permission_perpage')->where([['id_user', auth()->user()->id], ['id_permission_gudang', $cekP->id_permission]])->first();
-        if(empty($cek)) {
-            return abort(403);
-        }
-   
 
         $id_lokasi = Session::get('id_lokasi');
         $id_user = Auth::user()->id;
@@ -28,7 +22,7 @@ class Sistem_po extends Controller
         $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
         $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
         if (empty($cek)) {
-            return abort(404);
+            return abort(403, 'Akses Tidak ada');
         }
         $data = [
             'title' => 'Purchase Order (PO)',
@@ -37,47 +31,23 @@ class Sistem_po extends Controller
             where a.id_lokasi = '$id_lokasi'
             group by a.no_po order by a.id_purchase DESC"),
             'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
-            'idBolehSet' => config('idBolehSet'),
+
 
             // button
 
-            'tambah' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '1' and a.id_user = '$id_user'"),
+            'tambah' => btnHal(1,$id_user),
 
-            'print' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '2' and a.id_user = '$id_user'"),
+            'print' => btnHal(2,$id_user),
 
-            'edit' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '3' and a.id_user = '$id_user'"),
+            'edit' => btnHal(3,$id_user),
 
-            'hapus' => DB::selectOne("SELECT * FROM permission_perpage as a left join permission_button_gudang as b on b.id_permission_button = a.id_permission_button where a.id_permission_button = '4' and a.id_user = '$id_user'"),
+            'hapus' => btnHal(4,$id_user),
 
         ];
         return view('sistem_po.index', $data);
     }
 
-    public function save_permission(Request $r)
-    {
-        $id_user = $r->id_user;
-        $id_permission_gudang = $r->id_permission_gudang;
-        DB::table('permission_perpage')->where('id_permission_gudang', $id_permission_gudang)->delete();
-
-        if (!empty($id_user)) {
-            for ($i = 0; $i < count($id_user); $i++) {
-                $id_permission = "id_permission" . $id_user[$i];
-                $id_permission = $r->$id_permission;
-
-                foreach ($id_permission as $b => $d) {
-                    $data = [
-                        'id_permission_button' => $d,
-                        'id_user' => $id_user[$i],
-                        'id_permission_gudang' => $id_permission_gudang
-                    ];
-                    DB::table('permission_perpage')->insert($data);
-                }
-            }
-            $pesan = 'sukses';
-        }
-
-        return redirect()->route("sistem_po")->with($pesan ?? 'error', "Permission " . strtoupper($pesan ?? 'error') . " di input");
-    }
+    
 
     public function tambah_po(Request $r)
     {

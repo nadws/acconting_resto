@@ -73,9 +73,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tambah_bahan', [Gudang::class, 'tambah_bahan'])->name('tambah_bahan');
     Route::get('/delete_bahan', [Gudang::class, 'delete_bahan'])->name('delete_bahan');
 
-    Route::get('/kategori_bahan', [KategoriController::class, 'index'])->name('kategori_bahan');
+    Route::get('/kategori_bahan/', [KategoriController::class, 'index'])->name('kategori_bahan');
+    Route::get('/load_add_bahan', [KategoriController::class, 'load_add_bahan'])->name('load_add_bahan');
     Route::post('/save_kategori', [KategoriController::class, 'save_kategori'])->name('save_kategori');
-
+    Route::post('/save_add_bahan', [KategoriController::class, 'save_add_bahan'])->name('save_add_bahan');
+  
     Route::get('/buku_besar', [Buku_besar::class, 'index'])->name('buku_besar');
     Route::get('/detail_buku', [Buku_besar::class, 'detail_buku'])->name('detail_buku');
 
@@ -159,9 +161,9 @@ Route::middleware(['auth'])->group(function () {
 
     // opname peralatan
     Route::get('/opname_peralatan', [OpnamePeralatanController::class, 'index'])->name('opname_peralatan');
-    Route::post('/save_permission', [Sistem_po::class, 'save_permission'])->name('save_permission');
     Route::get('/load_pesanan', [Sistem_po::class, 'load_pesanan'])->name('load_pesanan');
-
+    Route::post('/save_permission', [PermissionHalamanController::class, 'save_permission'])->name('save_permission');
+    
     Route::prefix('permission_gudang')->middleware('rolePresiden')->name('permission_gudang.')->group(function () {
         Route::get('/', [PermissionHalamanController::class, 'index'])->name('index');
         Route::get('/{id}', [PermissionHalamanController::class, 'detail_permission'])->name('detail');

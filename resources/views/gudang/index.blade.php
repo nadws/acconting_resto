@@ -1,19 +1,5 @@
 @extends('theme.app')
 @section('content')
-<style>
-    .form-switch2 .form-check-input2 {
-        background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-background-position: 0;
-        border-radius: 2em;
-        margin-left: -2.5em;
-        transition: background-position .15s ease-in-out;
-        width: 40px;
-        transform: scale(2);
-        margin-top: 8px;
-        margin-left: -22px;
-    }
-</style>
-
 <div id="main">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
@@ -44,7 +30,7 @@ background-position: 0;
                     <div class="card-header">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="nav-link " aria-current="page" href="{{ route('produk',1) }}">Bahan &
+                                <a class="nav-link " aria-current="page" href="{{ route('produk', 1) }}">Bahan &
                                     barang</a>
                             </li>
                             <li class="nav-item">
@@ -54,12 +40,19 @@ background-position: 0;
                                 <a class="nav-link" href="{{ route('kategori_bahan') }}">Kategori Bahan</a>
                             </li>
                         </ul>
-                        <button type="submit" class="btn icon icon-left btn-primary "
+                        <x-btn-setting />
+
+                        @if (!empty($tambah))
+                        <button type="submit" class="me-1 btn icon icon-left btn-primary "
                             style="float: right; margin-left: 2px"><i class="far fa-save"></i>
                             Opname</button>
+                        @endif
+
+                        @if (!empty($read))
                         <a href="{{ route('export_opname') }}" class="btn icon icon-left btn-primary"
                             style="float: right;margin-left: 2px"><i class="bi bi-file-earmark-excel"></i>
                             Export</a>
+                        @endif
                     </div>
                     <div class="card-body">
 
@@ -89,15 +82,12 @@ background-position: 0;
                                     $tgl2 = date('Y-m-d', strtotime('30 days', strtotime($j->tgl1)));
 
                                     if (empty($j->tgl1)) {
-                                    $tKerja='0';
+                                    $tKerja = '0';
                                     } else {
                                     $totalKerja = new DateTime($tgl1);
                                     $today = new DateTime($tgl2);
                                     $tKerja = $today->diff($totalKerja);
                                     }
-
-
-
 
                                     @endphp
                                     <td align="right">{{ number_format($stk, 0) }} </td>
@@ -231,6 +221,82 @@ background-position: 0;
         </div>
     </div>
 
+    <form action="{{ route('save_permission') }}" method="post">
+        @csrf
+        <x-modal id="akses" title="Setting Akses" btnSave="Y" size="modal-lg-max">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Halaman</th>
+                        <th>Create</th>
+                        <th>Read</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($user as $u)
+                    @php
+                    $akses = DB::selectOne("SELECT a.*, b.id_permission_page FROM permission_button_gudang
+                    AS
+                    a
+                    LEFT JOIN (
+                    SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
+                    WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
+                    ) AS b ON b.id_permission_button = a.id_permission_button");
+
+                    $create = btnSetHal($halaman, $u->id, 'create');
+
+                    $read = btnSetHal($halaman, $u->id, 'read');
+
+                    
+
+                    @endphp
+                    <input type="hidden" name="route" value="gudang">
+                    <tr>
+                        <td>{{ $u->nama }}</td>
+
+                        <td>
+                            <label><input type="checkbox" class="akses_h akses_h{{ $u->id }}" id_user="{{ $u->id }}"
+                                    id_user="{{ $u->id }}" {{ empty($akses->id_permission_page) ? '' : 'Checked' }} />
+                                Akses</label>
+                            <input type="hidden" class="open_check{{ $u->id }}" name="id_user[]" {{
+                                empty($akses->id_permission_page) ? 'disabled' : '' }}
+                            value="{{ $u->id }}">
+                        </td>
+                        <td>
+                            <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
+
+                            @foreach ($create as $c)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $c->id_permission_button }}" {{ empty($c->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $c->nm_permission_button !!}</label>
+                            <br>
+                            @endforeach
+                        </td>
+                        <td>
+
+                            @foreach ($read as $r)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $r->nm_permission_button !!}</label> <br>
+                            @endforeach
+                        </td>
+                        
+
+                    </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </x-modal>
+    </form>
+
     <footer>
         <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
@@ -247,12 +313,11 @@ background-position: 0;
 @section('scripts')
 <script>
     $(document).ready(function() {
-            $('.select2').select2({
-            });
+            $('.select2').select2({});
 
-            $(document).on('change', '.filterKategoriMakanan', function(){
+            $(document).on('change', '.filterKategoriMakanan', function() {
                 var id_kategori = $(this).val()
-                document.location.href = "{{route('gudang')}}?id_kategori="+id_kategori
+                document.location.href = "{{ route('gudang') }}?id_kategori=" + id_kategori
             })
 
 
@@ -271,6 +336,17 @@ background-position: 0;
 
 
             });
+
+            $(document).on('click', '.akses_h', function() {
+                    var id_user = $(this).attr('id_user');
+                    if ($('.akses_h' + id_user).prop("checked") == true) {
+                        $('.open_check' + id_user).removeAttr('disabled');
+                    } else {
+                        $('.open_check' + id_user).prop('disabled', true);
+
+                    }
+
+                });
         });
 </script>
 @endsection

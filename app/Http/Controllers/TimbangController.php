@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\Timbangan;
 use App\Models\Listbahan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -11,9 +12,17 @@ use Illuminate\Support\Facades\Session;
 
 class TimbangController extends Controller
 {
-    public function index()
+    public function index(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = auth()->user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(403, 'Akses Tidak ada');
+        }
+
         $data = [
             'title' => 'Timbang',
             'pembelian' => DB::select("SELECT a.pembeli, a.tempat_beli, a.dimuka, a.selesai, a.timbang,a.tgl,a.admin,a.no_po, a.sub_no_po, sum(a.ttl_rp) as ttl_rp, c.lain FROM pembelian_purchase as a
@@ -23,8 +32,16 @@ class TimbangController extends Controller
             GROUP BY a.sub_no_po
             order by a.sub_no_po DESC;
             "),
+             'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
+             'halaman' => 6,
+             // button
+ 
+             'tambah' => btnHal(9,$id_user),
+             'update' => btnHal(17,$id_user),
+             'print' => btnHal(10,$id_user),
 
         ];
+
         return view('timbang.timbang', $data);
     }
 

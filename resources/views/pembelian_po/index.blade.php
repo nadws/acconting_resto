@@ -38,11 +38,12 @@
                             <a class="nav-link" href="{{ route('timbang') }}">Timbang</a>
                         </li>
                     </ul>
+
+                    <x-btn-setting />
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-
-
                         <table class="table" id="table1">
                             <thead>
                                 <tr>
@@ -60,36 +61,39 @@
                             <tbody>
                                 @foreach ($purchase as $i => $p)
                                 <tr>
-                                    <td>{{$i+1}}</td>
-                                    <td>{{date('d-m-Y',strtotime($p->tgl))}}</td>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($p->tgl)) }}</td>
                                     <td>
-                                        {{$p->no_po}}
+                                        {{ $p->no_po }}
                                     </td>
 
-                                    <td>Rp. {{number_format($p->total,0)}}</td>
-                                    <td>Rp. {{number_format($p->total_beli,0)}}</td>
-                                    <td>{{$p->admin}}</td>
-                                    <td>{{$p->admin_beli}}</td>
+                                    <td>Rp. {{ number_format($p->total, 0) }}</td>
+                                    <td>Rp. {{ number_format($p->total_beli, 0) }}</td>
+                                    <td>{{ $p->admin }}</td>
+                                    <td>{{ $p->admin_beli }}</td>
                                     <td>
-                                        <span class=" badge bg-{{$p->po != $p->beli ? 'danger' : 'success'}}"><i
-                                                class="fas {{$p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks'}} "></i>
-                                            {{$p->po != $p->beli
-                                            ? 'Diproses' : 'Selesai'}}</span>
+                                        <span class=" badge bg-{{ $p->po != $p->beli ? 'danger' : 'success' }}"><i
+                                                class="fas {{ $p->po != $p->beli ? 'fa-clipboard-list' : 'fa-tasks' }} "></i>
+                                            {{ $p->po != $p->beli ? 'Diproses' : 'Selesai' }}</span>
                                     </td>
                                     <td>
+                                        @if (!empty($tambah))
                                         @if ($p->po != $p->beli)
-                                        <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                        <a href="{{ route('tambah_beli', ['no_po' => $p->no_po]) }}"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Pembelian"
                                             class="btn btn-sm btn-primary">Belanja
                                         </a>
                                         @else
-                                        <a href="{{route('tambah_beli',['no_po' => $p->no_po])}}"
+                                        <a href="{{ route('tambah_beli', ['no_po' => $p->no_po]) }}"
                                             class="btn btn-sm btn-primary disabled">Belanja
                                         </a>
                                         @endif
+                                        @endif
+                                        @if (!empty($history))
                                         <a href="" data-bs-toggle="modal" data-bs-target="#detail"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Nota Pembelian"
-                                            no_po="{{$p->no_po}}" class="btn btn-warning btn-sm detail">History</a>
+                                            no_po="{{ $p->no_po }}" class="btn btn-warning btn-sm detail">History</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -101,154 +105,159 @@
             </div>
         </section>
     </div>
-    <style>
-        .modal-lg-max2 {
-            max-width: 1350px;
-        }
-    </style>
 
-    <div id="detail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="detail">
-                        Daftar {{$title}}
-                    </h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id=detail_po></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Close</span>
-                    </button>
-                </div>
+    <x-modal id="detail" title="Daftar {{ $title }}" size="modal-lg">
+        <div id=detail_po></div>
+    </x-modal>
 
-            </div>
-        </div>
-    </div>
-    <div id="detail_sub" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg-max2" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="detail_sub">
-                        Daftar {{$title}}
-                    </h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id=detail_sub_po></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Close</span>
-                    </button>
-                </div>
+    <x-modal id="detail_sub" title="Daftar {{ $title }}" size="modal-lg-max2">
+        <div id=detail_sub_po></div>
+    </x-modal>
 
-            </div>
-        </div>
-    </div>
-    <div id="print" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg-max2" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">
-                        Daftar {{$title}}
-                    </h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div id="nota"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Close</span>
-                    </button>
-                </div>
+    <x-modal id="print" title="Daftar {{ $title }}" size="modal-lg-max2">
+        <div id="nota"></div>
+    </x-modal>
 
-            </div>
-        </div>
-    </div>
+    <form action="{{ route('save_permission') }}" method="post">
+        @csrf
+        <x-modal id="akses" title="Setting Akses" btnSave="Y" size="modal-lg-max">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Halaman</th>
+                        <th>Create</th>
+                        <th>Read</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($user as $u)
+                    @php
+                    $akses = DB::selectOne("SELECT a.*, b.id_permission_page FROM permission_button_gudang
+                    AS
+                    a
+                    LEFT JOIN (
+                    SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
+                    WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
+                    ) AS b ON b.id_permission_button = a.id_permission_button");
 
+                    $create = btnSetHal($halaman, $u->id, 'create');
 
-    <footer>
-        <div class="footer clearfix mb-0 text-muted">
-            <div class="float-start">
-                <p>2021 &copy; Mazer</p>
-            </div>
-            <div class="float-end">
-                <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                        href="https://saugi.me">Saugi</a></p>
-            </div>
-        </div>
-    </footer>
+                    $read = btnSetHal($halaman, $u->id, 'read');
+
+                    @endphp
+                    <input type="hidden" name="route" value="pembelian_po">
+                    <tr>
+                        <td>{{ $u->nama }}</td>
+
+                        <td>
+                            <label><input type="checkbox" class="akses_h akses_h{{ $u->id }}" id_user="{{ $u->id }}"
+                                    id_user="{{ $u->id }}" {{ empty($akses->id_permission_page) ? '' : 'Checked' }} />
+                                Akses</label>
+                            <input type="hidden" class="open_check{{ $u->id }}" name="id_user[]" {{
+                                empty($akses->id_permission_page) ? 'disabled' : '' }}
+                            value="{{ $u->id }}">
+                        </td>
+                        <td>
+                            <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
+
+                            @foreach ($create as $c)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $c->id_permission_button }}" {{ empty($c->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $c->nm_permission_button !!}</label>
+                            <br>
+                            @endforeach
+                        </td>
+                        <td>
+
+                            @foreach ($read as $r)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $r->nm_permission_button !!}</label> <br>
+                            @endforeach
+                        </td>
+
+                    </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </x-modal>
+    </form>
 </div>
 @endsection
 
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $(document).on('click', '.detail', function() {
-            
-            var no_po = $(this).attr('no_po');
-            $.ajax({
-                url: "{{ route('detail_po2') }}?no_po=" + no_po,
-                type: "Get",
-                success: function(data) {
-                 
-                    $('#detail_po').html(data);
-                }
+            $(document).on('click', '.detail', function() {
+
+                var no_po = $(this).attr('no_po');
+                $.ajax({
+                    url: "{{ route('detail_po2') }}?no_po=" + no_po,
+                    type: "Get",
+                    success: function(data) {
+
+                        $('#detail_po').html(data);
+                    }
+                });
             });
-        });
-        $(document).on('click', '.print', function() {
-            
-            var no_po = $(this).attr('no_po');
-            $.ajax({
-                url: "{{ route('print_detail') }}?no_po=" + no_po,
-                type: "Get",
-                success: function(data) {
-                 
-                    $('#nota').html(data);
-                }
+            $(document).on('click', '.print', function() {
+
+                var no_po = $(this).attr('no_po');
+                $.ajax({
+                    url: "{{ route('print_detail') }}?no_po=" + no_po,
+                    type: "Get",
+                    success: function(data) {
+
+                        $('#nota').html(data);
+                    }
+                });
             });
-        });
-        $(document).on('click', '.detail_sub', function() {
-            var sub_po = $(this).attr('sub_po');
-            $("#detail_sub").modal('show')
-            $.ajax({
-                url: "{{ route('detail_sub') }}?sub_po=" + sub_po,
-                type: "Get",
-                success: function(data) {
-                    $('#detail_sub_po').html(data);
-                    $('#tb_bkin').DataTable({
-                "paging": false,
-                "pageLength": 100,
-                "scrollY": "100%",
-                "lengthChange": false,
-                // "ordering": false,
-                "info": false,
-                "stateSave": true,
-                "autoWidth": true,
-                // "order": [ 5, 'DESC' ],
-                "searching": true,
+            $(document).on('click', '.detail_sub', function() {
+                var sub_po = $(this).attr('sub_po');
+                $("#detail_sub").modal('show')
+                $.ajax({
+                    url: "{{ route('detail_sub') }}?sub_po=" + sub_po,
+                    type: "Get",
+                    success: function(data) {
+                        $('#detail_sub_po').html(data);
+                        $('#tb_bkin').DataTable({
+                            "paging": false,
+                            "pageLength": 100,
+                            "scrollY": "100%",
+                            "lengthChange": false,
+                            // "ordering": false,
+                            "info": false,
+                            "stateSave": true,
+                            "autoWidth": true,
+                            // "order": [ 5, 'DESC' ],
+                            "searching": true,
+                        });
+
+                    }
+                });
             });
 
-                }
-            });
-        });
+            $(document).on('click', '.akses_h', function() {
+                var id_user = $(this).attr('id_user');
+                if ($('.akses_h' + id_user).prop("checked") == true) {
+                    $('.open_check' + id_user).removeAttr('disabled');
+                } else {
+                    $('.open_check' + id_user).prop('disabled', true);
 
-        
-        
-    });
+                }
+
+            });
+
+
+
+        });
 </script>
 @endsection

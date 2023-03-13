@@ -19,7 +19,7 @@
                         <span class="d-none d-sm-block">Close</span>
                     </button>
                     @if ($btnSave == 'Y')
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <button type="submit" class="btn btn-primary">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Save</span>
                     </button>

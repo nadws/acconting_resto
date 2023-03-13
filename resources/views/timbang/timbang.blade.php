@@ -41,6 +41,7 @@
                                 </li>
                             </ul>
 
+                            <x-btn-setting />
                             {{-- <a href="#" data-bs-toggle="modal" data-bs-target="#tambah"
                                 class="btn icon icon-left btn-primary" style="float: right"><i
                                     class="bi bi-plus-circle"></i>
@@ -65,41 +66,47 @@
                                 <tbody>
                                     @foreach ($pembelian as $no => $d)
                                     <tr>
-                                        <td>{{ $no+1 }}</td>
+                                        <td>{{ $no + 1 }}</td>
                                         <td>{{ date('d-m-Y', strtotime($d->tgl)) }}</td>
-                                        <td><a href="#" class="detailPo" sub_no_po="{{$d->sub_no_po}}">{{ $d->sub_no_po
-                                                }}</a></td>
+                                        <td><a href="#" class="detailPo" sub_no_po="{{ $d->sub_no_po }}">{{
+                                                $d->sub_no_po }}</a></td>
                                         <td>{{ $d->admin }}</td>
-                                        <td>Rp. {{ number_format($d->ttl_rp + $d->lain,0) }}</td>
+                                        <td>Rp. {{ number_format($d->ttl_rp + $d->lain, 0) }}</td>
 
                                         <td>
-                                            {{$d->pembeli}}
+                                            {{ $d->pembeli }}
                                         </td>
                                         <td>
-                                            {{$d->tempat_beli}}
+                                            {{ $d->tempat_beli }}
                                         </td>
                                         <td>
                                             <h6>
-                                                <span class=" badge bg-{{$d->timbang == 'T' ? 'danger' :  'success' }}">
+                                                <span class=" badge bg-{{ $d->timbang == 'T' ? 'danger' : 'success' }}">
                                                     <i
-                                                        class="fas {{$d->timbang == 'T' ? 'fa-clipboard-list' :  'fa-tasks' }} "></i>
-                                                    {{$d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
+                                                        class="fas {{ $d->timbang == 'T' ? 'fa-clipboard-list' : 'fa-tasks' }} "></i>
+                                                    {{ $d->timbang == 'T' ? 'Diproses' : 'Selesai' }}</span>
 
 
                                             </h6>
                                         </td>
                                         <td>
                                             @if ($d->timbang == 'Y')
-                                            <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
-                                                class="btn btn-sm btn-success {{$d->selesai == 'T' ? '' : 'disabled'}} "><i
-                                                    class="fas fa-pen"></i></a>
+                                                @if (!empty($update))
+                                                <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
+                                                    class="btn btn-sm btn-success {{ $d->selesai == 'T' ? '' : 'disabled' }} "><i
+                                                        class="fas fa-pen"></i></a>
+                                                @endif
                                             @else
-                                            <a href="{{ route('timbangView', $d->sub_no_po) }}"
-                                                class="btn btn-sm btn-primary">Timbang</a>
+                                                @if (!empty($tambah))
+                                                <a href="{{ route('timbangView', $d->sub_no_po) }}"
+                                                    class="btn btn-sm btn-primary">Timbang</a>
+                                                @endif
                                             @endif
-                                            <a href="{{ route('print_timbang',['sub_no_po' => $d->sub_no_po]) }}"
+                                            @if (!empty($print))
+                                            <a href="{{ route('print_timbang', ['sub_no_po' => $d->sub_no_po]) }}"
                                                 target="_blank" class="btn btn-sm btn-primary"><i
                                                     class="fas fa-print"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -113,58 +120,125 @@
         </section>
     </div>
 </div>
-<style>
-    .modal-lg-max2 {
-        max-width: 1350px;
-    }
-</style>
-<div id="modalDetail" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg-max2" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel33">
-                    Detail {{$title}}
-                </h4>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="detail_po"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Close</span>
-                </button>
-                {{-- <button type="submit" class="btn btn-primary ml-1">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Save</span>
-                </button> --}}
-            </div>
+<x-modal id="modalDetail" title="Detail {{ $title }}" size="modal-lg-max">
+    <div id="detail_po"></div>
+</x-modal>
 
-        </div>
-    </div>
-</div>
+<form action="{{ route('save_permission') }}" method="post">
+    @csrf
+    <x-modal id="akses" title="Setting Akses" btnSave="Y" size="modal-lg-max">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Halaman</th>
+                    <th>Create</th>
+                    <th>Read</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($user as $u)
+                @php
+                $akses = DB::selectOne("SELECT a.*, b.id_permission_page FROM permission_button_gudang
+                AS
+                a
+                LEFT JOIN (
+                SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
+                WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
+                ) AS b ON b.id_permission_button = a.id_permission_button");
+
+                $create = btnSetHal($halaman, $u->id, 'create');
+
+                $read = btnSetHal($halaman, $u->id, 'read');
+
+                $update = btnSetHal($halaman, $u->id, 'update');
+
+                @endphp
+                <input type="hidden" name="route" value="timbang">
+                <tr>
+                    <td>{{ $u->nama }}</td>
+
+                    <td>
+                        <label><input type="checkbox" class="akses_h akses_h{{ $u->id }}" id_user="{{ $u->id }}"
+                                id_user="{{ $u->id }}" {{ empty($akses->id_permission_page) ? '' : 'Checked' }} />
+                            Akses</label>
+                        <input type="hidden" class="open_check{{ $u->id }}" name="id_user[]" {{
+                            empty($akses->id_permission_page) ? 'disabled' : '' }} value="{{ $u->id }}">
+                    </td>
+                    <td>
+                        <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
+
+                        @foreach ($create as $c)
+                        <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                value="{{ $c->id_permission_button }}" {{ empty($c->id_permission_page) ? '' : 'Checked'
+                            }}
+                            class="open_check{{ $u->id }}"
+                            {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                            {!! $c->nm_permission_button !!}</label>
+                        <br>
+                        @endforeach
+                    </td>
+                    <td>
+
+                        @foreach ($read as $r)
+                        <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' : 'Checked'
+                            }}
+                            class="open_check{{ $u->id }}"
+                            {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                            {!! $r->nm_permission_button !!}</label> <br>
+                        @endforeach
+                    </td>
+                    <td>
+
+                        @foreach ($update as $r)
+                        <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' : 'Checked'
+                            }}
+                            class="open_check{{ $u->id }}"
+                            {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                            {!! $r->nm_permission_button !!}</label> <br>
+                        @endforeach
+                    </td>
+
+                </tr>
+                @endforeach
+
+            </tbody>
+        </table>
+    </x-modal>
+</form>
 @endsection
 @section('scripts')
 <script>
-    $(document).ready(function () {
-        function loadDetail(sub_no_po) {
-            $.ajax({
-                type: "GET",
-                url: "{{ route('detail_timbang') }}?sub_no_po=" + sub_no_po,
-                success: function (r) {
-                    $('#detail_po').html(r);
-                }
-            });
-        }
+    $(document).ready(function() {
+            function loadDetail(sub_no_po) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('detail_timbang') }}?sub_no_po=" + sub_no_po,
+                    success: function(r) {
+                        $('#detail_po').html(r);
+                    }
+                });
+            }
 
-        $(document).on('click', '.detailPo', function(){
-            var sub_no_po = $(this).attr('sub_no_po')
-            $('#modalDetail').modal('show')
-            loadDetail(sub_no_po)
-        })
-    });
+            $(document).on('click', '.detailPo', function() {
+                var sub_no_po = $(this).attr('sub_no_po')
+                $('#modalDetail').modal('show')
+                loadDetail(sub_no_po)
+            })
+
+            $(document).on('click', '.akses_h', function() {
+                var id_user = $(this).attr('id_user');
+                if ($('.akses_h' + id_user).prop("checked") == true) {
+                    $('.open_check' + id_user).removeAttr('disabled');
+                } else {
+                    $('.open_check' + id_user).prop('disabled', true);
+
+                }
+
+            });
+        });
 </script>
 @endsection

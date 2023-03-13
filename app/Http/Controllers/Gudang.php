@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -11,6 +12,14 @@ class Gudang extends Controller
     public function index(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = auth()->user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', 'gudang')->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(403, 'Akses Tidak ada');
+        }
+
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl as tgl1
         FROM tb_list_bahan as a
         LEFT join (
@@ -36,7 +45,14 @@ class Gudang extends Controller
             'akun' => DB::table('tb_akun')->where('id_lokasi', "$id_lokasi")->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', "$id_lokasi")->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', "$id_lokasi")->get()
+            'kategori' => DB::table('tb_kategori_makanan')->where('id_lokasi', "$id_lokasi")->get(),
+
+            'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
+            'halaman' => 8,
+
+            'tambah' => btnHal(24,$id_user),
+
+            'read' => btnHal(25,$id_user),
         ];
         return view('gudang.index', $data);
     }
@@ -44,6 +60,14 @@ class Gudang extends Controller
     public function produk($id)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = auth()->user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', 'produk')->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(403, 'Akses Tidak ada');
+        }
+
         $gudang = DB::select("SELECT a.*, b.debit, b.kredit, c.nm_lokasi, d.nm_kategori, e.nm_satuan as n,f.tgl
         FROM tb_list_bahan as a
         LEFT join (
@@ -71,8 +95,18 @@ class Gudang extends Controller
             'akun' => DB::table('tb_akun')->where('id_lokasi', "$id_lokasi")->get(),
             'satuan' => DB::table('tb_satuan')->get(),
             'merk_baha' => DB::table('tb_merk_bahan')->where('id_lokasi', "$id_lokasi")->get(),
-            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', "$id_lokasi"], ['jenis', $id]])->get()
+            'kategori' => DB::table('tb_kategori_makanan')->where([['id_lokasi', "$id_lokasi"], ['jenis', $id]])->get(),
 
+            'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
+            'halaman' => 7,
+
+            'tambah' => btnHal(18,$id_user),
+
+            'update' => btnHal(19,$id_user),
+
+            'delete' => btnHal(20,$id_user),
+
+            
         ];
         return view('gudang.produk', $data);
     }
@@ -256,6 +290,8 @@ class Gudang extends Controller
     public function merk_bahan(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = auth()->user()->id;
+
         $data = [
             'title' => 'Merk Bahan',
             'merkBahan' => DB::table('tb_merk_bahan as a')
@@ -266,7 +302,8 @@ class Gudang extends Controller
                 ->orderBy('a.id_merk_bahan', 'DESC')
                 ->get(),
             'bahan' => DB::table('tb_list_bahan')->get(),
-            'id_lokasi' => $id_lokasi
+            'id_lokasi' => $id_lokasi,
+            
         ];
         return view('gudang.bahan', $data);
     }
@@ -334,11 +371,19 @@ class Gudang extends Controller
     public function save_kategori_makanan(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
-        DB::table('tb_kategori_makanan')->insert([
-            'nm_kategori' => $r->nm_kategori,
-            'id_lokasi' => $id_lokasi,
-            'jenis' => '1',
-        ]);
+        if(empty($r->edit)) {
+            DB::table('tb_kategori_makanan')->insert([
+                'nm_kategori' => $r->nm_kategori,
+                'id_lokasi' => $id_lokasi,
+                'jenis' => '1',
+            ]);
+        } else {
+            DB::table('tb_kategori_makanan')->where('id_kategori_makanan', $r->id_kategori_makanan)->update([
+                'nm_kategori' => $r->nm_kategori,
+                'id_lokasi' => $id_lokasi,
+                'jenis' => '1',
+            ]);
+        }
         return redirect()->route('kategori_bahan')->with('sukses', 'Berhasil tambah kategori makanan');
     }
 
@@ -360,20 +405,35 @@ class Gudang extends Controller
     public function get_merk(Request $r)
     {
         $id_list_bahan =  $r->id_list_bahan;
+        $id_user = auth()->user()->id;
         $data = [
             'merk' => DB::table('tb_merk_bahan')->where('id_list_bahan', $id_list_bahan)->get(),
-            'id_list_bahan' => $id_list_bahan
+            'id_list_bahan' => $id_list_bahan,
+            'halaman' => '7',
+            'tambahMerk' => btnHal(21, $id_user),
+
+            'updateMerk' => btnHal(22,$id_user),
+
+            'deleteMerk' => btnHal(23,$id_user),
         ];
         return view('gudang.merk', $data);
     }
 
     public function tambah_bahan(Request $r)
     {
-        $data = [
-            'nm_merk' => $r->nm_merk,
-            'id_list_bahan' => $r->id_list_bahan
-        ];
-        DB::table('tb_merk_bahan')->insert($data);
+        if(empty($r->editMerk)) {
+            $data = [
+                'nm_merk' => $r->nm_merk,
+                'id_list_bahan' => $r->id_list_bahan
+            ];
+            DB::table('tb_merk_bahan')->insert($data);
+        } else {
+            $data = [
+                'nm_merk' => $r->nm_merk,
+                'id_list_bahan' => $r->id_list_bahan
+            ];
+            DB::table('tb_merk_bahan')->where('id_merk_bahan', $r->idMerk)->update($data);
+        }
     }
 
     public function delete_bahan(Request $r)

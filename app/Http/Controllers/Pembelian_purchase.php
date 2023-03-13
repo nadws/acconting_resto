@@ -6,12 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use App\Models\User;
 class Pembelian_purchase extends Controller
 {
     public function index(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = auth()->user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(403, 'Akses Tidak ada');
+        }
         $data = [
             'title' => 'Pembelian Bahan',
             'purchase' => DB::select("SELECT a.tgl, a.no_po, a.admin, sum(a.ttl_rp) as total, count(a.beli) AS po, b.beli, b.total_beli, b.admin as admin_beli, b.timbang
@@ -24,6 +31,13 @@ class Pembelian_purchase extends Controller
             where a.id_lokasi = '$id_lokasi'
             group by a.no_po 
             order by a.id_purchase DESC"),
+            'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
+            'halaman' => 2,
+            // button
+
+            'tambah' => btnHal(5,$id_user),
+
+            'history' => btnHal(6,$id_user),
         ];
         return view('pembelian_po.index', $data);
     }

@@ -1,19 +1,10 @@
 @extends('theme.app')
 @section('content')
-<style>
-    .form-switch2 .form-check-input2 {
-        background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-background-position: 0;
-        border-radius: 2em;
-        margin-left: -2.5em;
-        transition: background-position .15s ease-in-out;
-        width: 40px;
-        transform: scale(2);
-        margin-top: 8px;
-        margin-left: -22px;
-    }
-</style>
-<div id="main">
+<div id="main" x-data="{
+        nama: '',
+        id_kategori: '',
+        edit: '',
+    }">
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
             <i class="bi bi-justify fs-3"></i>
@@ -43,7 +34,7 @@ background-position: 0;
                     <ul class="nav nav-pills">
 
                         <li class="nav-item">
-                            <a class="nav-link " aria-current="page" href="{{ route('produk',1) }}">Bahan &
+                            <a class="nav-link " aria-current="page" href="{{ route('produk', 1) }}">Bahan &
                                 barang</a>
                         </li>
                         <li class="nav-item">
@@ -53,15 +44,20 @@ background-position: 0;
                             <a class="nav-link active" href="{{ route('kategori_bahan') }}">Kategori Bahan</a>
                         </li>
                     </ul>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#tambah" class="btn icon icon-left btn-primary"
-                        style="float: right"><i class="bi bi-plus-circle"></i> Tambah</a>
+                    <x-btn-setting />
+
+                    @if (!empty($create))
+                    <a href="#" @click="nama = '';edit = ''" data-bs-toggle="modal" data-bs-target="#tambah"
+                        class="me-2 btn icon icon-left btn-primary" style="float: right"><i
+                            class="bi bi-plus-circle"></i> Tambah</a>
+                    @endif
                 </div>
                 <div class="card-body">
 
-                    <table class="table table-striped" id="tb_bkin">
+                    <table class="table table-striped" id="table">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th width="5%">No</th>
                                 <th>Nama Kategori </th>
                                 <th>Aksi</th>
                             </tr>
@@ -69,16 +65,26 @@ background-position: 0;
                         <tbody>
                             @foreach ($kategori as $no => $k)
                             <tr>
-                                <td>{{$no+1}}</td>
-                                <td>{{$k->nm_kategori}}</td>
+                                <td>{{ $no + 1 }}</td>
+                                <td><a href="#" class="click-add-bahan" id_kategori="{{ $k->id_kategori_makanan }}"
+                                        data-bs-target="#viewAddBahan" data-bs-toggle="modal">{{ $k->nm_kategori }}</a>
+                                </td>
                                 <td>
-                                    <a href="" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                    @if (!empty($update))
+                                    <a href="#" data-bs-target="#tambah" data-bs-toggle="modal" @click="
+                                                nama = '{{ $k->nm_kategori }}'; 
+                                                id_kategori = '{{$k->id_kategori_makanan}}';
+                                                edit = 'Y'" class="btn btn-warning btn-sm"><i
+                                            class="fas fa-edit"></i></a>
+                                    @endif
+
+                                    @if (!empty($delete))
                                     <a onclick="return confirm('Yakin ingin dihapus ?')"
                                         href="{{ route('hapus_kategori_makanan', [$k->id_kategori_makanan, $k->jenis]) }}"
                                         class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    @endif
                                 </td>
                             </tr>
-
                             @endforeach
                         </tbody>
 
@@ -91,77 +97,116 @@ background-position: 0;
         </section>
     </div>
 
-
-    <style>
-        .modal-lg-max2 {
-            max-width: 900px;
-        }
-    </style>
-
-
-    <div class="modal fade text-left" id="merk">
-        <div class="modal-dialog  modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel33">
-                        Merk {{$title}}
-                    </h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <div id="merk_bahan"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Close</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <form action="{{route('save_kategori_makanan')}}" method="post">
+    <form action="{{ route('save_kategori_makanan') }}" method="post">
         @csrf
-        <div class="modal fade text-left" id="tambah">
-            <div class="modal-dialog " role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel33">
-                            {{$title}}
-                        </h4>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <i data-feather="x"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <label for="">Nama Kategori</label>
-                                <input type="text" class="form-control" name="nm_kategori">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Close</span>
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Save</span>
-                        </button>
-                    </div>
+        <x-modal id="tambah" title="Tambah {{ $title }}" btnSave="Y" size="">
+            <div class="row">
+                <div class="col-lg-12">
+                    <input type="hidden" name="edit" :value="edit">
+                    <input type="hidden" name="id_kategori_makanan" :value="id_kategori">
 
+                    <label for="">Nama Kategori</label>
+                    <input :value="nama" type="text" class="form-control" name="nm_kategori">
                 </div>
             </div>
-        </div>
-
+        </x-modal>
     </form>
 
+    <form action="{{ route('save_permission') }}" method="post">
+        @csrf
+        <x-modal id="akses" title="Setting Akses" btnSave="Y" size="modal-lg-max">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Halaman</th>
+                        <th>Create</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($user as $u)
+                    @php
+                    $akses = DB::selectOne("SELECT a.*, b.id_permission_page FROM permission_button_gudang
+                    AS
+                    a
+                    LEFT JOIN (
+                    SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
+                    WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
+                    ) AS b ON b.id_permission_button = a.id_permission_button");
+
+                    $create = btnSetHal($halaman, $u->id, 'create');
+
+                    $update = btnSetHal($halaman, $u->id, 'update');
+
+                    $delete = btnSetHal($halaman, $u->id, 'delete');
+
+                    @endphp
+                    <input type="hidden" name="route" value="kategori_bahan">
+                    <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
+                    <tr>
+                        <td>{{ $u->nama }}</td>
+
+                        <td>
+                            <label><input type="checkbox" class="akses_h akses_h{{ $u->id }}" id_user="{{ $u->id }}"
+                                    id_user="{{ $u->id }}" {{ empty($akses->id_permission_page) ? '' : 'Checked' }} />
+                                Akses</label>
+                            <input type="hidden" class="open_check{{ $u->id }}" name="id_user[]" {{
+                                empty($akses->id_permission_page) ? 'disabled' : '' }}
+                            value="{{ $u->id }}">
+                        </td>
+                        <td>
 
 
+                            @foreach ($create as $c)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $c->id_permission_button }}" {{ empty($c->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $c->nm_permission_button !!}</label>
+                            <br>
+                            @endforeach
+                        </td>
+                        <td>
+
+                            @foreach ($update as $r)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $r->nm_permission_button !!}</label> <br>
+                            @endforeach
+                        </td>
+                        <td>
+
+                            @foreach ($delete as $r)
+                            <label><input type="checkbox" name="id_permission{{ $u->id }}[]"
+                                    value="{{ $r->id_permission_button }}" {{ empty($r->id_permission_page) ? '' :
+                                'Checked' }}
+                                class="open_check{{ $u->id }}"
+                                {{ empty($akses->id_permission_page) ? 'disabled' : '' }} />
+                                {!! $r->nm_permission_button !!}</label> <br>
+                            @endforeach
+                        </td>
+
+                    </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+        </x-modal>
+    </form>
+
+    <form action="{{ route('save_add_bahan') }}" method="post">
+        @csrf
+        <x-modal id="viewAddBahan" title="Add Bahan {{ $title }}" btnSave="Y" size="modal-lg">
+            <input id="searchBahan" type="text" placeholder="search..." class="form-control mb-5">
+            <div id="load-add-bahan"></div>
+        </x-modal>
+    </form>
     <footer>
         <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
@@ -176,5 +221,36 @@ background-position: 0;
 @endsection
 
 @section('scripts')
+<script>
+    $(document).ready(function() {
+            $(document).on('click', '.click-add-bahan', function(){
+                var id_kategori = $(this).attr('id_kategori')
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('load_add_bahan')}}?id_kategori="+id_kategori,
+                    success: function (r) {
+                        $("#load-add-bahan").html(r);
+                    }
+                });
+            })
+            
+            $("#searchBahan").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tableBahan tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
 
+            $(document).on('click', '.akses_h', function() {
+                var id_user = $(this).attr('id_user');
+                if ($('.akses_h' + id_user).prop("checked") == true) {
+                    $('.open_check' + id_user).removeAttr('disabled');
+                } else {
+                    $('.open_check' + id_user).prop('disabled', true);
+
+                }
+
+            });
+        });
+</script>
 @endsection

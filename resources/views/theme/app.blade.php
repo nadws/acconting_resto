@@ -53,6 +53,10 @@ background-position: 0;
         .modal-lg-max {
             max-width: 1200px;
         }
+        
+        .modal-lg-max2 {
+            max-width: 1350px;
+        }
 
         .modal-md {
             max-width: 700px;
@@ -155,6 +159,14 @@ background-position: 0;
             "autoWidth": true,
             // "order": [ 5, 'DESC' ],
             "searching": true,
+        });
+
+        $('#tableScroll').DataTable({
+            "searching": true,
+            scrollY: '400px',
+            scrollCollapse: true,
+            "autoWidth": true,
+            "paging": false,
         });
     </script>
     @if (session()->has('sukses'))
