@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use SettingHal;
 class Gudang extends Controller
 {
     public function index(Request $r)
@@ -50,9 +50,9 @@ class Gudang extends Controller
             'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
             'halaman' => 8,
 
-            'tambah' => btnHal(24,$id_user),
+            'tambah' => SettingHal::btnHal(24,$id_user),
 
-            'read' => btnHal(25,$id_user),
+            'read' => SettingHal::btnHal(25,$id_user),
         ];
         return view('gudang.index', $data);
     }
@@ -100,11 +100,11 @@ class Gudang extends Controller
             'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
             'halaman' => 7,
 
-            'tambah' => btnHal(18,$id_user),
+            'tambah' => SettingHal::btnHal(18,$id_user),
 
-            'update' => btnHal(19,$id_user),
+            'update' => SettingHal::btnHal(19,$id_user),
 
-            'delete' => btnHal(20,$id_user),
+            'delete' => SettingHal::btnHal(20,$id_user),
 
             
         ];
@@ -410,11 +410,11 @@ class Gudang extends Controller
             'merk' => DB::table('tb_merk_bahan')->where('id_list_bahan', $id_list_bahan)->get(),
             'id_list_bahan' => $id_list_bahan,
             'halaman' => '7',
-            'tambahMerk' => btnHal(21, $id_user),
+            'tambahMerk' => SettingHal::btnHal(21, $id_user),
 
-            'updateMerk' => btnHal(22,$id_user),
+            'updateMerk' => SettingHal::btnHal(22,$id_user),
 
-            'deleteMerk' => btnHal(23,$id_user),
+            'deleteMerk' => SettingHal::btnHal(23,$id_user),
         ];
         return view('gudang.merk', $data);
     }

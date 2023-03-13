@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use SettingHal;
 
 class Sistem_po extends Controller
 {
@@ -35,13 +36,13 @@ class Sistem_po extends Controller
 
             // button
 
-            'tambah' => btnHal(1,$id_user),
+            'tambah' => SettingHal::btnHal(1,$id_user),
 
-            'print' => btnHal(2,$id_user),
+            'print' => SettingHal::btnHal(2,$id_user),
 
-            'edit' => btnHal(3,$id_user),
+            'edit' => SettingHal::btnHal(3,$id_user),
 
-            'hapus' => btnHal(4,$id_user),
+            'hapus' => SettingHal::btnHal(4,$id_user),
 
         ];
         return view('sistem_po.index', $data);

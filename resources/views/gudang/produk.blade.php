@@ -222,20 +222,14 @@ background-position: 0;
                 <tbody>
                     @foreach ($user as $u)
                     @php
-                    $akses = DB::selectOne("SELECT a.*, b.id_permission_page FROM permission_button_gudang
-                    AS
-                    a
-                    LEFT JOIN (
-                    SELECT b.id_permission_button, b.id_permission_page FROM permission_perpage AS b
-                    WHERE b.id_user ='$u->id' AND b.id_permission_gudang = '$halaman'
-                    ) AS b ON b.id_permission_button = a.id_permission_button");
+                    $akses = SettingHal::akses($halaman, $u->id);
 
-                    $create = btnSetHal($halaman, $u->id, 'create');
+                    $create = SettingHal::btnSetHal($halaman, $u->id, 'create');
 
 
-                    $update = btnSetHal($halaman, $u->id, 'update');
+                    $update = SettingHal::btnSetHal($halaman, $u->id, 'update');
 
-                    $delete = btnSetHal($halaman, $u->id, 'delete');
+                    $delete = SettingHal::btnSetHal($halaman, $u->id, 'delete');
 
                     @endphp
                     <input type="hidden" name="route" value="produk">

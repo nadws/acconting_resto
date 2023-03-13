@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use SettingHal;
 class Pembelian_purchase extends Controller
 {
     public function index(Request $r)
@@ -35,9 +36,9 @@ class Pembelian_purchase extends Controller
             'halaman' => 2,
             // button
 
-            'tambah' => btnHal(5,$id_user),
+            'tambah' => SettingHal::btnHal(5,$id_user),
 
-            'history' => btnHal(6,$id_user),
+            'history' => SettingHal::btnHal(6,$id_user),
         ];
         return view('pembelian_po.index', $data);
     }

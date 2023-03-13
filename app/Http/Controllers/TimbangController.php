@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-
+use SettingHal;
 class TimbangController extends Controller
 {
     public function index(Request $r)
@@ -36,9 +36,9 @@ class TimbangController extends Controller
              'halaman' => 6,
              // button
  
-             'tambah' => btnHal(9,$id_user),
-             'update' => btnHal(17,$id_user),
-             'print' => btnHal(10,$id_user),
+             'tambah' => SettingHal::btnHal(9,$id_user),
+             'update' => SettingHal::btnHal(17,$id_user),
+             'print' => SettingHal::btnHal(10,$id_user),
 
         ];
 

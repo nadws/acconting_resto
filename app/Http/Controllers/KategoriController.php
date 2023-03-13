@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use SettingHal;
 
 class KategoriController extends Controller
 {
@@ -22,11 +23,11 @@ class KategoriController extends Controller
             'halaman' => 9,
             // button
 
-            'create' => btnHal(26,$id_user),
+            'create' => SettingHal::btnHal(26,$id_user),
 
-            'update' => btnHal(27,$id_user),
+            'update' => SettingHal::btnHal(27,$id_user),
                             
-            'delete' => btnHal(28,$id_user),
+            'delete' => SettingHal::btnHal(28,$id_user),
         ];
         return view('kategori.index', $data);
     }
