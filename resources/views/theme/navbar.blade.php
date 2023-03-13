@@ -31,7 +31,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                @if (in_array(auth()->user()->id, [1,2]))
+                @if (in_array(auth()->user()->id, config('idBolehSet')))
                 <li class="sidebar-item">
                     <a href="{{route('permission_gudang.index')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>

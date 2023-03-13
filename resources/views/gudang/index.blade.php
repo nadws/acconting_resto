@@ -102,10 +102,7 @@
                                                     value="{{ $j->id_list_bahan }}">
                                             </td>
                                             <td>{{ $j->n }}</td>
-
-
                                             <td align="center">{{ $tKerja == '0' ? ' - ' : $tKerja->days }} </td>
-
                                         </tr>
                                     @endforeach
 
