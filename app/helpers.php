@@ -13,7 +13,6 @@ if (!function_exists('convert')) {
         return $hasil;
     }
 }
-
 class SettingHal
 {
     public static function akses($halaman, $id_user)
@@ -26,6 +25,7 @@ class SettingHal
         WHERE b.id_user ='$id_user' AND b.id_permission_gudang = '$halaman'
         ) AS b ON b.id_permission_button = a.id_permission_button");
     }
+
     public static function btnHal($whereId, $id_user)
     {
         return DB::table('permission_perpage as a')

@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
 
-
-
-
     <link rel="stylesheet" href="{{ asset('theme') }}/assets/css/main/app.css">
 
     <link rel="shortcut icon" href="{{ asset('theme') }}/assets/images/logo/favicon.svg" type="image/x-icon">
@@ -34,13 +31,11 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-
-
         }
 
         .form-switch2 .form-check-input2 {
             background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='rgba(0, 0, 0, 0.25)'/%3E%3C/svg%3E);
-background-position: 0;
+            background-position: 0;
             border-radius: 2em;
             margin-left: -2.5em;
             transition: background-position .15s ease-in-out;
@@ -89,7 +84,7 @@ background-position: 0;
     <div id="app">
         @include('theme.navbar')
         @yield('content')
-
+        
     </div>
     <script src="{{ asset('theme') }}/assets/js/bootstrap.js"></script>
     <script src="{{ asset('theme') }}/assets/js/app.js"></script>
@@ -98,7 +93,6 @@ background-position: 0;
     <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
     <script src="{{ asset('theme') }}/assets/js/pages/datatables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 
     <script src="{{ asset('theme') }}/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
     <script src="{{ asset('theme') }}/assets/js/pages/form-element-select.js"></script>

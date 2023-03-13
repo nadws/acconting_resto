@@ -25,7 +25,7 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu </li>
-                <li class="sidebar-item  ">
+                <li class="sidebar-item">
                     <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
@@ -59,7 +59,7 @@
                         <i class="fas fa-calculator"></i>
                         <span>Accounting</span>
                     </a>
-                    <ul class="submenu ">
+                    <ul class="submenu">
                         <li class="submenu-item ">
                             <a href="{{route('jurnal_pemasukan')}}">Jurnal Pemasukan</a>
                         </li>
