@@ -20,6 +20,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        config(['idBolehSet' => [1,2,3,4]]);
+        config(['idBolehSet' => [1,4]]);
     }
 }
