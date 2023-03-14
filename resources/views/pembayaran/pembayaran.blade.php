@@ -148,6 +148,125 @@
     </div>
 </form>
 
+<form action="{{route('save_permission')}}" method="post">
+    @csrf
+    <div id="akses" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-lg-max" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">
+                        Akses {{$title}}
+                    </h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <input type="hidden" name="route" value="sistem_po">
+                <div class="modal-body">
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Halaman</th>
+                                <th>Create</th>
+                                <th>Read</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($user as $u)
+                            @php
+                            $akses = SettingHal::akses($halaman, $u->id);
+
+                            $create = SettingHal::btnSetHal($halaman, $u->id, 'create');
+
+                            $read = SettingHal::btnSetHal($halaman, $u->id, 'read');
+
+                            $update = SettingHal::btnSetHal($halaman, $u->id, 'update');
+
+                            $delete = SettingHal::btnSetHal($halaman, $u->id, 'delete');
+
+                            @endphp
+                            <tr>
+                                <td>{{$u->nama}}</td>
+
+                                <td>
+                                    <label><input type="checkbox" class="akses_h akses_h{{$u->id}}" id_user="{{$u->id}}"
+                                            id_user="{{$u->id}}" {{empty($akses->id_permission_page) ?
+                                        '' : 'Checked'}} /> Akses</label>
+                                    <input type="hidden" class="open_check{{$u->id}}" name="id_user[]"
+                                        {{empty($akses->id_permission_page) ?
+                                    'disabled' : ''}}
+                                    value="{{$u->id}}">
+                                </td>
+                                <td>
+                                    <input type="hidden" name="id_permission_gudang" value="{{ $halaman }}">
+
+                                    @foreach ($create as $c)
+                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                            value="{{$c->id_permission_button }}" {{empty($c->id_permission_page) ?
+                                        '' : 'Checked'}} class="open_check{{$u->id}}"
+                                        {{empty($akses->id_permission_page) ?
+                                        'disabled' : ''}} /> {!!$c->nm_permission_button!!}</label>
+                                    <br>
+                                    @endforeach
+                                </td>
+                                <td>
+
+                                    @foreach ($read as $r)
+                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                            value="{{$r->id_permission_button }}" {{empty($r->id_permission_page) ?
+                                        '' : 'Checked'}} class="open_check{{$u->id}}"
+                                        {{empty($akses->id_permission_page) ?
+                                        'disabled' : ''}} />
+                                        {!!$r->nm_permission_button!!}</label> <br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($update as $up)
+                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                            value="{{$up->id_permission_button }}" {{empty($up->id_permission_page)
+                                        ?
+                                        '' : 'Checked'}} class="open_check{{$u->id}}"
+                                        {{empty($akses->id_permission_page) ?
+                                        'disabled' : ''}} />
+                                        {!!$up->nm_permission_button!!}</label> <br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($delete as $d)
+                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
+                                            value="{{$d->id_permission_button }}" {{empty($d->id_permission_page) ?
+                                        '' : 'Checked'}} class="open_check{{$u->id}}"
+                                        {{empty($akses->id_permission_page) ?
+                                        'disabled' : ''}} />
+                                        {!!$d->nm_permission_button!!}</label> <br>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Save</span>
+                    </button>
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Close</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
 
 @endsection
 @section('scripts')
@@ -222,6 +341,16 @@
                     $('.btn-confirm').removeAttr('disabled')
                 }
             });
+            $(document).on('click', '.akses_h', function() {
+            var id_user = $(this).attr('id_user'); 
+                if($('.akses_h'+ id_user).prop("checked") == true){
+                    $('.open_check'+ id_user).removeAttr('disabled');
+                } else{
+                    $('.open_check'+ id_user).prop('disabled', true);
+                    
+                }
+                
+        });
            
         });
 </script>

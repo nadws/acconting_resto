@@ -36,19 +36,19 @@ class Sistem_po extends Controller
 
             // button
 
-            'tambah' => SettingHal::btnHal(1,$id_user),
+            'tambah' => SettingHal::btnHal(1, $id_user),
 
-            'print' => SettingHal::btnHal(2,$id_user),
+            'print' => SettingHal::btnHal(2, $id_user),
 
-            'edit' => SettingHal::btnHal(3,$id_user),
+            'edit' => SettingHal::btnHal(3, $id_user),
 
-            'hapus' => SettingHal::btnHal(4,$id_user),
+            'hapus' => SettingHal::btnHal(4, $id_user),
 
         ];
         return view('sistem_po.index', $data);
     }
 
-    
+
 
     public function tambah_po(Request $r)
     {

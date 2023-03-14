@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use SettingHal;
+use App\Models\User;
 
 class PembayaranController extends Controller
 {
@@ -34,7 +35,8 @@ class PembayaranController extends Controller
             'pembayaran' => $datas,
             'tambah' => SettingHal::btnHal(29, $id_user),
             'print' => SettingHal::btnHal(30, $id_user),
-            'halaman' => '10'
+            'halaman' => '10',
+            'user' => User::whereIn('id_posisi', ['1', '2'])->get(),
         ];
         return view('pembayaran.pembayaran', $data);
     }
