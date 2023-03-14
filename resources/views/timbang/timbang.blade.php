@@ -39,6 +39,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ route('timbang') }}">Timbang</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('pembayaran') }}">Pembukuan</a>
+                                </li>
                             </ul>
 
                             <x-btn-setting />
@@ -91,16 +94,16 @@
                                         </td>
                                         <td>
                                             @if ($d->timbang == 'Y')
-                                                @if (!empty($update))
-                                                <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
-                                                    class="btn btn-sm btn-success {{ $d->selesai == 'T' ? '' : 'disabled' }} "><i
-                                                        class="fas fa-pen"></i></a>
-                                                @endif
+                                            @if (!empty($update))
+                                            <a href="{{ route('timbangEdit', $d->sub_no_po) }}"
+                                                class="btn btn-sm btn-success {{ $d->selesai == 'T' ? '' : 'disabled' }} "><i
+                                                    class="fas fa-pen"></i></a>
+                                            @endif
                                             @else
-                                                @if (!empty($tambah))
-                                                <a href="{{ route('timbangView', $d->sub_no_po) }}"
-                                                    class="btn btn-sm btn-primary">Timbang</a>
-                                                @endif
+                                            @if (!empty($tambah))
+                                            <a href="{{ route('timbangView', $d->sub_no_po) }}"
+                                                class="btn btn-sm btn-primary">Timbang</a>
+                                            @endif
                                             @endif
                                             @if (!empty($print))
                                             <a href="{{ route('print_timbang', ['sub_no_po' => $d->sub_no_po]) }}"

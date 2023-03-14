@@ -23,7 +23,6 @@
                 </div>
             </div>
             <section class="section">
-
                 <div class="card">
                     <div class="card-header">
                         <ul class="nav nav-pills">
@@ -36,6 +35,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('timbang') }}">Timbang</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pembayaran') }}">Pembukuan</a>
                             </li>
                         </ul>
 

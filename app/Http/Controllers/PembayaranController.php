@@ -6,12 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use SettingHal;
 
 class PembayaranController extends Controller
 {
-    public function pembayaran()
+    public function pembayaran(Request $r)
     {
         $id_lokasi = Session::get('id_lokasi');
+        $id_user = Auth::user()->id;
+
+        $cekP = DB::table('permission_gudang')->where('url', $r->route()->getName())->first();
+        $cek = DB::table('permission_perpage')->where([['id_user', $id_user], ['id_permission_gudang', $cekP->id_permission]])->first();
+        if (empty($cek)) {
+            return abort(403, 'Akses Tidak ada');
+        }
         $datas = DB::select("SELECT a.selesai, b.dimuka, a.tgl,a.admin,a.no_po,sum(b.ttl_rp) as ttl_rp,d.nm_bahan FROM timbang_purchase as a
         LEFT JOIN pembelian_purchase as b ON a.id_pembelian = b.id_pembelian_purchase
         LEFT JOIN purchase as c ON b.id_purchase = c.id_purchase
@@ -23,7 +31,10 @@ class PembayaranController extends Controller
         ");
         $data = [
             'title' => 'Pembayaran',
-            'pembayaran' => $datas
+            'pembayaran' => $datas,
+            'tambah' => SettingHal::btnHal(29, $id_user),
+            'print' => SettingHal::btnHal(30, $id_user),
+            'halaman' => '10'
         ];
         return view('pembayaran.pembayaran', $data);
     }

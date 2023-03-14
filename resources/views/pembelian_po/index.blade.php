@@ -37,6 +37,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('timbang') }}">Timbang</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('pembayaran') }}">Pembukuan</a>
+                        </li>
                     </ul>
 
                     <x-btn-setting />

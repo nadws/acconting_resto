@@ -28,6 +28,22 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link" aria-current="page" href="{{ route('sistem_po') }}">Purchase
+                                        Order (PO)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('pembelian_po') }}">Pembelian</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('timbang') }}">Timbang</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('pembayaran') }}">Pembukuan</a>
+                                </li>
+                            </ul>
+                            <x-btn-setting />
                         </div>
                         <div class="card-body">
                             <table class="table table-hover" id="table1">
