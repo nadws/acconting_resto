@@ -338,7 +338,7 @@
                 if (total < total_semua) {
                     $('.btn-confirm').attr('disabled','disabled')
                 } else {
-                    $('.btn-confirm').removeAttr('disabled')
+                    $('.btn-confirm').removeAttr('disableds')
                 }
             });
             $(document).on('click', '.akses_h', function() {
