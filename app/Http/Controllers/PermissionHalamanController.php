@@ -17,7 +17,7 @@ class PermissionHalamanController extends Controller
             ];
             return view('permission_halaman.index',$data); 
         } else {
-            abort(404);
+            abort(403, 'akses tidak ada');
         }
     }
 
@@ -55,7 +55,6 @@ class PermissionHalamanController extends Controller
                 }
             }
         }
-
 
         return redirect()->route('permission_gudang.index')->with('sukses', 'Berhasil tambah data');
     }

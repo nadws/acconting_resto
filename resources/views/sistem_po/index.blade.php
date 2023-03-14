@@ -169,7 +169,6 @@
 
                                 $delete = SettingHal::btnSetHal($halaman, $u->id, 'delete');
 
-
                                 @endphp
                                 <tr>
                                     <td>{{$u->nama}}</td>
