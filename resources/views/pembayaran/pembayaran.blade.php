@@ -170,8 +170,6 @@
                                 <th>Nama</th>
                                 <th>Halaman</th>
                                 <th>Create</th>
-                                <th>Read</th>
-                                <th>Update</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -181,11 +179,6 @@
                             $akses = SettingHal::akses($halaman, $u->id);
 
                             $create = SettingHal::btnSetHal($halaman, $u->id, 'create');
-
-                            $read = SettingHal::btnSetHal($halaman, $u->id, 'read');
-
-                            $update = SettingHal::btnSetHal($halaman, $u->id, 'update');
-
                             $delete = SettingHal::btnSetHal($halaman, $u->id, 'delete');
 
                             @endphp
@@ -211,28 +204,6 @@
                                         {{empty($akses->id_permission_page) ?
                                         'disabled' : ''}} /> {!!$c->nm_permission_button!!}</label>
                                     <br>
-                                    @endforeach
-                                </td>
-                                <td>
-
-                                    @foreach ($read as $r)
-                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
-                                            value="{{$r->id_permission_button }}" {{empty($r->id_permission_page) ?
-                                        '' : 'Checked'}} class="open_check{{$u->id}}"
-                                        {{empty($akses->id_permission_page) ?
-                                        'disabled' : ''}} />
-                                        {!!$r->nm_permission_button!!}</label> <br>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach ($update as $up)
-                                    <label><input type="checkbox" name="id_permission{{$u->id}}[]"
-                                            value="{{$up->id_permission_button }}" {{empty($up->id_permission_page)
-                                        ?
-                                        '' : 'Checked'}} class="open_check{{$u->id}}"
-                                        {{empty($akses->id_permission_page) ?
-                                        'disabled' : ''}} />
-                                        {!!$up->nm_permission_button!!}</label> <br>
                                     @endforeach
                                 </td>
                                 <td>
