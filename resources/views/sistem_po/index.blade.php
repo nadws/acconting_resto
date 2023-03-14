@@ -39,7 +39,7 @@
                             </li>
                         </ul>
 
-                        <x-btn-setting  />
+                        <x-btn-setting />
 
 
                         @if (!empty($tambah))
